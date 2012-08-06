@@ -34,6 +34,7 @@ public class MainActivity extends Activity {
 
 		tvMain = new VerticalTextView(this);
 		tvMain.setText("nothing");
+		tvMain.setTextSize(28.0f);
 		tvMain.setInputType(InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
 
 		llMain.addView(tvMain);
