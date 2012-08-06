@@ -85,6 +85,10 @@ public class NewsList {
 	 *            time must be set already
 	 */
 	public void addNews(News n) {
+		if (n == null) {
+			return;
+		}
+
 		// check if exist
 		if (existNews(n)) {
 			Log.e("===domain.NEWSLIST===", "news exist: " + n.getText());

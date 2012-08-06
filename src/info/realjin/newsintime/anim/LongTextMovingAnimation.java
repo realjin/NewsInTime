@@ -119,9 +119,9 @@ public class LongTextMovingAnimation extends Animation {
 		} else {
 			float w = tv.getPaint().measureText(curLastText);
 			if (or == Orientation.Horizontal) {
-				startLeft = (int) (scrWidth - w);// TODO: fixed!!!!!!!!
+				startLeft = (int) (scrWidth - w);// TODO: check!!!!!!!!
 			} else if (or == Orientation.Vertical) {
-				startLeft = (int) (scrHeight - w);// TODO: fixed!!!!!!!!
+				startLeft = (int) (scrHeight - w);// TODO: check!!!!!!!!
 			}
 			repCount = (int) ((curTextWidth - w) / 6); // TODO: !!!
 		}

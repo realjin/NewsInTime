@@ -59,7 +59,7 @@ public class NewsRetrieverService implements Runnable {
 					RssItem ri = (RssItem) o;
 					Log.e("===NRSERVICE===", "all:" + feed.getAllItems().size()
 							+ ", news title= " + ri.getTitle());
-					News n = new News(ri.getTitle(),
+					News n = new News(ri.getTitle() + " ###",
 							NewsRetrieverService.parsePubDate(ri.getPubDate()));
 					// mmmmmm
 					nl.addNews(n);
