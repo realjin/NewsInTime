@@ -31,7 +31,7 @@ public class NewsInTimeApp extends Application {
 		// start retrieving news rss
 		// TODO: temp!!!
 		nrService = new NewsRetrieverService(data.getNewsList(),
-				"http://www.engadget.com/rss.xml");
+				"http://rss.sina.com.cn/news/marquee/ddt.xml");
 		Thread t = new Thread(nrService);
 		t.start();
 	}

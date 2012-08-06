@@ -67,6 +67,10 @@ public class NewsList {
 			// && d1.getHours() == d2.getHours()
 			// && d1.getMinutes() == d2.getMinutes()
 			// && d1.getSeconds() == d2.getSeconds()) {
+			Log.e("===TEMP===", "dm=" + dm + ", dn=" + dn);
+			Log.e("===TEMP===", "dn text=" + n.getText());
+			Log.e("===TEMP===", "dmgettime=" + dm.getTime() + ", dngettime="
+					+ dn.getTime());
 			if (dm.getTime() == dn.getTime()) {
 				if (m.getSubid() > maxSubId) {
 					maxSubId = m.getSubid();

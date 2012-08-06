@@ -14,11 +14,15 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Locale;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -59,8 +63,18 @@ public class NewsRetrieverService implements Runnable {
 					RssItem ri = (RssItem) o;
 					Log.e("===NRSERVICE===", "all:" + feed.getAllItems().size()
 							+ ", news title= " + ri.getTitle());
-					News n = new News(ri.getTitle() + " ###",
-							NewsRetrieverService.parsePubDate(ri.getPubDate()));
+
+					String text = ri.getTitle() + " ###";
+					Date pubDate;
+					if (ri.getPubDate() == null) {
+						// TODO: !!!mmm set as now!!!
+						pubDate = new Date();
+					} else {
+						pubDate = NewsRetrieverService.parsePubDate(ri
+								.getPubDate());
+					}
+
+					News n = new News(text, pubDate);
 					// mmmmmm
 					nl.addNews(n);
 				}
@@ -169,6 +183,50 @@ public class NewsRetrieverService implements Runnable {
 	}
 
 	private RssFeed getFeed(InputStream is) {
+		try {
+			if (is == null) {
+				return null;
+			}
+
+			RssFeed feed = new RssFeed();
+
+			SAXReader reader = new SAXReader();
+			Document doc = reader.read(is);
+
+			Element root = doc.getRootElement();
+
+			// TODO: assume one channel only!
+			Element channel = root.element("channel");
+
+			Iterator it = channel.elementIterator("item");
+			while (it.hasNext()) {
+				Element e = (Element) it.next();
+				RssItem ri = new RssItem();
+				ri.setTitle(e.elementTextTrim("title"));
+				ri.setCategory(e.elementTextTrim("category"));
+				ri.setDescription(e.elementTextTrim("description"));
+				String sDate = e.elementTextTrim("pubDate");
+				if (sDate == null || sDate.length() == 0) {
+					ri.setPubDate(null);
+				} else {
+					ri.setPubDate(sDate);
+				}
+				ri.setLink(e.elementTextTrim("link"));
+
+				feed.addItem(ri);
+
+				System.out.println("==>" + e.element("title").getTextTrim());
+			}
+
+			return feed;
+
+		} catch (Exception ee) {
+			return null;
+		}
+
+	}
+
+	private RssFeed getFeedOld(InputStream is) {
 		try {
 			if (is == null) {
 				return null;
