@@ -85,6 +85,12 @@ public class NewsList {
 	 *            time must be set already
 	 */
 	public void addNews(News n) {
+		// check if exist
+		if (existNews(n)) {
+			Log.e("===domain.NEWSLIST===", "news exist: " + n.getText());
+			return;
+		}
+
 		// allocate id
 		long subid = allocateSubId(n);
 		lock.lock();
@@ -97,6 +103,18 @@ public class NewsList {
 		newsList.add(n);
 		lock.unlock();
 
+	}
+
+	private boolean existNews(News n) {
+		lock.lock();
+		for (News m : newsList) {
+			if (m.getText().equalsIgnoreCase(n.getText())) {
+				lock.unlock();
+				return true;
+			}
+		}
+		lock.unlock();
+		return false;
 	}
 
 	// ------------------------ methods of get news ------------------

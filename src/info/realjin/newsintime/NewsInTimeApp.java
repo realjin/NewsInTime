@@ -5,6 +5,7 @@ import info.realjin.newsintime.domain.AppData;
 import info.realjin.newsintime.domain.AppStatus;
 import info.realjin.newsintime.domain.News;
 import info.realjin.newsintime.domain.NewsList;
+import info.realjin.newsintime.service.NewsRetrieverService;
 
 import java.util.List;
 
@@ -14,16 +15,25 @@ import android.util.Log;
 public class NewsInTimeApp extends Application {
 	private AppData data;
 	private AppConfig config;
-
 	private AppStatus status;
 
+	private NewsRetrieverService nrService;
+
 	public NewsInTimeApp() {
+		// init data
 		Log.i("===APP===", "1");
 		data = new AppData();
 		Log.i("===APP===", "2");
 		config = new AppConfig();
 		Log.i("===APP===", "3");
 		status = new AppStatus();
+
+		// start retrieving news rss
+		// TODO: temp!!!
+		nrService = new NewsRetrieverService(data.getNewsList(),
+				"http://www.engadget.com/rss.xml");
+		Thread t = new Thread(nrService);
+		t.start();
 	}
 
 	// ----- method for animation

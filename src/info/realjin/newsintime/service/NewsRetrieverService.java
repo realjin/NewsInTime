@@ -1,5 +1,6 @@
 package info.realjin.newsintime.service;
 
+import info.realjin.newsintime.domain.News;
 import info.realjin.newsintime.domain.NewsList;
 import info.realjin.newsintime.domain.RssFeed;
 import info.realjin.newsintime.domain.RssItem;
@@ -10,6 +11,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -20,22 +25,26 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
-public class NewsRetrieverService extends Thread {
+import android.util.Log;
+
+public class NewsRetrieverService implements Runnable {
 	private NewsList nl;
 	private String url;
 	private boolean enabled;
 
-	public NewsRetrieverService(NewsList nl) {
+	/**
+	 * @param nl
+	 * @param url
+	 *            initial url
+	 */
+	public NewsRetrieverService(NewsList nl, String url) {
 		this.nl = nl;
+		this.url = url;
 		this.enabled = true;
 	}
 
-	/**
-	 * @param ulr
-	 *            initial url
-	 */
-	public void start(String ulr) {
-		this.url = url;
+	public void run() {
+		// TODO Auto-generated method stub
 		loop();
 	}
 
@@ -45,7 +54,17 @@ public class NewsRetrieverService extends Thread {
 	public void loop() {
 		while (enabled) {
 			try {
-				this.wait(10 * 1000);
+				RssFeed feed = getFeedByUrl(url);
+				for (Object o : feed.getAllItems()) {
+					RssItem ri = (RssItem) o;
+					Log.e("===NRSERVICE===", "all:" + feed.getAllItems().size()
+							+ ", news title= " + ri.getTitle());
+					News n = new News(ri.getTitle(),
+							NewsRetrieverService.parsePubDate(ri.getPubDate()));
+					// mmmmmm
+					nl.addNews(n);
+				}
+				Thread.sleep(10 * 1000); // TODO: should be wait
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -55,6 +74,80 @@ public class NewsRetrieverService extends Thread {
 		}
 	}
 
+	/**
+	 * @param s
+	 *            pubdate
+	 * @return
+	 */
+	public static Date parsePubDate(String s) {
+		String format = null;
+
+		// the substring before "," is Day of Week
+		int nComma = s.indexOf(',');
+		if (nComma != -1) {
+			s = s.substring(nComma + 1);
+		}
+
+		// the substring at the end is always GMT
+		int nGMT = s.indexOf("GMT");
+		if (nGMT != -1) {
+			s = s.substring(0, nGMT);
+		}
+
+		System.out.println("===1===");
+
+		// trim
+		s = s.trim();
+
+		// get time part as s2
+		String s2;
+		int n1, n2;
+		n1 = s.indexOf(':');
+		n2 = s.lastIndexOf(':');
+		if (n1 != -1 && n2 != -1 && n2 - n1 == 3) {
+			s2 = s.substring(n1 - 2, n2 + 3);
+		} else {
+			System.out.println("parsePubDate: n2 and n1 not valid.");
+			return null;
+		}
+
+		System.out.println("===2===");
+		// get date part as s1
+		String s1;
+		s1 = s.substring(0, n1 - 2);
+		s1 = s1.trim();
+		String[] tokens = s1.split(" ");
+		System.out.println("===3===token length=" + tokens.length);
+		if (tokens.length == 3) {
+			if (tokens[0].length() == 1) {
+				tokens[0] = '0' + tokens[0];
+			}
+			if (tokens[1].matches(".*\\d.*")) {// contains digits
+				format = "yyyy MM dd HH:mm:ss";
+			} else {
+				format = "yyyy MMMMM dd HH:mm:ss";
+			}
+		} else {
+			return null;
+		}
+		s1 = tokens[2] + ' ' + tokens[1] + ' ' + tokens[0];
+		System.out.println("===4===fmt=" + format);
+
+		String modified = s1 + ' ' + s2;
+		System.out.println("===5=== modified=" + modified);
+		SimpleDateFormat _df = new SimpleDateFormat(format, Locale.US);
+		// System.out.println("sample--->" + _df.format(new Date()));
+		Date d = null;
+		try {
+			d = _df.parse(modified);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		return d;
+	}
+
 	private RssFeed getFeedByUrl(String urlString) {
 		URL url;
 		InputStream is;
@@ -62,13 +155,14 @@ public class NewsRetrieverService extends Thread {
 			url = new URL(urlString);
 			is = url.openStream();
 		} catch (MalformedURLException e) {
-			System.out.println("getFeedByUrl url malformed! (" + urlString
-					+ ")");
+			Log.e("===NRSERVICE===", "getFeedByUrl url malformed! ("
+					+ urlString + ")");
 			return null;
 			// e.printStackTrace();
 		} catch (IOException e) {
 			// e.printStackTrace();
-			System.out.println("getFeedByUrl ioException! (" + urlString + ")");
+			Log.e("===NRSERVICE===", "getFeedByUrl ioException! (" + urlString
+					+ ")" + e.getMessage());
 			return null;
 		}
 		return getFeed(is);
@@ -103,7 +197,7 @@ public class NewsRetrieverService extends Thread {
 
 	public static void main(String[] args) {
 		System.out.println("start");
-		NewsRetrieverService nrs = new NewsRetrieverService();
+		NewsRetrieverService nrs = new NewsRetrieverService(null, null);
 		// nrs.getFeed("http://cn.wsj.com.feedsportal.com/c/33121/f/538760/index.rss");
 		// nrs.getFeed("http://rss.sina.com.cn/news/marquee/ddt.xml");
 		try {
@@ -216,4 +310,5 @@ public class NewsRetrieverService extends Thread {
 			}
 		}
 	}
+
 }
