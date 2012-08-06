@@ -2,18 +2,30 @@ package info.realjin.newsintime.activity;
 
 import info.realjin.newsintime.R;
 import info.realjin.newsintime.anim.LongTextMovingAnimation;
+import info.realjin.newsintime.view.VerticalTextView;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
+	private TextView tvMain;
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+
+		LinearLayout llMain = (LinearLayout) findViewById(R.id.llMain);
+
+		tvMain = new VerticalTextView(this);
+		tvMain.setText("nothing");
+
+		llMain.addView(tvMain);
+
 	}
 
 	public boolean onTouchEvent(MotionEvent event) {
@@ -21,8 +33,9 @@ public class MainActivity extends Activity {
 			// RunAnimations();
 			// Button btMain = (Button) findViewById(R.id.btMain);
 			// btMain.startAnimation(new LongTextMovingAnimation(btMain));
-			TextView tv = (TextView) findViewById(R.id.tvMain);
-			tv.startAnimation(new LongTextMovingAnimation(this, tv));
+			// TextView tv = (TextView) findViewById(R.id.tvMain);
+			// tv.startAnimation(new LongTextMovingAnimation(this, tv));
+			tvMain.startAnimation(new LongTextMovingAnimation(this, tvMain));
 
 			Log.e("===onTouchEvent===", "start");
 			// testSetLP();

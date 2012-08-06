@@ -81,6 +81,9 @@ public class LongTextMovingAnimation extends Animation {
 		String curLastText = nl.get(0).toString();
 		curNewsId = nl.get(nl.size() - 1).getId();
 
+		Log.e("===temp===", "tv=" + tv);
+		Log.e("===temp===", "tv.getPaint=" + tv.getPaint());
+		Log.e("===temp===", "curText=" + curText);
 		curTextWidth = tv.getPaint().measureText(curText);
 
 		// calc initial positions
