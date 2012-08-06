@@ -16,7 +16,7 @@ public class AppConfig {
 	 * mmm: test only
 	 */
 	private void testInitConfig() {
-		props.put(CFGNAME_BATCHSIZE, "2");
+		props.put(CFGNAME_BATCHSIZE, "5");
 	}
 
 	// ----public methods

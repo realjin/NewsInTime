@@ -46,7 +46,7 @@ public class NewsList {
 	public NewsList() {
 		newsList = new ArrayList<News>();
 		lock = new ReentrantLock();
-		testInitNews();
+		// testInitNews();
 	}
 
 	public int size() {
@@ -137,6 +137,26 @@ public class NewsList {
 
 		lock.unlock();
 		return null;
+	}
+
+	public long getPosition(News n) {
+		SortedSet<News> ss = new TreeSet<News>();
+
+		lock.lock();
+		for (News m : newsList) {
+			ss.add(m);
+		}
+		lock.unlock();
+
+		long pos = 0;
+		for (News m : ss) {
+			if (m.getId().equalsIgnoreCase(n.getId())) {
+				break;
+			}
+			pos++;
+		}
+
+		return pos + 1;
 	}
 
 	public List<News> getAllCatFirstSeveral(int size) {

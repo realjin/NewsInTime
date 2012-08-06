@@ -139,6 +139,9 @@ public class LongTextMovingAnimation extends Animation {
 			Log.e("===ANIM===", "[ *** end *** ]");
 			firstTime = false;
 
+			NewsInTimeApp app = ((NewsInTimeApp) a.getApplication());
+			app.updateProgress(curNews);
+
 			prepareText();
 
 			setRepeatCount(repCount);

@@ -22,9 +22,11 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
+		NewsInTimeApp app = (NewsInTimeApp) getApplication();
+		app.setMainActivity(this);
+
 		// get screen size and save it
 		Display display = getWindowManager().getDefaultDisplay();
-		NewsInTimeApp app = (NewsInTimeApp) getApplication();
 		app.getData().setScrHeight(display.getHeight());
 		app.getData().setScrWidth(display.getWidth());
 		Log.e("===APPDATA===", app.getData().toString());

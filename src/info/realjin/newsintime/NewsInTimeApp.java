@@ -1,5 +1,6 @@
 package info.realjin.newsintime;
 
+import info.realjin.newsintime.activity.MainActivity;
 import info.realjin.newsintime.domain.AppConfig;
 import info.realjin.newsintime.domain.AppData;
 import info.realjin.newsintime.domain.AppStatus;
@@ -11,11 +12,15 @@ import java.util.List;
 
 import android.app.Application;
 import android.util.Log;
+import android.widget.TextView;
 
 public class NewsInTimeApp extends Application {
 	private AppData data;
 	private AppConfig config;
 	private AppStatus status;
+
+	// activity pointers
+	MainActivity mainActivity;
 
 	private NewsRetrieverService nrService;
 
@@ -53,6 +58,17 @@ public class NewsInTimeApp extends Application {
 		return sl;
 	}
 
+	public void updateProgress(News curNews) {
+		NewsList nl = data.getNewsList();
+		long pos = nl.getPosition(curNews);
+		long size = nl.size();
+
+		// for test
+		String s = pos + "/" + size;
+		TextView tv = (TextView) mainActivity.findViewById(R.id.tvMain);
+		tv.setText(s);
+	}
+
 	// ----- setters and getters
 	public AppData getData() {
 		return data;
@@ -76,5 +92,13 @@ public class NewsInTimeApp extends Application {
 
 	public void setStatus(AppStatus status) {
 		this.status = status;
+	}
+
+	public MainActivity getMainActivity() {
+		return mainActivity;
+	}
+
+	public void setMainActivity(MainActivity mainActivity) {
+		this.mainActivity = mainActivity;
 	}
 }
