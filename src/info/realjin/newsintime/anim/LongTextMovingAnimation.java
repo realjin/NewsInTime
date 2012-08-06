@@ -27,6 +27,16 @@ public class LongTextMovingAnimation extends Animation {
 	private int batchSize;
 
 	// VIP
+	public enum Orientation {
+		Horizontal, Vertical
+	}
+
+	// VIP
+	Orientation or;
+	int scrWidth;
+	int scrHeight;
+
+	// VIP
 	private long curNewsId; // id of the last news
 	private String curText; // text displaying
 	private float curTextWidth; // text displaying
@@ -40,11 +50,21 @@ public class LongTextMovingAnimation extends Animation {
 	// private long animationDuration;// = 10;
 
 	public LongTextMovingAnimation(Activity a, TextView tv) {
+		this(a, tv, Orientation.Vertical);
+	}
+
+	public LongTextMovingAnimation(Activity a, TextView tv, Orientation or) {
 		this.a = a;
 		this.tv = tv;
+		this.or = or;
+
+		NewsInTimeApp app = ((NewsInTimeApp) a.getApplication());
+
+		// load screen width and height
+		scrWidth = app.getData().getScrWidth();
+		scrHeight = app.getData().getScrHeight();
 
 		// init batch size from config
-		NewsInTimeApp app = ((NewsInTimeApp) a.getApplication());
 		batchSize = Integer.parseInt(app.getConfig().get(
 				AppConfig.CFGNAME_BATCHSIZE));
 
@@ -89,18 +109,20 @@ public class LongTextMovingAnimation extends Animation {
 		// calc initial positions
 		if (firstTime) {
 			startLeft = 0;
-			repCount = (int) ((curTextWidth - 480) / 6); // TODO: !!!
+			if (or == Orientation.Horizontal) {
+				repCount = (int) ((curTextWidth - scrWidth) / 6); // TODO: !!!
+			} else if (or == Orientation.Vertical) {
+				repCount = (int) ((curTextWidth - scrHeight) / 6); // TODO: !!!
+			}
 		} else {
 			float w = tv.getPaint().measureText(curLastText);
-			startLeft = (int) (480 - w);// TODO: fixed!!!!!!!!
+			if (or == Orientation.Horizontal) {
+				startLeft = (int) (scrWidth - w);// TODO: fixed!!!!!!!!
+			} else if (or == Orientation.Vertical) {
+				startLeft = (int) (scrHeight - w);// TODO: fixed!!!!!!!!
+			}
 			repCount = (int) ((curTextWidth - w) / 6); // TODO: !!!
 		}
-
-		// calc anim parameters
-		// animationDuration = (long) (curTextWidth * 5);
-		// animationDuration = 10;
-		// stepSize = 6;
-
 	}
 
 	class LongTextMovingAnimationListener implements AnimationListener {
@@ -128,8 +150,13 @@ public class LongTextMovingAnimation extends Animation {
 					new ViewGroup.MarginLayoutParams(
 							LinearLayout.LayoutParams.FILL_PARENT,
 							LinearLayout.LayoutParams.FILL_PARENT));
-			lp.setMargins((curLeft -= 5), 50, 0, 0); // TODO: 5 may be not
-														// proper
+			if (or == Orientation.Horizontal) {
+				lp.setMargins((curLeft -= 5), 50, 0, 0); // TODO: 5 may be not
+			} else if (or == Orientation.Vertical) {
+				lp.setMargins(0, 50 + (curLeft -= 5), 0, 0); // TODO: 5 may be
+																// not
+			}
+			// proper
 			tv.setLayoutParams(lp);
 		}
 

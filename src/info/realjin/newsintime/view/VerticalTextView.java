@@ -25,11 +25,8 @@ public class VerticalTextView extends TextView {
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		Log.e("onMeasure=====", "1");
 		super.onMeasure(heightMeasureSpec, widthMeasureSpec);
-		Log.e("onMeasure=====", "2");
 		setMeasuredDimension(getMeasuredHeight(), getMeasuredWidth());
-		Log.e("onMeasure=====", "3");
 	}
 
 	@Override
