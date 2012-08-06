@@ -1,10 +1,15 @@
 package info.realjin.newsintime.domain;
 
-import java.util.Comparator;
+import java.util.Date;
+
+import android.util.Log;
 
 public class News implements Comparable<News> {
-	private long id;
+	private String id; // id = time+subid
 	private String text;
+
+	private Date time;
+	private long subid;
 
 	private enum Category {
 
@@ -12,15 +17,16 @@ public class News implements Comparable<News> {
 
 	Category cat;
 
-	private static long idCounter;
+	// private static long idCounter;
 
 	static {
-		idCounter = 1;
+		// idCounter = 1;
 	}
 
-	public News(String text) {
-		id = idCounter++;
+	public News(String text, Date time) {
+		// id = idCounter++;
 		this.text = text;
+		this.time = time;
 	}
 
 	public String toString() {
@@ -28,11 +34,11 @@ public class News implements Comparable<News> {
 	}
 
 	// -------setters and getters
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -52,15 +58,41 @@ public class News implements Comparable<News> {
 		this.cat = cat;
 	}
 
+	public Date getTime() {
+		return time;
+	}
+
+	public void setTime(Date time) {
+		this.time = time;
+	}
+
+	public long getSubid() {
+		return subid;
+	}
+
+	public void setSubid(long subid) {
+		this.subid = subid;
+	}
+
 	public int compareTo(News another) {
-		long diff;
-		diff = this.getId() - another.getId();
-		if (diff == 0) {
-			return 0;
-		} else if (diff > 0) {
+		if (this.time.before(another.time)) {
+			return -1;
+		} else if (this.time.after(another.time)) {
 			return 1;
 		} else {
-			return -1;
+			long diff = this.subid - another.subid;
+			if (diff == 0) {
+				Log.e("===DOMAIN.news===", "sub id the same!!! [1] "
+						+ this.text + ", [2] " + another.text + ", [time]"
+						+ this.time + "|" + this.subid);
+			}
+			if (diff > 0) {
+				return 1;
+			} else if (diff < 0) {
+				return -1;
+			} else {
+				return 0;
+			}
 		}
 	}
 }

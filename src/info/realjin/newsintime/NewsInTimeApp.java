@@ -27,15 +27,15 @@ public class NewsInTimeApp extends Application {
 	}
 
 	// ----- method for animation
-	public List<News> getSubList(long lastId, int size) {
+	public List<News> getSubList(News least, int size) {
 		long i = 0;
 		int j;
 		List<News> sl;
 		NewsList nl = data.getNewsList();
-		if (lastId == 0) { // no news was played yet
+		if (least == null) { // no news was played yet
 			sl = nl.getAllCatFirstSeveral(size);
 		} else {
-			sl = nl.getAllCatByIdCyclicly(lastId, size);
+			sl = nl.getAllCatByIdCyclicly(least, size);
 		}
 
 		Log.i("===App===", "get " + (i - 1) + " news");

@@ -1,31 +1,51 @@
 package info.realjin.newsintime.domain;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.locks.ReentrantLock;
 
 import android.util.Log;
 
 public class NewsList {
+	private static final SimpleDateFormat sdf = new SimpleDateFormat(
+			"yyyy.MM.dd;HH:mm:ss");
+	private static final String ID_SPLITTER = "|";
+
 	private List<News> newsList;
+	private ReentrantLock lock;
 
 	/**
 	 * mmm: test only
 	 */
 	private void testInitNews() {
-		newsList.add(new News(
-				"1. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa."));
-		newsList.add(new News(
-				"2. bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb."));
-		newsList.add(new News(
-				"3. cccccccccccccccccccccccccccccccccccccccccccccccccccccccc."));
+		lock.lock();
+		Date d = new Date();
+		try {
+			d = sdf.parse("2012.08.06;11:23:25");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		addNews(new News(
+				"1. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.", d));
+		addNews(new News(
+				"2. bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.",
+				d));
+		addNews(new News(
+				"3. cccccccccccccccccccccccccccccccccccccccccccccccccccccccc.",
+				d));
+		lock.unlock();
 	}
 
 	// public-------------
 	public NewsList() {
 		newsList = new ArrayList<News>();
+		lock = new ReentrantLock();
 		testInitNews();
 	}
 
@@ -33,14 +53,63 @@ public class NewsList {
 		return newsList.size();
 	}
 
+	// --------- methods for newsretriever service to put news ----
+	private long allocateSubId(News n) {
+		long maxSubId = 0;
+		lock.lock();
+
+		for (News m : newsList) {
+			Date dm = m.getTime();
+			Date dn = n.getTime();
+			// if (d1.getYear() == d2.getYear() && d1.getMonth() ==
+			// d2.getMonth()
+			// && d1.getDay() == d2.getDay()
+			// && d1.getHours() == d2.getHours()
+			// && d1.getMinutes() == d2.getMinutes()
+			// && d1.getSeconds() == d2.getSeconds()) {
+			if (dm.getTime() == dn.getTime()) {
+				if (m.getSubid() > maxSubId) {
+					maxSubId = m.getSubid();
+				}
+			}
+		}
+
+		lock.unlock();
+
+		// if not found same time, then maxSubId remains zero
+		return maxSubId + 1;
+	}
+
+	/**
+	 * @param n
+	 *            time must be set already
+	 */
+	public void addNews(News n) {
+		// allocate id
+		long subid = allocateSubId(n);
+		lock.lock();
+		n.setSubid(subid);
+
+		String sTime = sdf.format(n.getTime());
+		String id = sTime + ID_SPLITTER + subid;
+		n.setId(id);
+
+		newsList.add(n);
+		lock.unlock();
+
+	}
+
 	// ------------------------ methods of get news ------------------
-	public News getById(long id) {
+	public News getById(String id) {
+		lock.lock();
 		for (News n : newsList) {
-			if (n.getId() == id) {
+			if (n.getId().equals(id)) {
+				lock.unlock();
 				return n;
 			}
 		}
 
+		lock.unlock();
 		return null;
 	}
 
@@ -48,6 +117,7 @@ public class NewsList {
 		List<News> result = new ArrayList<News>();
 		SortedSet<News> ss = new TreeSet<News>();
 
+		lock.lock();
 		for (News n : newsList) {
 			ss.add(n);
 		}
@@ -64,6 +134,7 @@ public class NewsList {
 					"getAllCatFirstSeveral: not so many(expecting size:" + size
 							+ ", actual size:" + result.size());
 		}
+		lock.unlock();
 
 		return result;
 	}
@@ -77,12 +148,13 @@ public class NewsList {
 	 * @param size
 	 * @return result is sorted by id
 	 */
-	public List<News> getAllCatByIdMax(long max, int size) {
+	public List<News> getAllCatByIdMax(News max, int size) {
 		List<News> result = new ArrayList<News>();
 		SortedSet<News> ss = new TreeSet<News>();
 
+		lock.lock();
 		for (News n : newsList) {
-			if (n.getId() < max) {
+			if (n.compareTo(max) < 0) { // TODO: cmp!!
 				ss.add(n);
 			}
 		}
@@ -101,6 +173,7 @@ public class NewsList {
 							+ ", actual size:" + result.size());
 		}
 
+		lock.unlock();
 		return result;
 	}
 
@@ -112,12 +185,14 @@ public class NewsList {
 	 * @param size
 	 * @return result is sorted by id
 	 */
-	public List<News> getAllCatById(long min, int size) {
+	public List<News> getAllCatById(News min, int size) {
 		List<News> result = new ArrayList<News>();
 		SortedSet<News> ss = new TreeSet<News>();
 
+		lock.lock();
 		for (News n : newsList) {
-			if (n.getId() >= min) {
+			// if (n.getId() >= min) {
+			if (n.compareTo(min) >= 0) {
 				ss.add(n);
 			}
 		}
@@ -135,6 +210,7 @@ public class NewsList {
 							+ ", actual size:" + result.size());
 		}
 
+		lock.unlock();
 		return result;
 	}
 
@@ -142,26 +218,38 @@ public class NewsList {
 	 * @param min
 	 * @return
 	 */
-	public List<News> getAllCatById(long min) {
+	public List<News> getAllCatById(News min) {
 		SortedSet<News> ss = new TreeSet<News>();
 
+		lock.lock();
 		for (News n : newsList) {
-			if (n.getId() >= min) {
+			// if (n.getId() >= min) {
+			if (n.compareTo(min) >= 0) {
 				ss.add(n);
 			}
 		}
 		News[] temp = new News[ss.size()];
 		ss.toArray(temp);
 
+		lock.unlock();
+
 		return Arrays.asList(temp);
 	}
 
-	public List<News> getAllCatByIdCyclicly(long least, int size) {
+	/**
+	 * @param least
+	 *            including
+	 * @param size
+	 * @return
+	 */
+	public List<News> getAllCatByIdCyclicly(News least, int size) {
 		List<News> result = new ArrayList<News>();
 		SortedSet<News> ss = new TreeSet<News>();
 
+		lock.lock();
 		for (News n : newsList) {
-			if (n.getId() >= least) {
+			// if (n.getId() >= least) {
+			if (n.compareTo(least) >= 0) {
 				ss.add(n);
 			}
 		}
@@ -174,6 +262,7 @@ public class NewsList {
 		if (result.size() >= size) {
 			result = result.subList(0, size);
 
+			lock.unlock();
 			return result;
 		} else {
 			int left = size - result.size();
@@ -182,7 +271,9 @@ public class NewsList {
 							+ ", actual size:" + result.size()
 							+ ", so starting from beginning");
 
-			List<News> leftNews = getAllCatByIdMax(result.get(0).getId(), left);
+			// List<News> leftNews = getAllCatByIdMax(result.get(0).getId(),
+			// left);
+			List<News> leftNews = getAllCatByIdMax(result.get(0), left);
 			Log.i("===NewsLIst===",
 					"getAllCatByIdCyclicly: debug(expecting size:" + size
 							+ ", actual size:" + result.size() + ", left:"
@@ -205,6 +296,7 @@ public class NewsList {
 			}
 			result.addAll(leftNews);
 
+			lock.unlock();
 			return result;
 		}
 
@@ -214,15 +306,21 @@ public class NewsList {
 
 	// ---- vip methods
 
-	public long getMaxId() {
-		long m;
-		m = 0;
+	public String getMaxId() {
+		News m;
+		if (newsList.size() == 0) {
+			return null;
+		}
+		m = newsList.get(0);
+		lock.lock();
 		for (News n : newsList) {
-			if (n.getId() > m) {
-				m = n.getId();
+			// if (n.getId() > m) {
+			if (n.compareTo(m) > 0) {
+				m = n;
 			}
 		}
-		return m;
+		lock.unlock();
+		return m.getId();
 	}
 
 	// ---- util methods

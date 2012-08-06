@@ -37,7 +37,8 @@ public class LongTextMovingAnimation extends Animation {
 	int scrHeight;
 
 	// VIP
-	private long curNewsId; // id of the last news
+	// private String curNewsId; // id of the last news
+	private News curNews; // last news
 	private String curText; // text displaying
 	private float curTextWidth; // text displaying
 	private int startLeft;
@@ -70,8 +71,9 @@ public class LongTextMovingAnimation extends Animation {
 
 		Log.e("===Animation===", "batchSize=" + batchSize);
 
-		// init news id
-		curNewsId = 0;
+		// init cur news
+		curNews = null;
+		// curNewsId = 0;
 
 		// init flag
 		firstTime = true;
@@ -92,14 +94,14 @@ public class LongTextMovingAnimation extends Animation {
 	public void prepareText() {
 		NewsInTimeApp app = ((NewsInTimeApp) a.getApplication());
 
-		Log.e("===ANIM===", "prepareText: curNewsId=" + curNewsId
-				+ ", batchSize" + batchSize);
+		Log.e("===ANIM===", "prepareText: curNews=" + curNews + ", batchSize"
+				+ batchSize);
 
-		List<News> nl = app.getSubList(curNewsId, batchSize);
+		List<News> nl = app.getSubList(curNews, batchSize);
 
 		curText = NewsList.newsListToString(nl);
 		String curLastText = nl.get(0).toString();
-		curNewsId = nl.get(nl.size() - 1).getId();
+		curNews = nl.get(nl.size() - 1);
 
 		Log.e("===temp===", "tv=" + tv);
 		Log.e("===temp===", "tv.getPaint=" + tv.getPaint());
