@@ -2,19 +2,35 @@ package info.realjin.newsintime.activity;
 
 import info.realjin.newsintime.NewsInTimeApp;
 import info.realjin.newsintime.R;
-import info.realjin.newsintime.anim.LongTextMovingAnimation;
 import info.realjin.newsintime.view.VerticalTextView;
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.provider.SyncStateContract.Constants;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
+	/**
+	 * main text view
+	 */
 	private TextView tvMain;
+
+	private PopupWindow colSelector;
+	private View colSelectorView;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -41,20 +57,45 @@ public class MainActivity extends Activity {
 
 		llMain.addView(tvMain);
 
+		// init
+		colSelector = null;
+
 	}
 
 	public boolean onTouchEvent(MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
-			// RunAnimations();
-			// Button btMain = (Button) findViewById(R.id.btMain);
-			// btMain.startAnimation(new LongTextMovingAnimation(btMain));
-			// TextView tv = (TextView) findViewById(R.id.tvMain);
-			// tv.startAnimation(new LongTextMovingAnimation(this, tv));
-			tvMain.startAnimation(new LongTextMovingAnimation(this, tvMain));
+
+			// tvMain.startAnimation(new LongTextMovingAnimation(this, tvMain));
+
+			showCover();
 
 			Log.e("===onTouchEvent===", "start");
-			// testSetLP();
 		}
 		return true;
+	}
+
+	/**
+	 * show top layer
+	 */
+	private void showCover() {
+		showColSelector();
+	}
+
+	private void showColSelector() {
+		if (colSelector == null) {
+			Log.i("===MainActivity===", "colSelector creating");
+			LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+			colSelectorView = layoutInflater
+					.inflate(R.layout.colselector, null);
+
+			colSelector = new PopupWindow(colSelectorView, 200, 150);
+			colSelector.setBackgroundDrawable(new BitmapDrawable());
+			colSelector.setOutsideTouchable(true);
+			colSelector.setFocusable(true);
+
+			// colSelector.showAsDropDown(llMain, 200, 200);
+		}
+		colSelector.showAtLocation(colSelectorView, Gravity.TOP, 100, 30);
 	}
 }
