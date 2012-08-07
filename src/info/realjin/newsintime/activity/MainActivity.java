@@ -1,3 +1,4 @@
+
 package info.realjin.newsintime.activity;
 
 import info.realjin.newsintime.NewsInTimeApp;
@@ -28,6 +29,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.PopupWindow.OnDismissListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -43,7 +45,7 @@ public class MainActivity extends Activity {
 	private PopupWindow pwCols;
 	private View vPwCols;
 	// TODO: no calc!!!
-	int colSelectorWidth = 200;
+	int colSelectorWidth = 100;
 	int colSelectorHeight = 200;
 	int colSelectorLeft = 25;
 	int colSelectorTop = 390;
@@ -128,13 +130,14 @@ public class MainActivity extends Activity {
 			colSelectorView = layoutInflater
 					.inflate(R.layout.colselector, null);
 
-			colSelector = new PopupWindow(colSelectorView, colSelectorWidth, colSelectorHeight);
+			colSelector = new PopupWindow(colSelectorView, colSelectorWidth,
+					colSelectorHeight);
 			colSelector.setBackgroundDrawable(new BitmapDrawable());
 			colSelector.setOutsideTouchable(true);
 			colSelector.setFocusable(true);
 
-			TextView tvColSel = new VerticalTextView(this);
-			tvColSel.setText("abc");
+			final TextView tvColSel = new VerticalTextView(this);
+			tvColSel.setText("collections");
 			tvColSel.setTextSize(28.0f);
 			// tvColSel.setInputType(InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
 			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -149,6 +152,12 @@ public class MainActivity extends Activity {
 
 				public void onClick(View v) {
 					Log.e("===MainActivity===", "tvCol onclick!");
+
+					// 1. hide this tv
+					v.setVisibility(View.GONE);
+
+					// 2.
+
 					LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 					vPwCols = layoutInflater.inflate(R.layout.colselector_menu,
@@ -177,10 +186,17 @@ public class MainActivity extends Activity {
 							MainActivity.this, cols);
 					lvCols.setAdapter(groupAdapter);
 
-					pwCols = new PopupWindow(vPwCols, colSelectorWidth/2, colSelectorWidth/2);
+					pwCols = new PopupWindow(vPwCols, colSelectorWidth - 5,
+							colSelectorWidth - 5);
 					pwCols.setBackgroundDrawable(new BitmapDrawable());
 					pwCols.setOutsideTouchable(true);
 					pwCols.setFocusable(true);
+					pwCols.setOnDismissListener(new OnDismissListener() {
+						
+						public void onDismiss() {
+							tvColSel.setVisibility(View.VISIBLE);
+						}
+					});
 
 					Log.e("===VIEW===", "top="
 							+ colSelector.getContentView().getTop() + ", left="
@@ -236,15 +252,17 @@ class GroupAdapter extends BaseAdapter {
 			convertView.setTag(holder);
 
 			TextView tv = new VerticalTextView(viewGroup.getContext());
-			((LinearLayout)convertView).addView(tv);
+			tv.setTextColor(Color.WHITE);
+			((LinearLayout) convertView).addView(tv);
 			holder.groupItem = tv;
-//			holder.groupItem = (TextView) convertView
-//					.findViewById(R.id.tvcolselector_menu_item);
+			// holder.groupItem = (TextView) convertView
+			// .findViewById(R.id.tvcolselector_menu_item);
 
 		} else {
+			// TODO: something missing?!!!
 			holder = (ViewHolder) convertView.getTag();
 		}
-		holder.groupItem.setTextColor(Color.BLACK);
+		// holder.groupItem.setTextColor(Color.BLACK);
 		holder.groupItem.setText(list.get(position));
 
 		return convertView;
