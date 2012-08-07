@@ -3,6 +3,7 @@ package info.realjin.newsintime.activity;
 import info.realjin.newsintime.NewsInTimeApp;
 import info.realjin.newsintime.R;
 import info.realjin.newsintime.anim.LongTextMovingAnimation;
+import info.realjin.newsintime.view.VerticalListView;
 import info.realjin.newsintime.view.VerticalTextView;
 
 import java.util.ArrayList;
@@ -22,10 +23,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -41,6 +42,11 @@ public class MainActivity extends Activity {
 	private View colSelectorView;
 	private PopupWindow pwCols;
 	private View vPwCols;
+	// TODO: no calc!!!
+	int colSelectorWidth = 200;
+	int colSelectorHeight = 200;
+	int colSelectorLeft = 25;
+	int colSelectorTop = 390;
 
 	//
 	private Button btPlay;
@@ -122,13 +128,23 @@ public class MainActivity extends Activity {
 			colSelectorView = layoutInflater
 					.inflate(R.layout.colselector, null);
 
-			colSelector = new PopupWindow(colSelectorView, 200, 150);
+			colSelector = new PopupWindow(colSelectorView, colSelectorWidth, colSelectorHeight);
 			colSelector.setBackgroundDrawable(new BitmapDrawable());
 			colSelector.setOutsideTouchable(true);
 			colSelector.setFocusable(true);
 
-			TextView tvColSel = (TextView) colSelectorView
-					.findViewById(R.id.tvTest1);
+			TextView tvColSel = new VerticalTextView(this);
+			tvColSel.setText("abc");
+			tvColSel.setTextSize(28.0f);
+			// tvColSel.setInputType(InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
+			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+					new ViewGroup.MarginLayoutParams(
+							LinearLayout.LayoutParams.FILL_PARENT,
+							LinearLayout.LayoutParams.FILL_PARENT));
+			lp.setMargins(0, 0, 0, 0);
+			tvColSel.setLayoutParams(lp);
+			// TextView tvColSel = (TextView) colSelectorView
+			// .findViewById(R.id.tvTest1);
 			tvColSel.setOnClickListener(new OnClickListener() {
 
 				public void onClick(View v) {
@@ -139,8 +155,15 @@ public class MainActivity extends Activity {
 							null);
 
 					// add data
-					ListView lvCols = (ListView) vPwCols
-							.findViewById(R.id.lvCols);
+					AdapterView lvCols;
+					lvCols = new VerticalListView(MainActivity.this);
+					LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+							LinearLayout.LayoutParams.FILL_PARENT,
+							LinearLayout.LayoutParams.FILL_PARENT);
+					lvCols.setLayoutParams(lp);
+					((LinearLayout) vPwCols).addView(lvCols);
+
+					// = (ListView) vPwCols.findViewById(R.id.lvCols);
 					// 加载数据
 					List<String> cols = new ArrayList<String>();
 					cols.add("全部");
@@ -149,25 +172,30 @@ public class MainActivity extends Activity {
 					cols.add("亲人");
 					cols.add("同学");
 					cols.add("朋友");
-					cols.add("陌生人");
 
 					GroupAdapter groupAdapter = new GroupAdapter(
 							MainActivity.this, cols);
 					lvCols.setAdapter(groupAdapter);
 
-					pwCols = new PopupWindow(vPwCols, 200, 300);
+					pwCols = new PopupWindow(vPwCols, colSelectorWidth/2, colSelectorWidth/2);
 					pwCols.setBackgroundDrawable(new BitmapDrawable());
 					pwCols.setOutsideTouchable(true);
 					pwCols.setFocusable(true);
 
-					pwCols.showAtLocation(vPwCols, Gravity.TOP, 100, 30);
+					Log.e("===VIEW===", "top="
+							+ colSelector.getContentView().getTop() + ", left="
+							+ colSelector.getContentView().getLeft());
+					pwCols.showAtLocation(vPwCols, Gravity.NO_GRAVITY,
+							colSelectorLeft, colSelectorTop);
 				}
 			});
 
 			// colSelector.showAsDropDown(llMain, 200, 200);
+			((LinearLayout) colSelectorView).addView(tvColSel);
 		}
 		// TODO: no position calculation!!!
-		colSelector.showAtLocation(colSelectorView, Gravity.TOP, 100, 30);
+		colSelector.showAtLocation(colSelectorView, Gravity.NO_GRAVITY,
+				colSelectorLeft, colSelectorTop);
 	}
 }
 
@@ -207,8 +235,11 @@ class GroupAdapter extends BaseAdapter {
 
 			convertView.setTag(holder);
 
-			holder.groupItem = (TextView) convertView
-					.findViewById(R.id.tvcolselector_menu_item);
+			TextView tv = new VerticalTextView(viewGroup.getContext());
+			((LinearLayout)convertView).addView(tv);
+			holder.groupItem = tv;
+//			holder.groupItem = (TextView) convertView
+//					.findViewById(R.id.tvcolselector_menu_item);
 
 		} else {
 			holder = (ViewHolder) convertView.getTag();

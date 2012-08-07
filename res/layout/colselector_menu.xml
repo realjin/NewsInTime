@@ -13,9 +13,10 @@
         android:background="@drawable/group_divider" />
     -->
 
+<!--
     <ListView
         android:id="@+id/lvCols"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
-
+-->
 </LinearLayout>
