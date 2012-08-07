@@ -4,6 +4,7 @@ import info.realjin.newsintime.activity.MainActivity;
 import info.realjin.newsintime.domain.AppConfig;
 import info.realjin.newsintime.domain.AppData;
 import info.realjin.newsintime.domain.AppStatus;
+import info.realjin.newsintime.domain.CollectionItem;
 import info.realjin.newsintime.domain.News;
 import info.realjin.newsintime.domain.NewsList;
 import info.realjin.newsintime.service.NewsRetrieverService;
@@ -36,8 +37,10 @@ public class NewsInTimeApp extends Application {
 		// start retrieving news rss
 		// TODO: temp!!!
 		nrService = new NewsRetrieverService(data.getNewsList(),
-				"http://rss.sina.com.cn/news/marquee/ddt.xml");
-		Thread t = new Thread(nrService);
+				new CollectionItem(
+						"http://rss.sina.com.cn/news/marquee/ddt.xml"));
+		nrService.start();
+		// Thread t = new Thread(nrService);
 		// t.start();
 	}
 

@@ -1,12 +1,11 @@
 package info.realjin.newsintime.service;
 
+import info.realjin.newsintime.domain.CollectionItem;
 import info.realjin.newsintime.domain.News;
 import info.realjin.newsintime.domain.NewsList;
 import info.realjin.newsintime.domain.RssFeed;
 import info.realjin.newsintime.domain.RssItem;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -29,35 +28,77 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
-public class NewsRetrieverService implements Runnable {
-	private NewsList nl;
-	private String url;
-	private boolean enabled;
+public class NewsRetrieverService {
+	private NewsRetrieverServiceThread thread;
+	private boolean threadRunning;
 
-	/**
-	 * @param nl
-	 * @param url
-	 *            initial url
-	 */
-	public NewsRetrieverService(NewsList nl, String url) {
-		this.nl = nl;
-		this.url = url;
-		this.enabled = true;
+	public void sendMsg(Message msg) {
+		handler.sendMessage(msg);
 	}
 
-	public void run() {
-		// TODO Auto-generated method stub
-		loop();
-	}
+	private Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			// get the bundle and extract data by key
+			Bundle b = msg.getData();
+			String msgType = b.getString("type");
+			if (msgType.equals("changeColItem") || msgType.equals("changeCol")) {
+				// end the loop
+				NewsRetrieverService.this.stop();
 
-	/**
-	 * 
-	 */
-	public void loop() {
-		while (enabled) {
+				if (msgType.equals("changeColItem")) {
+					// start new retrieval looping
+					String url = b.getString("content");
+					Log.e("===NRS===", "changeColItem: content=" + url);
+					NewsRetrieverService.this
+							.startByNewColItem(new CollectionItem(url));
+				}
+
+				// synchronized (NewsRetrieverService.this) {
+				// NewsRetrieverService.this.notifyAll();
+				// thread.enabled = false;
+				// }
+
+			} else {
+			}
+
+		}
+	};
+
+	class NewsRetrieverServiceThread implements Runnable {
+		NewsRetrieverService nrs;
+		private NewsList nl;
+		private String url;
+
+		private boolean enabled;
+
+		public NewsRetrieverServiceThread(NewsRetrieverService nrs,
+				NewsList nl, CollectionItem item) {
+			this.nrs = nrs;
+			this.nl = nl;
+			this.url = item.getUrl();
+			this.enabled = true;
+		}
+
+		public void run() {
 			try {
+				loop();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
+		/**
+		 * @throws InterruptedException
+		 * 
+		 */
+		public void loop() throws InterruptedException {
+			while (enabled) {
 				RssFeed feed = getFeedByUrl(url);
 				for (Object o : feed.getAllItems()) {
 					RssItem ri = (RssItem) o;
@@ -78,13 +119,261 @@ public class NewsRetrieverService implements Runnable {
 					// mmmmmm
 					nl.addNews(n);
 				}
-				Thread.sleep(10 * 1000); // TODO: should be wait
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+				// Thread.sleep(10 * 1000); // TODO: should be wait
+				synchronized (nrs) {
+					if (enabled) {
+						break;
+					}
+					nrs.wait(10 * 1000);
+				}
+
+				// if source changed
+
+			}
+			Log.e("===NRS===", "loop() end");
+		}
+
+		public String getUrl() {
+			return url;
+		}
+
+		public void setUrl(String url) {
+			this.url = url;
+		}
+
+		private RssFeed getFeedByUrl(String urlString) {
+			URL url;
+			InputStream is;
+			try {
+				url = new URL(urlString);
+				is = url.openStream();
+			} catch (MalformedURLException e) {
+				Log.e("===NRSERVICE===", "getFeedByUrl url malformed! ("
+						+ urlString + ")");
+				return null;
+				// e.printStackTrace();
+			} catch (IOException e) {
+				// e.printStackTrace();
+				Log.e("===NRSERVICE===", "getFeedByUrl ioException! ("
+						+ urlString + ")" + e.getMessage());
+				return null;
+			}
+			return getFeed(is);
+		}
+
+		private RssFeed getFeed(InputStream is) {
+			try {
+				if (is == null) {
+					return null;
+				}
+
+				RssFeed feed = new RssFeed();
+
+				SAXReader reader = new SAXReader();
+				Document doc = reader.read(is);
+
+				Element root = doc.getRootElement();
+
+				// TODO: assume one channel only!
+				Element channel = root.element("channel");
+
+				Iterator it = channel.elementIterator("item");
+				while (it.hasNext()) {
+					Element e = (Element) it.next();
+					RssItem ri = new RssItem();
+					ri.setTitle(e.elementTextTrim("title"));
+					ri.setCategory(e.elementTextTrim("category"));
+					ri.setDescription(e.elementTextTrim("description"));
+					String sDate = e.elementTextTrim("pubDate");
+					if (sDate == null || sDate.length() == 0) {
+						ri.setPubDate(null);
+					} else {
+						ri.setPubDate(sDate);
+					}
+					ri.setLink(e.elementTextTrim("link"));
+
+					feed.addItem(ri);
+
+					System.out
+							.println("==>" + e.element("title").getTextTrim());
+				}
+
+				return feed;
+
+			} catch (Exception ee) {
+				return null;
 			}
 
-			// if source changed
+		}
 
+		private RssFeed getFeedOld(InputStream is) {
+			try {
+				if (is == null) {
+					return null;
+				}
+				// URL url = new URL(urlString);
+				// 新建一个工厂类
+				SAXParserFactory factory = SAXParserFactory.newInstance();
+				// 工厂类产生出一个sax的解析类
+				SAXParser parser = factory.newSAXParser();
+				XMLReader xmlreader = parser.getXMLReader();
+
+				RSSHandler rssHandler = new RSSHandler();
+				xmlreader.setContentHandler(rssHandler);
+				// InputSource is = new InputSource(url.openStream());
+				InputSource isrc = new InputSource(is);
+				xmlreader.parse(isrc);
+				// // // 调用解析的类
+				// return rssHandler.getFeed();
+				RssFeed feed = rssHandler.getFeed();
+				System.out.println("after get feed: "
+						+ feed.getAllItems().size());
+				return feed;
+			} catch (Exception ee) {
+				return null;
+			}
+		}
+
+		class RSSHandler extends DefaultHandler {
+			RssFeed rssFeed;
+			RssItem rssItem;
+			String lastElementName = "";
+			final int RSS_TITLE = 1;
+			final int RSS_LINK = 2;
+			final int RSS_DESCRIPTION = 3;
+			final int RSS_CATEGORY = 4;
+			final int RSS_PUBDATE = 5;
+			int currentstate = 0;
+
+			public RSSHandler() {
+			}
+
+			// 调用顺序跟代码位置无关
+			public RssFeed getFeed() {
+				return rssFeed;
+			}
+
+			// 开始文档时调用
+			public void startDocument() throws SAXException {
+				System.out.println("startDocument");
+
+				// 实例化两个对象
+				rssFeed = new RssFeed();
+				rssItem = new RssItem();
+			}
+
+			public void endDocument() throws SAXException {
+			}
+
+			public void startElement(String namespaceURI, String localName,
+					String qName, Attributes atts) throws SAXException {
+				// System.out.println("localname: " + localName + ", qName=" +
+				// qName);
+				if (qName.equals("channel")) {
+					currentstate = 0;
+					return;
+				}
+				if (qName.equals("item")) {
+					rssItem = new RssItem();
+					return;
+				}
+				if (qName.equals("title")) {
+					currentstate = RSS_TITLE;
+					return;
+				}
+				if (qName.equals("description")) {
+					currentstate = RSS_DESCRIPTION;
+					return;
+				}
+				if (qName.equals("link")) {
+					currentstate = RSS_LINK;
+					return;
+				}
+				if (qName.equals("category")) {
+					currentstate = RSS_CATEGORY;
+					return;
+				}
+				if (qName.equals("pubDate")) {
+					currentstate = RSS_PUBDATE;
+					return;
+				}
+				currentstate = 0;
+			}
+
+			public void endElement(String namespaceURI, String localName,
+					String qName) throws SAXException {
+				// 如果解析一个item节点结束，就将rssItem添加到rssFeed中。
+				if (qName.equals("item")) {
+					rssFeed.addItem(rssItem);
+					return;
+				}
+			}
+
+			public void characters(char ch[], int start, int length) {
+				String theString = new String(ch, start, length);
+				switch (currentstate) {
+				case RSS_TITLE:
+					rssItem.setTitle(theString);
+					currentstate = 0;
+					break;
+				case RSS_LINK:
+					rssItem.setLink(theString);
+					currentstate = 0;
+					break;
+				case RSS_DESCRIPTION:
+					rssItem.setDescription(theString);
+					currentstate = 0;
+					break;
+				case RSS_CATEGORY:
+					rssItem.setCategory(theString);
+					currentstate = 0;
+					break;
+				case RSS_PUBDATE:
+					rssItem.setPubDate(theString);
+					currentstate = 0;
+					break;
+				default:
+					return;
+				}
+			}
+		}
+
+	}
+
+	/**
+	 * @param nl
+	 * @param url
+	 *            initial url
+	 */
+	public NewsRetrieverService(NewsList nl, CollectionItem item) {
+		thread = new NewsRetrieverServiceThread(this, nl, item);
+	}
+
+	public void start() {
+		threadRunning = true;
+		new Thread(thread).start();
+	}
+
+	public void startByNewColItem(CollectionItem ci) {
+		// 1.clear list
+		thread.nl.clearAll();
+
+		// 2. start retrieving
+
+		threadRunning = true;
+		thread.setUrl(ci.getUrl());
+		new Thread(thread).start();
+	}
+
+	public void stop() {
+		if (!threadRunning) {
+			Log.e("===NRS===", "stop error: thead not running!");
+			return;
+		}
+		threadRunning = false;
+		synchronized (this) {
+			this.notifyAll();
+			thread.enabled = false;
 		}
 	}
 
@@ -162,211 +451,15 @@ public class NewsRetrieverService implements Runnable {
 		return d;
 	}
 
-	private RssFeed getFeedByUrl(String urlString) {
-		URL url;
-		InputStream is;
-		try {
-			url = new URL(urlString);
-			is = url.openStream();
-		} catch (MalformedURLException e) {
-			Log.e("===NRSERVICE===", "getFeedByUrl url malformed! ("
-					+ urlString + ")");
-			return null;
-			// e.printStackTrace();
-		} catch (IOException e) {
-			// e.printStackTrace();
-			Log.e("===NRSERVICE===", "getFeedByUrl ioException! (" + urlString
-					+ ")" + e.getMessage());
-			return null;
-		}
-		return getFeed(is);
-	}
-
-	private RssFeed getFeed(InputStream is) {
-		try {
-			if (is == null) {
-				return null;
-			}
-
-			RssFeed feed = new RssFeed();
-
-			SAXReader reader = new SAXReader();
-			Document doc = reader.read(is);
-
-			Element root = doc.getRootElement();
-
-			// TODO: assume one channel only!
-			Element channel = root.element("channel");
-
-			Iterator it = channel.elementIterator("item");
-			while (it.hasNext()) {
-				Element e = (Element) it.next();
-				RssItem ri = new RssItem();
-				ri.setTitle(e.elementTextTrim("title"));
-				ri.setCategory(e.elementTextTrim("category"));
-				ri.setDescription(e.elementTextTrim("description"));
-				String sDate = e.elementTextTrim("pubDate");
-				if (sDate == null || sDate.length() == 0) {
-					ri.setPubDate(null);
-				} else {
-					ri.setPubDate(sDate);
-				}
-				ri.setLink(e.elementTextTrim("link"));
-
-				feed.addItem(ri);
-
-				System.out.println("==>" + e.element("title").getTextTrim());
-			}
-
-			return feed;
-
-		} catch (Exception ee) {
-			return null;
-		}
-
-	}
-
-	private RssFeed getFeedOld(InputStream is) {
-		try {
-			if (is == null) {
-				return null;
-			}
-			// URL url = new URL(urlString);
-			// 新建一个工厂类
-			SAXParserFactory factory = SAXParserFactory.newInstance();
-			// 工厂类产生出一个sax的解析类
-			SAXParser parser = factory.newSAXParser();
-			XMLReader xmlreader = parser.getXMLReader();
-
-			RSSHandler rssHandler = new RSSHandler();
-			xmlreader.setContentHandler(rssHandler);
-			// InputSource is = new InputSource(url.openStream());
-			InputSource isrc = new InputSource(is);
-			xmlreader.parse(isrc);
-			// // // 调用解析的类
-			// return rssHandler.getFeed();
-			RssFeed feed = rssHandler.getFeed();
-			System.out.println("after get feed: " + feed.getAllItems().size());
-			return feed;
-		} catch (Exception ee) {
-			return null;
-		}
-	}
-
 	public static void main(String[] args) {
 		System.out.println("start");
 		NewsRetrieverService nrs = new NewsRetrieverService(null, null);
 		// nrs.getFeed("http://cn.wsj.com.feedsportal.com/c/33121/f/538760/index.rss");
 		// nrs.getFeed("http://rss.sina.com.cn/news/marquee/ddt.xml");
-		try {
-			nrs.getFeed(new FileInputStream("I:\\Tangdun\\index.rss"));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+		// try {
+		// nrs.getFeed(new FileInputStream("I:\\Tangdun\\index.rss"));
+		// } catch (FileNotFoundException e) {
+		// e.printStackTrace();
+		// }
 	}
-
-	class RSSHandler extends DefaultHandler {
-		RssFeed rssFeed;
-		RssItem rssItem;
-		String lastElementName = "";
-		final int RSS_TITLE = 1;
-		final int RSS_LINK = 2;
-		final int RSS_DESCRIPTION = 3;
-		final int RSS_CATEGORY = 4;
-		final int RSS_PUBDATE = 5;
-		int currentstate = 0;
-
-		public RSSHandler() {
-		}
-
-		// 调用顺序跟代码位置无关
-		public RssFeed getFeed() {
-			return rssFeed;
-		}
-
-		// 开始文档时调用
-		public void startDocument() throws SAXException {
-			System.out.println("startDocument");
-
-			// 实例化两个对象
-			rssFeed = new RssFeed();
-			rssItem = new RssItem();
-		}
-
-		public void endDocument() throws SAXException {
-		}
-
-		public void startElement(String namespaceURI, String localName,
-				String qName, Attributes atts) throws SAXException {
-			// System.out.println("localname: " + localName + ", qName=" +
-			// qName);
-			if (qName.equals("channel")) {
-				currentstate = 0;
-				return;
-			}
-			if (qName.equals("item")) {
-				rssItem = new RssItem();
-				return;
-			}
-			if (qName.equals("title")) {
-				currentstate = RSS_TITLE;
-				return;
-			}
-			if (qName.equals("description")) {
-				currentstate = RSS_DESCRIPTION;
-				return;
-			}
-			if (qName.equals("link")) {
-				currentstate = RSS_LINK;
-				return;
-			}
-			if (qName.equals("category")) {
-				currentstate = RSS_CATEGORY;
-				return;
-			}
-			if (qName.equals("pubDate")) {
-				currentstate = RSS_PUBDATE;
-				return;
-			}
-			currentstate = 0;
-		}
-
-		public void endElement(String namespaceURI, String localName,
-				String qName) throws SAXException {
-			// 如果解析一个item节点结束，就将rssItem添加到rssFeed中。
-			if (qName.equals("item")) {
-				rssFeed.addItem(rssItem);
-				return;
-			}
-		}
-
-		public void characters(char ch[], int start, int length) {
-			String theString = new String(ch, start, length);
-			switch (currentstate) {
-			case RSS_TITLE:
-				rssItem.setTitle(theString);
-				currentstate = 0;
-				break;
-			case RSS_LINK:
-				rssItem.setLink(theString);
-				currentstate = 0;
-				break;
-			case RSS_DESCRIPTION:
-				rssItem.setDescription(theString);
-				currentstate = 0;
-				break;
-			case RSS_CATEGORY:
-				rssItem.setCategory(theString);
-				currentstate = 0;
-				break;
-			case RSS_PUBDATE:
-				rssItem.setPubDate(theString);
-				currentstate = 0;
-				break;
-			default:
-				return;
-			}
-		}
-	}
-
 }

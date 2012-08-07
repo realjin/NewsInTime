@@ -84,6 +84,12 @@ public class NewsList {
 		return maxSubId + 1;
 	}
 
+	public void clearAll() {
+		lock.lock();
+		newsList.clear();
+		lock.unlock();
+	}
+
 	/**
 	 * @param n
 	 *            time must be set already
