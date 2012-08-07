@@ -158,10 +158,11 @@ public class LongTextMovingAnimation extends Animation {
 			if (or == Orientation.Horizontal) {
 				lp.setMargins((curLeft -= 5), 50, 0, 0); // TODO: 5 may be not
 			} else if (or == Orientation.Vertical) {
-				lp.setMargins(0, 50 + (curLeft -= 5), 0, 0); // TODO: 5 may be
-																// not
+				// TODO: no calc!!!
+				int offsetRight = 100; // distance from right edge
+				// TODO: 5 may be not proper
+				lp.setMargins(0, 50 + (curLeft -= 5), offsetRight, 0);
 			}
-			// proper
 			tv.setLayoutParams(lp);
 		}
 
