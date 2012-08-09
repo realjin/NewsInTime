@@ -1,4 +1,3 @@
-
 package info.realjin.newsintime.activity;
 
 import info.realjin.newsintime.NewsInTimeApp;
@@ -12,6 +11,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -20,6 +20,8 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -192,7 +194,7 @@ public class MainActivity extends Activity {
 					pwCols.setOutsideTouchable(true);
 					pwCols.setFocusable(true);
 					pwCols.setOnDismissListener(new OnDismissListener() {
-						
+
 						public void onDismiss() {
 							tvColSel.setVisibility(View.VISIBLE);
 						}
@@ -213,7 +215,53 @@ public class MainActivity extends Activity {
 		colSelector.showAtLocation(colSelectorView, Gravity.NO_GRAVITY,
 				colSelectorLeft, colSelectorTop);
 	}
+
+	public boolean onCreateOptionsMenu(Menu menu) {
+		/*
+		 * 
+		 * add()方法的四个参数，依次是：
+		 * 
+		 * 1、组别，如果不分组的话就写Menu.NONE,
+		 * 
+		 * 2、Id，这个很重要，Android根据这个Id来确定不同的菜单
+		 * 
+		 * 3、顺序，那个菜单现在在前面由这个参数的大小决定
+		 * 
+		 * 4、文本，菜单的显示文本
+		 */
+
+		menu.add(Menu.NONE, Menu.FIRST + 1, 1, "Edit Collection").setIcon(
+				android.R.drawable.ic_menu_edit);
+		// setIcon()方法为菜单设置图标，这里使用的是系统自带的图标，同学们留意一下,以
+		// android.R开头的资源是系统提供的，我们自己提供的资源是以R开头的
+		menu.add(Menu.NONE, Menu.FIRST + 2, 2, "Menu2").setIcon(
+				android.R.drawable.ic_menu_call);
+		menu.add(Menu.NONE, Menu.FIRST + 3, 5, "Menu3").setIcon(
+				android.R.drawable.ic_menu_help);
+		menu.add(Menu.NONE, Menu.FIRST + 4, 6, "Menu4").setIcon(
+				android.R.drawable.ic_menu_day);
+		return true;
+
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+
+		case Menu.FIRST + 1:
+			Intent intent = new Intent(this, CollectionListActivity.class);
+			this.startActivity(intent);
+
+			// Toast.makeText(this, "删除菜单被点击了", Toast.LENGTH_LONG).show();
+			break;
+		}
+
+		return false;
+
+	}
+
 }
+
+// ------------------- class
 
 class GroupAdapter extends BaseAdapter {
 
