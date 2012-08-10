@@ -1,7 +1,5 @@
 package info.realjin.newsintime.activity;
 
-import info.realjin.newsintime.R;
-
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 /*
@@ -50,25 +47,21 @@ public class CollectionListActivity extends ListActivity {
 			this.li = LayoutInflater.from(context);
 		}
 
-		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
 			return mData.size();
 		}
 
-		@Override
 		public Object getItem(int arg0) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
-		@Override
 		public long getItemId(int arg0) {
 			// TODO Auto-generated method stub
 			return 0;
 		}
 
-		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 
 			ViewHolder holder = null;
@@ -78,7 +71,8 @@ public class CollectionListActivity extends ListActivity {
 
 				// convertView = li.inflate(R.layout.vlist2, null);
 				// holder.img = (ImageView) convertView.findViewById(R.id.img);
-				holder.title = (TextView) convertView.findViewById(R.id.title);
+				// holder.title = (TextView)
+				// convertView.findViewById(R.id.title);
 				// holder.btEdit = (Button)
 				// convertView.findViewById(R.id.view_btn);
 
@@ -91,7 +85,6 @@ public class CollectionListActivity extends ListActivity {
 
 			holder.btEdit.setOnClickListener(new View.OnClickListener() {
 
-				@Override
 				public void onClick(View v) {
 					// showInfo();
 				}

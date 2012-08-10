@@ -1,14 +1,11 @@
 package info.realjin.newsintime.domain;
 
-public class CollectionItem {
+import java.util.List;
+
+public class Collection {
+	private List<CollectionItem> items;
 	private String id;
 	private String name;
-
-	private String url;
-
-	public CollectionItem(String url) {
-		this.url = url;
-	}
 
 	public String getId() {
 		return id;
@@ -26,11 +23,12 @@ public class CollectionItem {
 		this.name = name;
 	}
 
-	public String getUrl() {
-		return url;
+	public List<CollectionItem> getItems() {
+		return items;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
+	public void setItems(List<CollectionItem> items) {
+		this.items = items;
 	}
+
 }
