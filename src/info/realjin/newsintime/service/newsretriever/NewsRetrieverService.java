@@ -1,4 +1,4 @@
-package info.realjin.newsintime.service;
+package info.realjin.newsintime.service.newsretriever;
 
 import info.realjin.newsintime.domain.Collection;
 import info.realjin.newsintime.domain.CollectionItem;
@@ -101,26 +101,32 @@ public class NewsRetrieverService {
 		 */
 		public void loop() throws InterruptedException {
 			while (enabled) {
-				RssFeed feed = getFeedByUrl(url);
-				for (Object o : feed.getAllItems()) {
-					RssItem ri = (RssItem) o;
-					Log.e("===NRSERVICE===", "all:" + feed.getAllItems().size()
-							+ ", news title= " + ri.getTitle());
+				List<News> newsList, unarrangedNewsList;
+				List<RssFeed> feedList = getFeedList(coll);
+				unarrangedNewsList = feedListToNews(feedList);
+				newsList = filterAndRearrangeNews(unarrangedNewsList);
+				nl.addNewsList(newsList);
 
-					String text = ri.getTitle() + " ###";
-					Date pubDate;
-					if (ri.getPubDate() == null) {
-						// TODO: !!!mmm set as now!!!
-						pubDate = new Date();
-					} else {
-						pubDate = NewsRetrieverService.parsePubDate(ri
-								.getPubDate());
-					}
-
-					News n = new News(text, pubDate);
-					// mmmmmm
-					nl.addNews(n);
-				}
+				// RssFeed feed = getFeedByUrl(url);
+				// for (Object o : feed.getAllItems()) {
+				// RssItem ri = (RssItem) o;
+				// Log.e("===NRSERVICE===", "all:" + feed.getAllItems().size()
+				// + ", news title= " + ri.getTitle());
+				//
+				// String text = ri.getTitle() + " ###";
+				// Date pubDate;
+				// if (ri.getPubDate() == null) {
+				// // TODO: !!!mmm set as now!!!
+				// pubDate = new Date();
+				// } else {
+				// pubDate = NewsRetrieverService.parsePubDate(ri
+				// .getPubDate());
+				// }
+				//
+				// News n = new News(text, pubDate);
+				// // mmmmmm
+				// nl.addNews(n);
+				// }
 				// Thread.sleep(10 * 1000); // TODO: should be wait
 				synchronized (nrs) {
 					if (enabled) {
@@ -135,10 +141,35 @@ public class NewsRetrieverService {
 			Log.e("===NRS===", "loop() end");
 		}
 
-		private List<News> filterAndRearrangeNews(List<News> n){
-			return null;
+		private List<News> filterAndRearrangeNews(List<News> n) {
+			// TODO: temp
+			return n;
 		}
-		
+
+		private List<News> feedListToNews(List<RssFeed> rfList) {
+			List<News> newsList = new ArrayList<News>();
+			for (RssFeed rf : rfList) {
+				for (Object o : rf.getAllItems()) {
+					RssItem ri = (RssItem) o;
+					String text = ri.getTitle() + " ###";
+					Date pubDate;
+					if (ri.getPubDate() == null) {
+						// TODO: !!!mmm set as now!!!
+						pubDate = new Date();
+					} else {
+						pubDate = NewsRetrieverService.parsePubDate(ri
+								.getPubDate());
+					}
+
+					News n = new News(text, pubDate);
+
+					newsList.add(n);
+				}
+			}
+
+			return newsList;
+		}
+
 		private List<RssFeed> getFeedList(Collection c) {
 			List<RssFeed> rfList = new ArrayList<RssFeed>();
 			if (c == null || c.getItems() == null || c.getItems().size() == 0) {
@@ -146,6 +177,7 @@ public class NewsRetrieverService {
 				return null;
 			}
 			for (CollectionItem ci : c.getItems()) {
+				// TODO: !!!!!!!!!!!!!!!!!!!!!! no exception handling
 				RssFeed rf = getFeedByUrl(ci.getUrl());
 				rfList.add(rf);
 			}
