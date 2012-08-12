@@ -1,5 +1,6 @@
 package info.realjin.newsintime.service;
 
+import info.realjin.newsintime.domain.Collection;
 import info.realjin.newsintime.domain.CollectionItem;
 import info.realjin.newsintime.domain.News;
 import info.realjin.newsintime.domain.NewsList;
@@ -12,20 +13,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
 import android.os.Bundle;
@@ -53,10 +51,11 @@ public class NewsRetrieverService {
 
 				if (msgType.equals("changeColItem")) {
 					// start new retrieval looping
-					String url = b.getString("content");
-					Log.e("===NRS===", "changeColItem: content=" + url);
-					NewsRetrieverService.this
-							.startByNewColItem(new CollectionItem(url));
+					// TODO: deleted!!!
+					// String url = b.getString("content");
+					// Log.e("===NRS===", "changeColItem: content=" + url);
+					// NewsRetrieverService.this
+					// .startByNewColItem(new CollectionItem(url));
 				}
 
 				// synchronized (NewsRetrieverService.this) {
@@ -73,15 +72,18 @@ public class NewsRetrieverService {
 	class NewsRetrieverServiceThread implements Runnable {
 		NewsRetrieverService nrs;
 		private NewsList nl;
-		private String url;
+		private Collection coll;
+		// private String url;
 
 		private boolean enabled;
 
 		public NewsRetrieverServiceThread(NewsRetrieverService nrs,
-				NewsList nl, CollectionItem item) {
+				NewsList nl, Collection coll) {
 			this.nrs = nrs;
 			this.nl = nl;
-			this.url = item.getUrl();
+			this.coll = coll;
+			// TODO: temp!!!!!!!!!!
+			// this.url = coll.getItems().get(0).getUrl();
 			this.enabled = true;
 		}
 
@@ -133,12 +135,22 @@ public class NewsRetrieverService {
 			Log.e("===NRS===", "loop() end");
 		}
 
-		public String getUrl() {
-			return url;
+		private List<News> filterAndRearrangeNews(List<News> n){
+			return null;
 		}
+		
+		private List<RssFeed> getFeedList(Collection c) {
+			List<RssFeed> rfList = new ArrayList<RssFeed>();
+			if (c == null || c.getItems() == null || c.getItems().size() == 0) {
+				Log.e("===NRS===", "getFeedList error: arg 0 null!");
+				return null;
+			}
+			for (CollectionItem ci : c.getItems()) {
+				RssFeed rf = getFeedByUrl(ci.getUrl());
+				rfList.add(rf);
+			}
 
-		public void setUrl(String url) {
-			this.url = url;
+			return rfList;
 		}
 
 		private RssFeed getFeedByUrl(String urlString) {
@@ -204,34 +216,6 @@ public class NewsRetrieverService {
 				return null;
 			}
 
-		}
-
-		private RssFeed getFeedOld(InputStream is) {
-			try {
-				if (is == null) {
-					return null;
-				}
-				// URL url = new URL(urlString);
-				// 新建一个工厂类
-				SAXParserFactory factory = SAXParserFactory.newInstance();
-				// 工厂类产生出一个sax的解析类
-				SAXParser parser = factory.newSAXParser();
-				XMLReader xmlreader = parser.getXMLReader();
-
-				RSSHandler rssHandler = new RSSHandler();
-				xmlreader.setContentHandler(rssHandler);
-				// InputSource is = new InputSource(url.openStream());
-				InputSource isrc = new InputSource(is);
-				xmlreader.parse(isrc);
-				// // // 调用解析的类
-				// return rssHandler.getFeed();
-				RssFeed feed = rssHandler.getFeed();
-				System.out.println("after get feed: "
-						+ feed.getAllItems().size());
-				return feed;
-			} catch (Exception ee) {
-				return null;
-			}
 		}
 
 		class RSSHandler extends DefaultHandler {
@@ -338,6 +322,14 @@ public class NewsRetrieverService {
 			}
 		}
 
+		public Collection getColl() {
+			return coll;
+		}
+
+		public void setColl(Collection coll) {
+			this.coll = coll;
+		}
+
 	}
 
 	/**
@@ -345,8 +337,8 @@ public class NewsRetrieverService {
 	 * @param url
 	 *            initial url
 	 */
-	public NewsRetrieverService(NewsList nl, CollectionItem item) {
-		thread = new NewsRetrieverServiceThread(this, nl, item);
+	public NewsRetrieverService(NewsList nl, Collection coll) {
+		thread = new NewsRetrieverServiceThread(this, nl, coll);
 	}
 
 	public void start() {
@@ -354,14 +346,15 @@ public class NewsRetrieverService {
 		new Thread(thread).start();
 	}
 
-	public void startByNewColItem(CollectionItem ci) {
+	public void startByNewColItem(Collection coll) {
 		// 1.clear list
 		thread.nl.clearAll();
 
 		// 2. start retrieving
 
 		threadRunning = true;
-		thread.setUrl(ci.getUrl());
+		// thread.setUrl(ci.getUrl());
+		thread.setColl(coll);
 		new Thread(thread).start();
 	}
 
