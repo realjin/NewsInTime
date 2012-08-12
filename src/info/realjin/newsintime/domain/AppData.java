@@ -1,5 +1,6 @@
 package info.realjin.newsintime.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AppData {
@@ -13,6 +14,17 @@ public class AppData {
 
 	// proxy methods
 	public List<Collection> getCollectionList() {
+		List<Collection> collList = new ArrayList<Collection>();
+		Collection coll1 = new Collection();
+		coll1.setName("cu1");
+		Collection coll2 = new Collection();
+		coll2.setName("cstomized2");
+		Collection coll3 = new Collection();
+		coll3.setName("cu3");
+		collList.add(coll1);
+		collList.add(coll2);
+		collList.add(coll3);
+		return collList;
 	}
 
 	// ----- setters and getters

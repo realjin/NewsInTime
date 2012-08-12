@@ -3,6 +3,7 @@ package info.realjin.newsintime.activity;
 import info.realjin.newsintime.NewsInTimeApp;
 import info.realjin.newsintime.R;
 import info.realjin.newsintime.anim.LongTextMovingAnimation;
+import info.realjin.newsintime.domain.AppConfig;
 import info.realjin.newsintime.domain.Collection;
 import info.realjin.newsintime.view.VerticalListView;
 import info.realjin.newsintime.view.VerticalTextView;
@@ -48,8 +49,8 @@ public class MainActivity extends Activity {
 	private PopupWindow pwCols;
 	private View vPwCols;
 	// TODO: no calc!!!
-	int colSelectorWidth = 100;
-	int colSelectorHeight = 200;
+	int colSelectorWidth = 300;
+	int colSelectorHeight = 400;
 	int colSelectorLeft = 25;
 	int colSelectorTop = 390;
 
@@ -141,7 +142,7 @@ public class MainActivity extends Activity {
 
 			final TextView tvColSel = new VerticalTextView(this);
 			tvColSel.setText("collections");
-			tvColSel.setTextSize(28.0f);
+			tvColSel.setTextSize(50.0f);
 			// tvColSel.setInputType(InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
 			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 					new ViewGroup.MarginLayoutParams(
@@ -166,9 +167,17 @@ public class MainActivity extends Activity {
 					vPwCols = layoutInflater.inflate(R.layout.colselector_menu,
 							null);
 
-					// add data
 					AdapterView lvCols;
 					lvCols = new VerticalListView(MainActivity.this);
+					AdapterView.OnItemClickListener lvColsOnItemClickListener = new AdapterView.OnItemClickListener() {
+						public void onItemClick(AdapterView<?> arg0, View arg1,
+								int position, long id) {
+							Log.e("===0812===", "click! position=" + position
+									+ ", id=" + id);
+						}
+					};
+					lvCols.setOnItemClickListener(lvColsOnItemClickListener);
+
 					LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 							LinearLayout.LayoutParams.FILL_PARENT,
 							LinearLayout.LayoutParams.FILL_PARENT);
@@ -185,13 +194,6 @@ public class MainActivity extends Activity {
 					for (Collection coll : colls) {
 						collNames.add(coll.getName());
 					}
-
-					collNames.add("全部");
-					collNames.add("我的微博");
-					collNames.add("好友");
-					collNames.add("亲人");
-					collNames.add("同学");
-					collNames.add("朋友");
 
 					GroupAdapter groupAdapter = new GroupAdapter(
 							MainActivity.this, collNames);
@@ -309,7 +311,15 @@ class GroupAdapter extends BaseAdapter {
 			convertView.setTag(holder);
 
 			TextView tv = new VerticalTextView(viewGroup.getContext());
-			tv.setTextColor(Color.WHITE);
+			tv.setTextColor(Color.RED);
+			/*
+			 * TODO: mmmmmmmmmm what if total text height exceeds listview
+			 * height?
+			 */
+			NewsInTimeApp app = (NewsInTimeApp) (((MainActivity) context)
+					.getApplication());
+			tv.setTextSize(Integer.parseInt(app.getConfig().get(
+					AppConfig.CFGNAME_UI_MAIN_COLSELECTOR_TEXTSIZE)));
 			((LinearLayout) convertView).addView(tv);
 			holder.groupItem = tv;
 			// holder.groupItem = (TextView) convertView

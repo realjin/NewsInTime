@@ -33,6 +33,7 @@ import java.util.Queue;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
@@ -279,13 +280,22 @@ public class VerticalListView extends AdapterView<ListAdapter> {
 	private void positionItems(final int dx) {
 		if (getChildCount() > 0) {
 			mDisplayOffset += dx;
-			int left = mDisplayOffset;
+			// int left = mDisplayOffset;
+			// mmm: niujin mod 0812
+			int right = getWidth();
+			// TODO: mmm: assume mDisplayOffset = 0!!!!!!
+			Log.e("===VLV===", "width=" + getWidth() + ", mdoffset="
+					+ mDisplayOffset);
 			for (int i = 0; i < getChildCount(); i++) {
 				View child = getChildAt(i);
 				int childWidth = child.getMeasuredWidth();
-				child.layout(left, 0, left + childWidth,
+				// mmm: niujin mod 0812
+				child.layout(right - childWidth, 0, right,
 						child.getMeasuredHeight());
-				left += childWidth;
+				right -= childWidth;
+				// child.layout(left, 0, left + childWidth,
+				// child.getMeasuredHeight());
+				// left -= childWidth;
 			}
 		}
 	}

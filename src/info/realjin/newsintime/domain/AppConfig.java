@@ -6,7 +6,9 @@ public class AppConfig {
 	private Properties props;
 
 	public static final String CFGNAME_BATCHSIZE = "batchsize";
+	public static final String CFGNAME_UI_MAIN_COLSELECTOR_TEXTSIZE = "ui.main.colselector.textsize";
 
+	// TODO: make sure every config has a default value when get!
 	public AppConfig() {
 		props = new Properties();
 		testInitConfig();
@@ -17,6 +19,7 @@ public class AppConfig {
 	 */
 	private void testInitConfig() {
 		props.put(CFGNAME_BATCHSIZE, "5");
+		props.put(CFGNAME_UI_MAIN_COLSELECTOR_TEXTSIZE, "32");
 	}
 
 	// ----public methods
