@@ -90,10 +90,17 @@ public class NewsList {
 		lock.unlock();
 	}
 
+	public void addNewsList(List<News> l) {
+		for (News n : l) {
+			addNews(n);
+		}
+	}
+
 	/**
 	 * @param n
 	 *            time must be set already
 	 */
+	// TODO: what if too many news and cannot be displayed properly?!!
 	public void addNews(News n) {
 		if (n == null) {
 			return;

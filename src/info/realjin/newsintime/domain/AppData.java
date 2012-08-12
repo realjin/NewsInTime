@@ -1,5 +1,7 @@
 package info.realjin.newsintime.domain;
 
+import java.util.List;
+
 public class AppData {
 	private NewsList newsList;
 	int scrWidth;
@@ -7,6 +9,10 @@ public class AppData {
 
 	public AppData() {
 		newsList = new NewsList();
+	}
+
+	// proxy methods
+	public List<Collection> getCollectionList() {
 	}
 
 	// ----- setters and getters

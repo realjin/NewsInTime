@@ -3,6 +3,7 @@ package info.realjin.newsintime.activity;
 import info.realjin.newsintime.NewsInTimeApp;
 import info.realjin.newsintime.R;
 import info.realjin.newsintime.anim.LongTextMovingAnimation;
+import info.realjin.newsintime.domain.Collection;
 import info.realjin.newsintime.view.VerticalListView;
 import info.realjin.newsintime.view.VerticalTextView;
 
@@ -176,16 +177,24 @@ public class MainActivity extends Activity {
 
 					// = (ListView) vPwCols.findViewById(R.id.lvCols);
 					// 加载数据
-					List<String> cols = new ArrayList<String>();
-					cols.add("全部");
-					cols.add("我的微博");
-					cols.add("好友");
-					cols.add("亲人");
-					cols.add("同学");
-					cols.add("朋友");
+					List<String> collNames = new ArrayList<String>();
+
+					// load collection data from database
+					NewsInTimeApp app = (NewsInTimeApp) getApplication();
+					List<Collection> colls = app.getData().getCollectionList();
+					for (Collection coll : colls) {
+						collNames.add(coll.getName());
+					}
+
+					collNames.add("全部");
+					collNames.add("我的微博");
+					collNames.add("好友");
+					collNames.add("亲人");
+					collNames.add("同学");
+					collNames.add("朋友");
 
 					GroupAdapter groupAdapter = new GroupAdapter(
-							MainActivity.this, cols);
+							MainActivity.this, collNames);
 					lvCols.setAdapter(groupAdapter);
 
 					pwCols = new PopupWindow(vPwCols, colSelectorWidth - 5,

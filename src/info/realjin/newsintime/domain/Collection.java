@@ -1,11 +1,16 @@
 package info.realjin.newsintime.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Collection {
 	private List<CollectionItem> items;
 	private String id;
 	private String name;
+
+	public Collection() {
+		items = new ArrayList<CollectionItem>();
+	}
 
 	public String getId() {
 		return id;
