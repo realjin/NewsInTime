@@ -186,17 +186,17 @@ public class MainActivity extends Activity {
 
 					// = (ListView) vPwCols.findViewById(R.id.lvCols);
 					// º”‘ÿ ˝æ›
-					List<String> collNames = new ArrayList<String>();
+					// List<String> collNames = new ArrayList<String>();
 
 					// load collection data from database
 					NewsInTimeApp app = (NewsInTimeApp) getApplication();
 					List<Collection> colls = app.getData().getCollectionList();
-					for (Collection coll : colls) {
-						collNames.add(coll.getName());
-					}
+					// for (Collection coll : colls) {
+					// collNames.add(coll.getName());
+					// }
 
 					GroupAdapter groupAdapter = new GroupAdapter(
-							MainActivity.this, collNames);
+							MainActivity.this, colls);
 					lvCols.setAdapter(groupAdapter);
 
 					pwCols = new PopupWindow(vPwCols, colSelectorWidth - 5,
@@ -278,9 +278,9 @@ class GroupAdapter extends BaseAdapter {
 
 	private Context context;
 
-	private List<String> list;
+	private List<Collection> list;
 
-	public GroupAdapter(Context context, List<String> list) {
+	public GroupAdapter(Context context, List<Collection> list) {
 
 		this.context = context;
 		this.list = list;
@@ -330,13 +330,15 @@ class GroupAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		// holder.groupItem.setTextColor(Color.BLACK);
-		holder.groupItem.setText(list.get(position));
+		holder.groupItem.setText(list.get(position).getName());
+		holder.collId = list.get(position).getId();
 
 		return convertView;
 	}
 
 	static class ViewHolder {
 		TextView groupItem;
+		String collId;
 	}
 
 }

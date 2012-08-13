@@ -16,10 +16,13 @@ public class AppData {
 	public List<Collection> getCollectionList() {
 		List<Collection> collList = new ArrayList<Collection>();
 		Collection coll1 = new Collection();
+		coll1.setId("1");
 		coll1.setName("cu1");
 		Collection coll2 = new Collection();
+		coll2.setId("2");
 		coll2.setName("cstomized2");
 		Collection coll3 = new Collection();
+		coll3.setId("3");
 		coll3.setName("cu3");
 		collList.add(coll1);
 		collList.add(coll2);

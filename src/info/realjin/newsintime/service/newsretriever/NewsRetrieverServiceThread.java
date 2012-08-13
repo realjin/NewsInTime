@@ -59,6 +59,7 @@ public class NewsRetrieverServiceThread implements Runnable {
 		while (enabled) {
 			List<News> newsList, unarrangedNewsList;
 			List<RssFeed> feedList = getFeedList(coll);
+			Log.e("===fl=== size=", "" + feedList.size());
 			unarrangedNewsList = feedListToNews(feedList);
 			newsList = filterAndRearrangeNews(unarrangedNewsList);
 			nl.addNewsList(newsList);
