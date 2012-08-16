@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2011 Jag Saund
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package info.realjin.newsintime.view;
 
 import info.realjin.newsintime.R;
@@ -9,7 +25,17 @@ import android.graphics.drawable.LayerDrawable;
 import android.util.AttributeSet;
 import android.widget.ProgressBar;
 
+/**
+ * An enhanced version of the ProgressBar which provides greater control over
+ * how the progress bar is drawn and displayed. The motivation is to allow us to
+ * customize the appearance of the progress bar more freely. We can now display
+ * a rounded cap at the end of the progress bar and optionally show an overlay.
+ * 
+ * @author jsaund
+ * 
+ */
 public class NewsProgressBar extends ProgressBar {
+
 	public NewsProgressBar(Context context) {
 		super(context);
 	}
@@ -22,14 +48,6 @@ public class NewsProgressBar extends ProgressBar {
 		super(context, attrs, defStyle);
 	}
 
-	public synchronized void setProgress(int progress) {
-		super.setProgress(progress);
-
-		// the setProgress super will not change the details of the progress bar
-		// anymore so we need to force an update to redraw the progress bar
-		invalidate();
-	}
-
 	@Override
 	protected synchronized void onDraw(Canvas canvas) {
 		// update the size of the progress bar and overlay
@@ -37,6 +55,15 @@ public class NewsProgressBar extends ProgressBar {
 
 		// paint the changes to the canvas
 		super.onDraw(canvas);
+	}
+
+	@Override
+	public synchronized void setProgress(int progress) {
+		super.setProgress(progress);
+
+		// the setProgress super will not change the details of the progress bar
+		// anymore so we need to force an update to redraw the progress bar
+		invalidate();
 	}
 
 	private float getScale(int progress) {

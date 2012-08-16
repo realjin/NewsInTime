@@ -42,9 +42,7 @@ public class NewsInTimeApp extends Application {
 				new CollectionItem(
 						"http://rss.sina.com.cn/news/marquee/ddt.xml"));
 		nrService = new NewsRetrieverService(data.getNewsList(), tempColl);
-		nrService.start();
-		// Thread t = new Thread(nrService);
-		// t.start();
+//		nrService.start();
 	}
 
 	// ----- method for animation

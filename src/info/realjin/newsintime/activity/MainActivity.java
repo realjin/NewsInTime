@@ -5,10 +5,10 @@ import info.realjin.newsintime.R;
 import info.realjin.newsintime.anim.LongTextMovingAnimation;
 import info.realjin.newsintime.domain.AppConfig;
 import info.realjin.newsintime.domain.Collection;
+import info.realjin.newsintime.view.NewsProgressBar;
 import info.realjin.newsintime.view.VerticalListView;
 import info.realjin.newsintime.view.VerticalTextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -56,6 +57,8 @@ public class MainActivity extends Activity {
 
 	//
 	private Button btPlay;
+
+	private NewsProgressBar m_regularProgressBar;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -106,6 +109,10 @@ public class MainActivity extends Activity {
 
 		// init
 		colSelector = null;
+
+		// for test
+		m_regularProgressBar = (NewsProgressBar) findViewById(R.id.progressbar1);
+		new UpdateBarTask().execute();
 
 	}
 
@@ -270,6 +277,30 @@ public class MainActivity extends Activity {
 
 	}
 
+	private class UpdateBarTask extends AsyncTask<Void, Integer, Void> {
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			int max = m_regularProgressBar.getMax();
+			for (int i = 0; i <= max; i++) {
+				try {
+					// update every second
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+
+				}
+
+				publishProgress(i);
+			}
+
+			return null;
+		}
+
+		@Override
+		protected void onProgressUpdate(Integer... values) {
+			m_regularProgressBar.setProgress(values[0]);
+		}
+	}
 }
 
 // ------------------- class
