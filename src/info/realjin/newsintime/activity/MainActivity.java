@@ -142,8 +142,9 @@ public class MainActivity extends Activity {
 	}
 
 	private void showColSelector() {
+		
 		if (colSelector == null) {
-			Log.e("===MainActivity===", "colSelector creating");
+			Log.d("===MainActivity===", "colSelector creating");
 			LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 			colSelectorView = layoutInflater
@@ -167,7 +168,6 @@ public class MainActivity extends Activity {
 			tvColSel.setLayoutParams(lp);
 			// TextView tvColSel = (TextView) colSelectorView
 			// .findViewById(R.id.tvTest1);
-			Log.e("===MainActivity===", "colSelector creating 1");
 			tvColSel.setOnClickListener(new OnClickListener() {
 
 				public void onClick(View v) {
@@ -188,14 +188,23 @@ public class MainActivity extends Activity {
 					AdapterView.OnItemClickListener lvColsOnItemClickListener = new AdapterView.OnItemClickListener() {
 						public void onItemClick(AdapterView<?> adapter,
 								View arg1, int position, long id) {
-							Log.e("===0812===", "click! position=" + position
+							Log.d("===0812===", "click! position=" + position
 									+ ", id=" + id);
+
+							// change collection
 							GroupAdapter a = (GroupAdapter) adapter
 									.getAdapter();
 							// mmm: right? position or id?
 							Collection coll = (Collection) a.getItem(position);
+							//hide pw
+							pwCols.dismiss();
+							Toast.makeText(MainActivity.this,
+									"Collection \"" + coll.getName() + "\"",
+									Toast.LENGTH_LONG).show();
 							NewsInTimeApp app = (NewsInTimeApp) getApplication();
 							app.getNrService().restartByNewColItem(coll);
+							
+							
 						}
 					};
 					lvCols.setOnItemClickListener(lvColsOnItemClickListener);
@@ -233,9 +242,9 @@ public class MainActivity extends Activity {
 						}
 					});
 
-					Log.e("===VIEW===", "top="
-							+ colSelector.getContentView().getTop() + ", left="
-							+ colSelector.getContentView().getLeft());
+					// Log.e("===VIEW===", "top="
+					// + colSelector.getContentView().getTop() + ", left="
+					// + colSelector.getContentView().getLeft());
 					pwCols.showAtLocation(vPwCols, Gravity.NO_GRAVITY,
 							colSelectorLeft, colSelectorTop);
 				}
@@ -244,7 +253,7 @@ public class MainActivity extends Activity {
 			// colSelector.showAsDropDown(llMain, 200, 200);
 			((LinearLayout) colSelectorView).addView(tvColSel);
 		}
-		Log.e("===MainActivity===", "colSelector creating 2");
+		Log.d("===MainActivity===", "colSelector created");
 		// TODO: no position calculation!!!
 		colSelector.showAtLocation(colSelectorView, Gravity.NO_GRAVITY,
 				colSelectorLeft, colSelectorTop);

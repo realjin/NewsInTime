@@ -284,8 +284,8 @@ public class VerticalListView extends AdapterView<ListAdapter> {
 			// mmm: niujin mod 0812
 			int right = getWidth();
 			// TODO: mmm: assume mDisplayOffset = 0!!!!!!
-			Log.e("===VLV===", "width=" + getWidth() + ", mdoffset="
-					+ mDisplayOffset);
+//			Log.e("===VLV===", "width=" + getWidth() + ", mdoffset="
+//					+ mDisplayOffset);
 			for (int i = 0; i < getChildCount(); i++) {
 				View child = getChildAt(i);
 				int childWidth = child.getMeasuredWidth();

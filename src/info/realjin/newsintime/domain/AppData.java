@@ -17,19 +17,30 @@ public class AppData {
 		List<Collection> collList = new ArrayList<Collection>();
 		Collection coll1 = new Collection();
 		coll1.setId("1");
-		coll1.setName("cu1");
+		coll1.setName("sina general");
+		CollectionItem ci1 = new CollectionItem(
+				"http://rss.sina.com.cn/roll/sports/hot_roll.xml");
+		ci1.setName("sina general");
+		coll1.getItems().add(ci1);
+		
 
 		Collection coll2 = new Collection();
 		coll2.setId("2");
-		coll2.setName("cstomized2");
-		CollectionItem ci = new CollectionItem(
+		coll2.setName("sina sports");
+		CollectionItem ci2 = new CollectionItem(
 				"http://rss.sina.com.cn/roll/sports/hot_roll.xml");
-		ci.setName("sina sports");
-		coll2.getItems().add(ci);
+		ci2.setName("sina sports");
+		coll2.getItems().add(ci2);
 
 		Collection coll3 = new Collection();
 		coll3.setId("3");
-		coll3.setName("cu3");
+		coll3.setName("sina finance");
+		CollectionItem ci3 = new CollectionItem(
+				"http://rss.sina.com.cn/roll/finance/hot_roll.xml");
+		ci3.setName("sina finance");
+		coll3.getItems().add(ci3);
+		
+		
 		collList.add(coll1);
 		collList.add(coll2);
 		collList.add(coll3);
