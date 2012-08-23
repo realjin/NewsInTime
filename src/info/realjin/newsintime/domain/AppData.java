@@ -48,10 +48,28 @@ public class AppData {
 		ci4.setName("nyt global");
 		coll4.getItems().add(ci4);
 		
+		Collection coll5 = new Collection();
+		coll5.setId("5");
+		coll5.setName("wsj china");
+		CollectionItem ci5 = new CollectionItem(
+				"http://chinese.wsj.com/gb/rssbch.xml");
+		ci5.setName("wsj china");
+		coll5.getItems().add(ci5);
+		
+		Collection coll6 = new Collection();
+		coll6.setId("6");
+		coll6.setName("wsj finance");
+		CollectionItem ci6 = new CollectionItem(
+				"http://chinese.wsj.com/gb/rss01.xml");
+		ci6.setName("wsj finance");
+		coll6.getItems().add(ci6);
+		
 		collList.add(coll1);
 		collList.add(coll2);
 		collList.add(coll3);
 		collList.add(coll4);
+		collList.add(coll5);
+		collList.add(coll6);
 		return collList;
 	}
 
