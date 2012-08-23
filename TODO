@@ -5,3 +5,4 @@ news update notifications
 when news retrieving, pressing "play" will cause the app crash!
 
 ===other===
+*** do not retrieve too frequently (saving traffic)

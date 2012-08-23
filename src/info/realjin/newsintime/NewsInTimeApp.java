@@ -68,11 +68,12 @@ public class NewsInTimeApp extends Application {
 		long pos = nl.getPosition(curNews);
 		long size = nl.size();
 
-		// for test
-		String s = pos + "/" + size;
-		TextView tv = mainActivity.getTvProgress();
-		tv.setText(s);
+		// update progress text
+		// String s = pos + "/" + size;
+		// TextView tv = mainActivity.getTvProgress();
+		// tv.setText(s);
 
+		// update slider
 		VerticalSlider vsMain = mainActivity.getVsMain();
 		float max = vsMain.getMax();
 		float min = vsMain.getMin();
@@ -81,10 +82,6 @@ public class NewsInTimeApp extends Application {
 				+ ", max=" + vsMain.getMax());
 		vsMain.setPosition(position);
 
-		// ProgressBar pbarMain = mainActivity.getPbarMain();
-		// int max = pbarMain.getMax();
-		// int progress = (int) (pos * max / size);
-		// pbarMain.setProgress(progress);
 	}
 
 	// ----- setters and getters

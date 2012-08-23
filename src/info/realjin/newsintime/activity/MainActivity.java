@@ -30,7 +30,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
@@ -43,7 +42,7 @@ public class MainActivity extends Activity {
 	 * main text view
 	 */
 	private TextView tvMain;
-	private TextView tvProgress;
+	// private TextView tvProgress;
 
 	// collection selector
 	private PopupWindow colSelector;
@@ -57,7 +56,7 @@ public class MainActivity extends Activity {
 	int colSelectorTop = 390;
 
 	//
-	private Button btPlay;
+	// private Button btPlay;
 
 	// private ProgressBar pbarMain;
 	private VerticalSlider vsMain;
@@ -81,52 +80,47 @@ public class MainActivity extends Activity {
 		RelativeLayout llMain = (RelativeLayout) findViewById(R.id.llMain);
 
 		tvMain = new VerticalTextView(this);
-		tvMain.setText("nothing");
+		tvMain.setText("");
 		tvMain.setTextSize(28.0f);
 		tvMain.setInputType(InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
 
-		 RelativeLayout.LayoutParams rlp;
-		 rlp = new RelativeLayout.LayoutParams(50,50);
-		 rlp.leftMargin = 100;
-		 rlp.topMargin = 0;
-		 tvMain.setLayoutParams(rlp);
+		RelativeLayout.LayoutParams rlp;
+		rlp = new RelativeLayout.LayoutParams(50, 50);
+		rlp.leftMargin = 100;
+		rlp.topMargin = 0;
+		tvMain.setLayoutParams(rlp);
 
 		llMain.addView(tvMain);
 
+		// init slider
+		vsMain = (VerticalSlider) findViewById(R.id.vsMain);
+
 		// init test button
-		btPlay = new Button(this);
-		btPlay.setText("Play");
-		btPlay.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				/*
-				 * check if there is any news yet(maybe connection error and
-				 * there's no news yet
-				 */
-				int nNews = ((NewsInTimeApp) getApplication()).getData()
-						.getNewsList().size();
-				if (nNews == 0) {
-					Log.e("===MainActivity===", "playing failed: news null");
-				}
-				tvMain.startAnimation(new LongTextMovingAnimation(
-						MainActivity.this, tvMain));
-			}
-		});
-		rlp = new RelativeLayout.LayoutParams(100,
-				50);
-		rlp.leftMargin = 200;
-		rlp.topMargin = 400;
-		btPlay.setLayoutParams(rlp);
-		llMain.addView(btPlay);
+		// btPlay = new Button(this);
+		// btPlay.setText("Play");
+		// btPlay.setOnClickListener(new OnClickListener() {
+		// public void onClick(View v) {
+		// /*
+		// * check if there is any news yet(maybe connection error and
+		// * there's no news yet
+		// */
+		// int nNews = ((NewsInTimeApp) getApplication()).getData()
+		// .getNewsList().size();
+		// if (nNews == 0) {
+		// Log.e("===MainActivity===", "playing failed: news null");
+		// }
+		// tvMain.startAnimation(new LongTextMovingAnimation(
+		// MainActivity.this, tvMain));
+		// }
+		// });
+		// rlp = new RelativeLayout.LayoutParams(100, 50);
+		// rlp.leftMargin = 200;
+		// rlp.topMargin = 400;
+		// btPlay.setLayoutParams(rlp);
+		// llMain.addView(btPlay);
 
 		// init
 		colSelector = null;
-
-		// for test
-		// pbarMain = (ProgressBar) findViewById(R.id.progressbar1);
-		// new UpdateBarTask().execute();
-
-		tvProgress = (TextView) findViewById(R.id.tvProgress);
-		vsMain = (VerticalSlider) findViewById(R.id.vsMain);
 
 	}
 
@@ -268,8 +262,8 @@ public class MainActivity extends Activity {
 				android.R.drawable.ic_menu_edit);
 		// setIcon()方法为菜单设置图标，这里使用的是系统自带的图标，同学们留意一下,以
 		// android.R开头的资源是系统提供的，我们自己提供的资源是以R开头的
-		menu.add(Menu.NONE, Menu.FIRST + 2, 2, "Menu2").setIcon(
-				android.R.drawable.ic_menu_call);
+		menu.add(Menu.NONE, Menu.FIRST + 2, 2, "Play").setIcon(
+				android.R.drawable.ic_media_play);
 		menu.add(Menu.NONE, Menu.FIRST + 3, 5, "Menu3").setIcon(
 				android.R.drawable.ic_menu_help);
 		menu.add(Menu.NONE, Menu.FIRST + 4, 6, "Menu4").setIcon(
@@ -287,7 +281,7 @@ public class MainActivity extends Activity {
 
 			break;
 		case Menu.FIRST + 2:
-			Toast.makeText(this, "删除菜单被点击了", Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "Playing", Toast.LENGTH_LONG).show();
 
 			int nNews = ((NewsInTimeApp) getApplication()).getData()
 					.getNewsList().size();
@@ -345,13 +339,13 @@ public class MainActivity extends Activity {
 		this.vsMain = vsMain;
 	}
 
-	public TextView getTvProgress() {
-		return tvProgress;
-	}
-
-	public void setTvProgress(TextView tvProgress) {
-		this.tvProgress = tvProgress;
-	}
+	// public TextView getTvProgress() {
+	// return tvProgress;
+	// }
+	//
+	// public void setTvProgress(TextView tvProgress) {
+	// this.tvProgress = tvProgress;
+	// }
 
 	// public ProgressBar getPbarMain() {
 	// return pbarMain;
