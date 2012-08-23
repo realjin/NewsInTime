@@ -19,7 +19,7 @@ public class AppConfig {
 	 */
 	private void testInitConfig() {
 		props.put(CFGNAME_BATCHSIZE, "5");
-		props.put(CFGNAME_UI_MAIN_COLSELECTOR_TEXTSIZE, "32");
+		props.put(CFGNAME_UI_MAIN_COLSELECTOR_TEXTSIZE, "24");
 	}
 
 	// ----public methods

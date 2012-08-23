@@ -158,7 +158,7 @@ public class MainActivity extends Activity {
 
 			final TextView tvColSel = new VerticalTextView(this);
 			tvColSel.setText("collections");
-			tvColSel.setTextSize(50.0f);
+			tvColSel.setTextSize(28.0f);
 			// tvColSel.setInputType(InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
 			RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
 					new ViewGroup.MarginLayoutParams(
