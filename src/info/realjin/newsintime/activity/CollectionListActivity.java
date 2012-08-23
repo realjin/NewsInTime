@@ -1,5 +1,7 @@
 package info.realjin.newsintime.activity;
 
+import info.realjin.newsintime.R;
+
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +25,7 @@ public class CollectionListActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// setContentView(R.layout.collections);
+//		setContentView(R.layout.collections);
 		//
 		// LinearLayout llCollections = (LinearLayout)
 		// findViewById(R.id.llcollections);
