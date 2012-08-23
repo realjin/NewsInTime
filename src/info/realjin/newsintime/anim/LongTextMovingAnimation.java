@@ -69,7 +69,7 @@ public class LongTextMovingAnimation extends Animation {
 		batchSize = Integer.parseInt(app.getConfig().get(
 				AppConfig.CFGNAME_BATCHSIZE));
 
-		Log.e("===Animation===", "batchSize=" + batchSize);
+		Log.i("===Animation===", "batchSize=" + batchSize);
 
 		// init cur news
 		curNews = null;
@@ -94,7 +94,7 @@ public class LongTextMovingAnimation extends Animation {
 	public void prepareText() {
 		NewsInTimeApp app = ((NewsInTimeApp) a.getApplication());
 
-		Log.e("===ANIM===", "prepareText: curNews=" + curNews + ", batchSize"
+		Log.d("===ANIM===", "prepareText: curNews=" + curNews + ", batchSize"
 				+ batchSize);
 
 		List<News> nl = app.getSubList(curNews, batchSize);
@@ -103,9 +103,9 @@ public class LongTextMovingAnimation extends Animation {
 		String curLastText = nl.get(0).toString();
 		curNews = nl.get(nl.size() - 1);
 
-		Log.e("===temp===", "tv=" + tv);
-		Log.e("===temp===", "tv.getPaint=" + tv.getPaint());
-		Log.e("===temp===", "curText=" + curText);
+//		Log.e("===temp===", "tv=" + tv);
+//		Log.e("===temp===", "tv.getPaint=" + tv.getPaint());
+//		Log.e("===temp===", "curText=" + curText);
 		curTextWidth = tv.getPaint().measureText(curText);
 
 		// calc initial positions
@@ -136,7 +136,7 @@ public class LongTextMovingAnimation extends Animation {
 		}
 
 		public void onAnimationEnd(Animation animation) {
-			Log.e("===ANIM===", "[ *** end *** ]");
+			Log.d("===ANIM===", "*** end ***");
 			firstTime = false;
 
 			NewsInTimeApp app = ((NewsInTimeApp) a.getApplication());
@@ -167,7 +167,7 @@ public class LongTextMovingAnimation extends Animation {
 		}
 
 		public void onAnimationStart(Animation animation) {
-			Log.e("===ANIM===", "[ *** start *** ]Text: " + curText);
+			Log.d("===ANIM===", "*** start ***, Text: " + curText);
 
 			tv.setText(curText);
 			curLeft = startLeft;
@@ -176,7 +176,7 @@ public class LongTextMovingAnimation extends Animation {
 			// TODO: not exactly!!!
 			// setRepeatCount(repCount);
 
-			Log.e("===ANIMATION===", "duration = " + 10 + ", repcount = "
+			Log.d("===ANIMATION===", "duration = " + 10 + ", repcount = "
 					+ repCount);
 		}
 	}
