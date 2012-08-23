@@ -15,7 +15,6 @@ import java.util.List;
 
 import android.app.Application;
 import android.util.Log;
-import android.widget.TextView;
 
 public class NewsInTimeApp extends Application {
 	private AppData data;
@@ -115,5 +114,13 @@ public class NewsInTimeApp extends Application {
 
 	public void setMainActivity(MainActivity mainActivity) {
 		this.mainActivity = mainActivity;
+	}
+
+	public NewsRetrieverService getNrService() {
+		return nrService;
+	}
+
+	public void setNrService(NewsRetrieverService nrService) {
+		this.nrService = nrService;
 	}
 }

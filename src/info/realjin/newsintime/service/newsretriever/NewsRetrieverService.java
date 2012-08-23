@@ -62,19 +62,21 @@ public class NewsRetrieverService {
 
 	public void start() {
 		threadRunning = true;
+		thread.setEnabled(true);
 		new Thread(thread).start();
 	}
 
-	public void startByNewColItem(Collection coll) {
+	public void restartByNewColItem(Collection coll) {
+		//0. stop old thread
+		stop();
+		
 		// 1.clear list
 		thread.getNl().clearAll();
 
 		// 2. start retrieving
-
-		threadRunning = true;
-		// thread.setUrl(ci.getUrl());
 		thread.setColl(coll);
-		new Thread(thread).start();
+		
+		start();
 	}
 
 	public void stop() {

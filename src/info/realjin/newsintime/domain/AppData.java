@@ -18,9 +18,15 @@ public class AppData {
 		Collection coll1 = new Collection();
 		coll1.setId("1");
 		coll1.setName("cu1");
+
 		Collection coll2 = new Collection();
 		coll2.setId("2");
 		coll2.setName("cstomized2");
+		CollectionItem ci = new CollectionItem(
+				"http://rss.sina.com.cn/roll/sports/hot_roll.xml");
+		ci.setName("sina sports");
+		coll2.getItems().add(ci);
+
 		Collection coll3 = new Collection();
 		coll3.setId("3");
 		coll3.setName("cu3");

@@ -186,10 +186,16 @@ public class MainActivity extends Activity {
 					AdapterView lvCols;
 					lvCols = new VerticalListView(MainActivity.this);
 					AdapterView.OnItemClickListener lvColsOnItemClickListener = new AdapterView.OnItemClickListener() {
-						public void onItemClick(AdapterView<?> arg0, View arg1,
-								int position, long id) {
+						public void onItemClick(AdapterView<?> adapter,
+								View arg1, int position, long id) {
 							Log.e("===0812===", "click! position=" + position
 									+ ", id=" + id);
+							GroupAdapter a = (GroupAdapter) adapter
+									.getAdapter();
+							// mmm: right? position or id?
+							Collection coll = (Collection) a.getItem(position);
+							NewsInTimeApp app = (NewsInTimeApp) getApplication();
+							app.getNrService().restartByNewColItem(coll);
 						}
 					};
 					lvCols.setOnItemClickListener(lvColsOnItemClickListener);
@@ -423,6 +429,14 @@ class GroupAdapter extends BaseAdapter {
 	static class ViewHolder {
 		TextView groupItem;
 		String collId;
+	}
+
+	public List<Collection> getList() {
+		return list;
+	}
+
+	public void setList(List<Collection> list) {
+		this.list = list;
 	}
 
 }
