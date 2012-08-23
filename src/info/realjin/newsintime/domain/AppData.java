@@ -40,10 +40,18 @@ public class AppData {
 		ci3.setName("sina finance");
 		coll3.getItems().add(ci3);
 		
+		Collection coll4 = new Collection();
+		coll4.setId("4");
+		coll4.setName("nyt global");
+		CollectionItem ci4 = new CollectionItem(
+				"http://www.nytimes.com/services/xml/rss/nyt/International.xml");
+		ci4.setName("nyt global");
+		coll4.getItems().add(ci4);
 		
 		collList.add(coll1);
 		collList.add(coll2);
 		collList.add(coll3);
+		collList.add(coll4);
 		return collList;
 	}
 
