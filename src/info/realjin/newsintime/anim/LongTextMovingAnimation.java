@@ -12,7 +12,7 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
@@ -151,10 +151,10 @@ public class LongTextMovingAnimation extends Animation {
 
 		public void onAnimationRepeat(Animation animation) {
 			// Log.e("===ANIM===", "[ *** . *** ]");
-			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+			RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
 					new ViewGroup.MarginLayoutParams(
-							LinearLayout.LayoutParams.FILL_PARENT,
-							LinearLayout.LayoutParams.FILL_PARENT));
+							RelativeLayout.LayoutParams.FILL_PARENT,
+							RelativeLayout.LayoutParams.FILL_PARENT));
 			if (or == Orientation.Horizontal) {
 				lp.setMargins((curLeft -= 5), 50, 0, 0); // TODO: 5 may be not
 			} else if (or == Orientation.Vertical) {

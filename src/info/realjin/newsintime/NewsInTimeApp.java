@@ -9,6 +9,7 @@ import info.realjin.newsintime.domain.CollectionItem;
 import info.realjin.newsintime.domain.News;
 import info.realjin.newsintime.domain.NewsList;
 import info.realjin.newsintime.service.newsretriever.NewsRetrieverService;
+import info.realjin.newsintime.view.VerticalSlider;
 
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class NewsInTimeApp extends Application {
 				new CollectionItem(
 						"http://rss.sina.com.cn/news/marquee/ddt.xml"));
 		nrService = new NewsRetrieverService(data.getNewsList(), tempColl);
-//		nrService.start();
+		nrService.start();
 	}
 
 	// ----- method for animation
@@ -69,8 +70,21 @@ public class NewsInTimeApp extends Application {
 
 		// for test
 		String s = pos + "/" + size;
-		TextView tv = (TextView) mainActivity.findViewById(R.id.tvMain);
+		TextView tv = mainActivity.getTvProgress();
 		tv.setText(s);
+
+		VerticalSlider vsMain = mainActivity.getVsMain();
+		float max = vsMain.getMax();
+		float min = vsMain.getMin();
+		float position = min + (1 - pos * 1.0f / size) * (max - min);
+		Log.d("===ANIM===", "position=" + position + ", min=" + vsMain.getMin()
+				+ ", max=" + vsMain.getMax());
+		vsMain.setPosition(position);
+
+		// ProgressBar pbarMain = mainActivity.getPbarMain();
+		// int max = pbarMain.getMax();
+		// int progress = (int) (pos * max / size);
+		// pbarMain.setProgress(progress);
 	}
 
 	// ----- setters and getters

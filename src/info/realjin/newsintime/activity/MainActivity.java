@@ -6,6 +6,7 @@ import info.realjin.newsintime.anim.LongTextMovingAnimation;
 import info.realjin.newsintime.domain.AppConfig;
 import info.realjin.newsintime.domain.Collection;
 import info.realjin.newsintime.view.VerticalListView;
+import info.realjin.newsintime.view.VerticalSlider;
 import info.realjin.newsintime.view.VerticalTextView;
 
 import java.util.List;
@@ -15,7 +16,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -34,15 +34,16 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	/**
 	 * main text view
 	 */
 	private TextView tvMain;
+	private TextView tvProgress;
 
 	// collection selector
 	private PopupWindow colSelector;
@@ -58,7 +59,8 @@ public class MainActivity extends Activity {
 	//
 	private Button btPlay;
 
-	private ProgressBar m_regularProgressBar;
+	// private ProgressBar pbarMain;
+	private VerticalSlider vsMain;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -76,18 +78,18 @@ public class MainActivity extends Activity {
 		Log.e("===APPDATA===", app.getData().toString());
 
 		// init main textview
-		LinearLayout llMain = (LinearLayout) findViewById(R.id.llMain);
+		RelativeLayout llMain = (RelativeLayout) findViewById(R.id.llMain);
 
 		tvMain = new VerticalTextView(this);
 		tvMain.setText("nothing");
 		tvMain.setTextSize(28.0f);
 		tvMain.setInputType(InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
 
-		// RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(50,
-		// 50);
-		// rlp.leftMargin = 100;
-		// rlp.topMargin = 0;
-		// tvMain.setLayoutParams(rlp);
+		 RelativeLayout.LayoutParams rlp;
+		 rlp = new RelativeLayout.LayoutParams(50,50);
+		 rlp.leftMargin = 100;
+		 rlp.topMargin = 0;
+		 tvMain.setLayoutParams(rlp);
 
 		llMain.addView(tvMain);
 
@@ -109,10 +111,10 @@ public class MainActivity extends Activity {
 						MainActivity.this, tvMain));
 			}
 		});
-		RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(100,
+		rlp = new RelativeLayout.LayoutParams(100,
 				50);
 		rlp.leftMargin = 200;
-		rlp.topMargin = 300;
+		rlp.topMargin = 400;
 		btPlay.setLayoutParams(rlp);
 		llMain.addView(btPlay);
 
@@ -120,8 +122,11 @@ public class MainActivity extends Activity {
 		colSelector = null;
 
 		// for test
-		m_regularProgressBar = (ProgressBar) findViewById(R.id.progressbar1);
-		new UpdateBarTask().execute();
+		// pbarMain = (ProgressBar) findViewById(R.id.progressbar1);
+		// new UpdateBarTask().execute();
+
+		tvProgress = (TextView) findViewById(R.id.tvProgress);
+		vsMain = (VerticalSlider) findViewById(R.id.vsMain);
 
 	}
 
@@ -144,7 +149,7 @@ public class MainActivity extends Activity {
 
 	private void showColSelector() {
 		if (colSelector == null) {
-			Log.i("===MainActivity===", "colSelector creating");
+			Log.e("===MainActivity===", "colSelector creating");
 			LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 			colSelectorView = layoutInflater
@@ -160,14 +165,15 @@ public class MainActivity extends Activity {
 			tvColSel.setText("collections");
 			tvColSel.setTextSize(50.0f);
 			// tvColSel.setInputType(InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
-			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+			RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
 					new ViewGroup.MarginLayoutParams(
-							LinearLayout.LayoutParams.FILL_PARENT,
-							LinearLayout.LayoutParams.FILL_PARENT));
+							RelativeLayout.LayoutParams.FILL_PARENT,
+							RelativeLayout.LayoutParams.FILL_PARENT));
 			lp.setMargins(0, 0, 0, 0);
 			tvColSel.setLayoutParams(lp);
 			// TextView tvColSel = (TextView) colSelectorView
 			// .findViewById(R.id.tvTest1);
+			Log.e("===MainActivity===", "colSelector creating 1");
 			tvColSel.setOnClickListener(new OnClickListener() {
 
 				public void onClick(View v) {
@@ -238,6 +244,7 @@ public class MainActivity extends Activity {
 			// colSelector.showAsDropDown(llMain, 200, 200);
 			((LinearLayout) colSelectorView).addView(tvColSel);
 		}
+		Log.e("===MainActivity===", "colSelector creating 2");
 		// TODO: no position calculation!!!
 		colSelector.showAtLocation(colSelectorView, Gravity.NO_GRAVITY,
 				colSelectorLeft, colSelectorTop);
@@ -278,7 +285,17 @@ public class MainActivity extends Activity {
 			Intent intent = new Intent(this, CollectionListActivity.class);
 			this.startActivity(intent);
 
-			// Toast.makeText(this, "删除菜单被点击了", Toast.LENGTH_LONG).show();
+			break;
+		case Menu.FIRST + 2:
+			Toast.makeText(this, "删除菜单被点击了", Toast.LENGTH_LONG).show();
+
+			int nNews = ((NewsInTimeApp) getApplication()).getData()
+					.getNewsList().size();
+			if (nNews == 0) {
+				Log.e("===MainActivity===", "playing failed: news null");
+			}
+			tvMain.startAnimation(new LongTextMovingAnimation(
+					MainActivity.this, tvMain));
 			break;
 		}
 
@@ -286,31 +303,63 @@ public class MainActivity extends Activity {
 
 	}
 
-	private class UpdateBarTask extends AsyncTask<Void, Integer, Void> {
+	// private class UpdateBarTask extends AsyncTask<Void, Integer, Void> {
+	//
+	// @Override
+	// protected Void doInBackground(Void... params) {
+	// int max = pbarMain.getMax();
+	// Log.e("MAINACTIVITY", "pbar.max=" + max);
+	// for (int i = 0; i <= max; i++) {
+	// try {
+	// // update every second
+	// Thread.sleep(100);
+	// } catch (InterruptedException e) {
+	//
+	// }
+	//
+	// publishProgress(i);
+	// }
+	//
+	// return null;
+	// }
+	//
+	// @Override
+	// protected void onProgressUpdate(Integer... values) {
+	// pbarMain.setProgress(values[0]);
+	// }
+	// }
 
-		@Override
-		protected Void doInBackground(Void... params) {
-			int max = m_regularProgressBar.getMax();
-			Log.e("MAINACTIVITY", "pbar.max=" + max);
-			for (int i = 0; i <= max; i++) {
-				try {
-					// update every second
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-
-				}
-
-				publishProgress(i);
-			}
-
-			return null;
-		}
-
-		@Override
-		protected void onProgressUpdate(Integer... values) {
-			m_regularProgressBar.setProgress(values[0]);
-		}
+	public TextView getTvMain() {
+		return tvMain;
 	}
+
+	public void setTvMain(TextView tvMain) {
+		this.tvMain = tvMain;
+	}
+
+	public VerticalSlider getVsMain() {
+		return vsMain;
+	}
+
+	public void setVsMain(VerticalSlider vsMain) {
+		this.vsMain = vsMain;
+	}
+
+	public TextView getTvProgress() {
+		return tvProgress;
+	}
+
+	public void setTvProgress(TextView tvProgress) {
+		this.tvProgress = tvProgress;
+	}
+
+	// public ProgressBar getPbarMain() {
+	// return pbarMain;
+	// }
+	//
+	// public void setPbarMain(ProgressBar pbarMain) {
+	// this.pbarMain = pbarMain;
+	// }
 }
 
 // ------------------- class

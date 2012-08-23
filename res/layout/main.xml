@@ -1,21 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/llMain" android:layout_width="fill_parent"
 	android:layout_height="fill_parent" android:orientation="vertical">
 
-	<TextView android:id="@+id/tvMain" android:layout_width="fill_parent"
+	<TextView android:id="@+id/tvProgress" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:gravity="center_horizontal"
 		android:inputType="textLongMessage" android:text="init"
 		android:textSize="42sp">
 	</TextView>
+	<info.realjin.newsintime.view.VerticalSlider android:id="@+id/vsMain"
+      android:layout_height="wrap_content"
+      android:layout_width="fill_parent"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentTop="true"
+    />
+	<!-- 
+	<info.realjin.newsintime.view.VerticalProgressBarWithBug
+		android:id="@+id/progressbar1" android:layout_width="wrap_content"
+		android:layout_height="fill_parent" android:layout_marginTop="50dip"
+		style="@style/Widget.ProgressBar.RegularProgressBar" />
 	<info.realjin.newsintime.view.VerticalNewsProgressBar
 		android:id="@+id/progressbar1" android:layout_width="wrap_content"
-		android:layout_height="fill_parent" android:layout_marginLeft="50dip"
+		android:layout_height="fill_parent" android:layout_marginTop="50dip"
 		style="@style/Widget.ProgressBar.RegularProgressBar" />
+	-->
 	<!-- 
 	<info.realjin.newsintime.view.NewsProgressBar
 		android:id="@+id/progressbar1" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:layout_marginTop="50dip"
 		style="@style/Widget1.ProgressBar.RegularProgressBar" />
 		 -->
-</LinearLayout>
+</RelativeLayout>

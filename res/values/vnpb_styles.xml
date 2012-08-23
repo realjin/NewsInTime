@@ -24,7 +24,7 @@ limitations under the License.
         <item name="android:indeterminateBehavior">repeat</item>
         <item name="android:indeterminateDuration">3500</item>
         <item name="android:minWidth">4dip</item>
-        <item name="android:maxWidth">400dip</item>
+        <item name="android:maxWidth">40dip</item>
         <item name="android:minHeight">4dip</item>
         <item name="android:maxHeight">400dip</item>
     </style>

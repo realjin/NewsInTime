@@ -44,7 +44,7 @@ public class VerticalNewsProgressBar extends ProgressBar {
 	@Override
 	protected synchronized void onMeasure(int widthMeasureSpec,
 			int heightMeasureSpec) {
-		super.onMeasure(heightMeasureSpec, widthMeasureSpec);
+//		super.onMeasure(heightMeasureSpec, widthMeasureSpec);
 		setMeasuredDimension(getMeasuredHeight(), getMeasuredWidth());
 	}
 
@@ -52,6 +52,7 @@ public class VerticalNewsProgressBar extends ProgressBar {
 		updateProgressBar();
 		c.rotate(-90);
 		c.translate(-getHeight(), 0);
+		Log.e("==INITWIDTH===", "" + getWidth());
 		super.onDraw(c);
 	}
 
@@ -84,19 +85,18 @@ public class VerticalNewsProgressBar extends ProgressBar {
 		return true;
 	}
 
-//	@Override
-//	public synchronized void setProgress(int progress) {
-//
-//		if (progress >= 0)
-//			super.setProgress(progress);
-//
-//		else
-//			super.setProgress(0);
-//		onSizeChanged(x, y, z, w);
-//
-//	}
-	
-	
+	// @Override
+	// public synchronized void setProgress(int progress) {
+	//
+	// if (progress >= 0)
+	// super.setProgress(progress);
+	//
+	// else
+	// super.setProgress(0);
+	// onSizeChanged(x, y, z, w);
+	//
+	// }
+
 	@Override
 	public synchronized void setProgress(int progress) {
 		super.setProgress(progress);
@@ -105,7 +105,7 @@ public class VerticalNewsProgressBar extends ProgressBar {
 		// anymore so we need to force an update to redraw the progress bar
 		invalidate();
 
-		 onSizeChanged(x, y, z, w);
+		onSizeChanged(x, y, z, w);
 	}
 
 	private float getScale(int progress) {
