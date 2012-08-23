@@ -5,7 +5,6 @@ import info.realjin.newsintime.R;
 import info.realjin.newsintime.anim.LongTextMovingAnimation;
 import info.realjin.newsintime.domain.AppConfig;
 import info.realjin.newsintime.domain.Collection;
-import info.realjin.newsintime.view.NewsProgressBar;
 import info.realjin.newsintime.view.VerticalListView;
 import info.realjin.newsintime.view.VerticalTextView;
 
@@ -35,6 +34,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -58,7 +58,7 @@ public class MainActivity extends Activity {
 	//
 	private Button btPlay;
 
-	private NewsProgressBar m_regularProgressBar;
+	private ProgressBar m_regularProgressBar;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -96,6 +96,15 @@ public class MainActivity extends Activity {
 		btPlay.setText("Play");
 		btPlay.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				/*
+				 * check if there is any news yet(maybe connection error and
+				 * there's no news yet
+				 */
+				int nNews = ((NewsInTimeApp) getApplication()).getData()
+						.getNewsList().size();
+				if (nNews == 0) {
+					Log.e("===MainActivity===", "playing failed: news null");
+				}
 				tvMain.startAnimation(new LongTextMovingAnimation(
 						MainActivity.this, tvMain));
 			}
@@ -111,7 +120,7 @@ public class MainActivity extends Activity {
 		colSelector = null;
 
 		// for test
-		m_regularProgressBar = (NewsProgressBar) findViewById(R.id.progressbar1);
+		m_regularProgressBar = (ProgressBar) findViewById(R.id.progressbar1);
 		new UpdateBarTask().execute();
 
 	}
@@ -282,6 +291,7 @@ public class MainActivity extends Activity {
 		@Override
 		protected Void doInBackground(Void... params) {
 			int max = m_regularProgressBar.getMax();
+			Log.e("MAINACTIVITY", "pbar.max=" + max);
 			for (int i = 0; i <= max; i++) {
 				try {
 					// update every second

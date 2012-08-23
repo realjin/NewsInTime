@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2011 Jag Saund
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package info.realjin.newsintime.view;
 
 import info.realjin.newsintime.R;
@@ -24,62 +8,95 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.widget.ProgressBar;
 
-/**
- * An enhanced version of the ProgressBar which provides greater control over
- * how the progress bar is drawn and displayed. The motivation is to allow us to
- * customize the appearance of the progress bar more freely. We can now display
- * a rounded cap at the end of the progress bar and optionally show an overlay.
- * 
- * @author jsaund
- * 
- */
-public class NewsProgressBar extends ProgressBar {
+public class VerticalNewsProgressBar extends ProgressBar {
+	private int x, y, z, w;
 
-	private int x;
-	private int y;
-	private int z;
-	private int w;
+	@Override
+	protected void drawableStateChanged() {
+		// TODO Auto-generated method stub
+		super.drawableStateChanged();
+	}
 
-	public NewsProgressBar(Context context) {
+	public VerticalNewsProgressBar(Context context) {
 		super(context);
 	}
 
-	public NewsProgressBar(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
-
-	public NewsProgressBar(Context context, AttributeSet attrs, int defStyle) {
+	public VerticalNewsProgressBar(Context context, AttributeSet attrs,
+			int defStyle) {
 		super(context, attrs, defStyle);
 	}
 
-	@Override
-	protected synchronized void onDraw(Canvas canvas) {
-		// update the size of the progress bar and overlay
-		updateProgressBar();
-
-		// canvas.rotate(-90);
-		// canvas.translate(-getHeight(), 0);
-
-		// paint the changes to the canvas
-		super.onDraw(canvas);
+	public VerticalNewsProgressBar(Context context, AttributeSet attrs) {
+		super(context, attrs);
 	}
 
-	// protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-	// super.onSizeChanged(h, w, oldh, oldw);
-	// this.x = w;
-	// this.y = h;
-	// this.z = oldw;
-	// this.w = oldh;
-	// }
-	//
-	// protected synchronized void onMeasure(int widthMeasureSpec,
-	// int heightMeasureSpec) {
-	// super.onMeasure(heightMeasureSpec, widthMeasureSpec);
-	// setMeasuredDimension(getMeasuredHeight(), getMeasuredWidth());
-	// }
+	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+		super.onSizeChanged(h, w, oldh, oldw);
+		this.x = w;
+		this.y = h;
+		this.z = oldw;
+		this.w = oldh;
+	}
 
+	@Override
+	protected synchronized void onMeasure(int widthMeasureSpec,
+			int heightMeasureSpec) {
+		super.onMeasure(heightMeasureSpec, widthMeasureSpec);
+		setMeasuredDimension(getMeasuredHeight(), getMeasuredWidth());
+	}
+
+	protected void onDraw(Canvas c) {
+		updateProgressBar();
+		c.rotate(-90);
+		c.translate(-getHeight(), 0);
+		super.onDraw(c);
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		if (!isEnabled()) {
+			return false;
+		}
+
+		switch (event.getAction()) {
+		case MotionEvent.ACTION_DOWN:
+
+			setSelected(true);
+			setPressed(true);
+			break;
+		case MotionEvent.ACTION_MOVE:
+			setProgress(getMax()
+					- (int) (getMax() * event.getY() / getHeight()));
+			onSizeChanged(getWidth(), getHeight(), 0, 0);
+
+			break;
+		case MotionEvent.ACTION_UP:
+			setSelected(false);
+			setPressed(false);
+			break;
+
+		case MotionEvent.ACTION_CANCEL:
+			break;
+		}
+		return true;
+	}
+
+//	@Override
+//	public synchronized void setProgress(int progress) {
+//
+//		if (progress >= 0)
+//			super.setProgress(progress);
+//
+//		else
+//			super.setProgress(0);
+//		onSizeChanged(x, y, z, w);
+//
+//	}
+	
+	
 	@Override
 	public synchronized void setProgress(int progress) {
 		super.setProgress(progress);
@@ -88,7 +105,7 @@ public class NewsProgressBar extends ProgressBar {
 		// anymore so we need to force an update to redraw the progress bar
 		invalidate();
 
-		// onSizeChanged(x, y, z, w);
+		 onSizeChanged(x, y, z, w);
 	}
 
 	private float getScale(int progress) {

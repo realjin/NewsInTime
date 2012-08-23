@@ -8,8 +8,14 @@
 		android:inputType="textLongMessage" android:text="init"
 		android:textSize="42sp">
 	</TextView>
+	<info.realjin.newsintime.view.VerticalNewsProgressBar
+		android:id="@+id/progressbar1" android:layout_width="wrap_content"
+		android:layout_height="fill_parent" android:layout_marginLeft="50dip"
+		style="@style/Widget.ProgressBar.RegularProgressBar" />
+	<!-- 
 	<info.realjin.newsintime.view.NewsProgressBar
 		android:id="@+id/progressbar1" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:layout_marginTop="50dip"
-		style="@style/Widget.ProgressBar.RegularProgressBar" />
+		style="@style/Widget1.ProgressBar.RegularProgressBar" />
+		 -->
 </LinearLayout>
