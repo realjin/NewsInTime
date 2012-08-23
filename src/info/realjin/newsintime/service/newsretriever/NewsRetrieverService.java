@@ -111,7 +111,7 @@ public class NewsRetrieverService {
 			s = s.substring(0, nGMT);
 		}
 
-		System.out.println("===1===");
+//		System.out.println("===1===");
 
 		// trim
 		s = s.trim();
@@ -128,13 +128,13 @@ public class NewsRetrieverService {
 			return null;
 		}
 
-		System.out.println("===2===");
+//		System.out.println("===2===");
 		// get date part as s1
 		String s1;
 		s1 = s.substring(0, n1 - 2);
 		s1 = s1.trim();
 		String[] tokens = s1.split(" ");
-		System.out.println("===3===token length=" + tokens.length);
+//		System.out.println("===3===token length=" + tokens.length);
 		if (tokens.length == 3) {
 			if (tokens[0].length() == 1) {
 				tokens[0] = '0' + tokens[0];
@@ -148,10 +148,10 @@ public class NewsRetrieverService {
 			return null;
 		}
 		s1 = tokens[2] + ' ' + tokens[1] + ' ' + tokens[0];
-		System.out.println("===4===fmt=" + format);
+//		System.out.println("===4===fmt=" + format);
 
 		String modified = s1 + ' ' + s2;
-		System.out.println("===5=== modified=" + modified);
+//		System.out.println("===5=== modified=" + modified);
 		SimpleDateFormat _df = new SimpleDateFormat(format, Locale.US);
 		// System.out.println("sample--->" + _df.format(new Date()));
 		Date d = null;

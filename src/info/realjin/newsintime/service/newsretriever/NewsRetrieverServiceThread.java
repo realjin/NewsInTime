@@ -195,7 +195,7 @@ public class NewsRetrieverServiceThread implements Runnable {
 
 				feed.addItem(ri);
 
-				System.out.println("==>" + e.element("title").getTextTrim());
+//				System.out.println("==>" + e.element("title").getTextTrim());
 			}
 
 			return feed;
@@ -227,7 +227,7 @@ public class NewsRetrieverServiceThread implements Runnable {
 
 		// 开始文档时调用
 		public void startDocument() throws SAXException {
-			System.out.println("startDocument");
+//			System.out.println("startDocument");
 
 			// 实例化两个对象
 			rssFeed = new RssFeed();
