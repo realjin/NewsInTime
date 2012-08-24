@@ -1,68 +1,111 @@
-
 <!-- not used yet -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:background="#81BEF7"
-	android:scrollbars="vertical" android:id="@+id/rlCollectionList">
+    android:id="@+id/llCollectionlistitem"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#81BEF7"
+    android:orientation="vertical"
+    android:scrollbars="vertical" >
 
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:id="@+id/buttonlayout" android:orientation="horizontal"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:height="32dp" android:gravity="left|top" android:background="#2B60DE">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/llCollectionlistitem_1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#2B60DE"
+        android:gravity="left|top"
+        android:height="32dp"
+        android:orientation="horizontal" >
 
-		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			android:id="@+id/buttonlayout2" android:orientation="horizontal"
-			android:layout_height="wrap_content" android:gravity="left|center_vertical"
-			android:layout_width="wrap_content" android:layout_gravity="left|center_vertical">
-			<TextView android:id="@+id/txtTest" android:layout_width="fill_parent"
-				android:layout_height="fill_parent" android:text="Edit Collections"
-				android:gravity="center_vertical">
-			</TextView>
-		</LinearLayout>
-		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			android:id="@+id/buttonlayout2" android:orientation="horizontal"
-			android:layout_height="wrap_content" android:gravity="right"
-			android:layout_width="fill_parent" android:layout_gravity="right|center_vertical">
-			<Button android:id="@+id/btAdd" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="ADD"
-				android:height="24dp" android:width="60dp"></Button>
-			<Button android:id="@+id/btDelete" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="DELETE"
-				android:height="24dp" android:width="80dp"></Button>
-		</LinearLayout>
-		<!-- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
-			android:id="@+id/buttonlayout2" android:orientation="horizontal" android:layout_height="wrap_content" 
-			android:gravity="right" android:layout_width="fill_parent" android:layout_gravity="right|center_vertical"> 
-			<Button android:id="@+id/btnSave" android:layout_width="wrap_content" android:layout_height="wrap_content" 
-			android:text="Save" android:height="15dp" android:width="70dp"></Button> 
-			<Button android:id="@+id/btnClear" android:layout_width="wrap_content" android:layout_height="wrap_content" 
-			android:text="Clear" android:height="15dp" android:width="70dp"></Button> 
-			</LinearLayout> -->
-	</LinearLayout>
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/llCollectionlistitem_1_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:gravity="left|center_vertical"
+            android:orientation="horizontal" >
 
-	<ListView android:id="@+id/collectionlist_lv"
-		android:layout_width="fill_parent" android:layout_height="wrap_content" />
-	<!-- <TableLayout android:id="@+id/TableLayout01" android:layout_width="fill_parent" 
-		android:layout_height="fill_parent"> <TableRow> <ListView android:id="@+id/collectionlist_lv" 
-		android:layout_width="fill_parent" android:layout_height="wrap_content" /> 
-		</TableRow> </TableLayout> -->
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:id="@+id/buttonlayout4" android:orientation="vertical"
-		android:layout_height="fill_parent" android:gravity="right"
-		android:layout_width="fill_parent">
-		<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			android:id="@+id/buttonlayout5" android:orientation="horizontal"
-			android:layout_height="wrap_content" android:gravity="bottom"
-			android:layout_width="fill_parent" android:background="#81BEF7">
-			<Button android:id="@+id/btSave" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="SAVE"
-				android:height="24dp" android:width="80dp" android:layout_alignParentLeft="true"></Button>
-			<Button android:id="@+id/btCancel" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="CANCEL"
-				android:height="24dp" android:width="80dp" android:layout_alignParentRight="true"></Button>
-		</RelativeLayout>
-	</LinearLayout>
+            <TextView
+                android:id="@+id/txtTest"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                android:text="Edit Collections" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/buttonlayout2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:gravity="right"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:height="24dp"
+                android:text="ADD"
+                android:width="60dp" >
+            </Button>
+
+            <Button
+                android:id="@+id/btDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:height="24dp"
+                android:text="DELETE"
+                android:width="80dp" >
+            </Button>
+        </LinearLayout>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/collectionlistitem_lv"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/buttonlayout4"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="right"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/buttonlayout5"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#81BEF7"
+            android:gravity="bottom"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:height="24dp"
+                android:text="SAVE"
+                android:width="80dp" >
+            </Button>
+
+            <Button
+                android:id="@+id/btCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:height="24dp"
+                android:text="CANCEL"
+                android:width="80dp" >
+            </Button>
+        </RelativeLayout>
+    </LinearLayout>
+
 </LinearLayout>
-
-
-
