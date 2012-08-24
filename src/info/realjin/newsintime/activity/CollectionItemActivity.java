@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -107,7 +108,7 @@ public class CollectionItemActivity extends Activity {
 					}
 				});
 
-				PopupWindow pw = new PopupWindow(pwView, 300, 200, true);
+				PopupWindow pw = new PopupWindow(pwView, 300, 400, true);
 				pw.setBackgroundDrawable(new BitmapDrawable());
 				// pw.setOutsideTouchable(true);
 				pw.setFocusable(true);
@@ -132,6 +133,8 @@ class CollectionListItemSelectAdapter extends BaseAdapter {
 	public CollectionListItemSelectAdapter(Activity a, List<CollectionItem> c) {
 		this.activity = a;
 		this.collitems = c;
+		Log.e("COLLITEMSIN CollectionListItemSelectAdapter, size=",
+				"" + c.size());
 		mInflater = LayoutInflater.from(a);
 	}
 
@@ -153,17 +156,17 @@ class CollectionListItemSelectAdapter extends BaseAdapter {
 		if (convertView == null) {
 			holder = new CollectionListItemSelectViewHolder();
 			convertView = mInflater.inflate(
-					R.layout.collectionlistitem_listview, null);
+					R.layout.collectionlistitemitem_select_listview, null);
 			// holder.img = (ImageView) convertView.findViewById(R.id.co);
 			holder.title = (TextView) convertView
-					.findViewById(R.id.collectionlistitem_listview_text);
+					.findViewById(R.id.collectionlistitemitem_select_listview_tv);
 			convertView.setTag(holder);
 		} else {
 			holder = (CollectionListItemSelectViewHolder) convertView.getTag();
 		}
 		// holder.img.setBackgroundResource((Integer) colls.get(position).get(
 		// "img"));
-		holder.title.setText(collitems.get(position).getUrl());
+		holder.title.setText(collitems.get(position).getName());
 		// holder.cBox.setChecked(isSelected.get(position));
 		return convertView;
 	}
