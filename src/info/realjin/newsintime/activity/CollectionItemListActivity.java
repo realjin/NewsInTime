@@ -11,15 +11,22 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 public class CollectionItemListActivity extends Activity {
@@ -44,7 +51,7 @@ public class CollectionItemListActivity extends Activity {
 		// List<Collection> collections = app.getData().getCollectionList();
 		CollectionListItemAdapter adapter = new CollectionListItemAdapter(this,
 				c.getItems());
-		
+
 		// listView = new ListView(this);// 实例化列表视图
 		ListView listView = (ListView) findViewById(R.id.collectionlistitem_lv);
 		listView.setAdapter(adapter);
@@ -64,7 +71,7 @@ public class CollectionItemListActivity extends Activity {
 
 		// //显示列表视图
 		// this.setContentView(listView);
-		
+
 	}
 
 }
@@ -115,13 +122,13 @@ class CollectionListItemAdapter extends BaseAdapter {
 		// convertView为null的时候初始化convertView。
 		if (convertView == null) {
 			holder = new CollectionListItemViewHolder();
-			convertView = mInflater.inflate(R.layout.collectionlist_listview,
-					null);
+			convertView = mInflater.inflate(
+					R.layout.collectionlistitem_listview, null);
 			// holder.img = (ImageView) convertView.findViewById(R.id.co);
 			holder.title = (TextView) convertView
-					.findViewById(R.id.collectionlist_listview_text);
+					.findViewById(R.id.collectionlistitem_listview_text);
 			holder.cBox = (CheckBox) convertView
-					.findViewById(R.id.collectionlist_listview_checkbox);
+					.findViewById(R.id.collectionlistitem_listview_checkbox);
 			holder.cBox
 					.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
 
@@ -131,6 +138,46 @@ class CollectionListItemAdapter extends BaseAdapter {
 						}
 
 					});
+			holder.btEdit = (Button) convertView
+					.findViewById(R.id.collectionlistitem_listview_btedit);
+			holder.btEdit.setOnClickListener(new OnClickListener() {
+
+				public void onClick(View v) {
+					LayoutInflater inflater = (LayoutInflater) activity
+							.getSystemService(activity.LAYOUT_INFLATER_SERVICE);
+
+					View pwView = inflater.inflate(
+							R.layout.collectionlistitemitem, null, false);
+					
+					RadioGroup rgp = (RadioGroup) pwView
+							.findViewById(R.id.radioSex);
+					final Spinner cmbName = (Spinner) pwView
+							.findViewById(R.id.cmbName);
+					final EditText etName = (EditText) pwView
+							.findViewById(R.id.etName);
+					rgp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+						public void onCheckedChanged(RadioGroup group,
+								int checkedId) {
+							if (checkedId == R.id.radioMale) {
+								etName.setEnabled(false);
+								cmbName.setEnabled(true);
+							} else {
+								etName.setEnabled(true);
+								cmbName.setEnabled(false);
+							}
+						}
+					});
+					
+					
+					PopupWindow pw = new PopupWindow(pwView, 300, 200, true);
+					// The code below assumes that the root container has an id
+					// called 'main'
+					pw.showAtLocation(
+							activity.findViewById(R.id.collectionlistitem_lv),
+							Gravity.CENTER, 0, 0);
+
+				}
+			});
 			convertView.setTag(holder);
 		} else {
 			holder = (CollectionListItemViewHolder) convertView.getTag();
@@ -155,4 +202,6 @@ final class CollectionListItemViewHolder {
 	// public ImageView img;
 	public TextView title;
 	public CheckBox cBox;
+	public Button btEdit;
+	public CollectionItem collItem;
 }
