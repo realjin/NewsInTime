@@ -99,12 +99,8 @@ public class CollectionItemActivity extends Activity {
 				lv.setOnItemClickListener(new OnItemClickListener() {
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
-						CollectionListItemViewHolder vHollder = (CollectionListItemViewHolder) view
+						CollectionListItemSelectViewHolder vHollder = (CollectionListItemSelectViewHolder) view
 								.getTag();
-						// 在每次获取点击的item时将对于的checkbox状态改变，同时修改map的值。
-						vHollder.cBox.toggle();
-						CollectionListAdapter.isSelected.put(position,
-								vHollder.cBox.isChecked());
 					}
 				});
 

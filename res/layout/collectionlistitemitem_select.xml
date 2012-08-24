@@ -10,8 +10,8 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:inputType="textLongMessage"
-        android:text="AAAAAAAAA"
-        android:textSize="42sp" >
+        android:text="select feed"
+        android:textSize="20sp" >
     </TextView>
 
     <ListView
