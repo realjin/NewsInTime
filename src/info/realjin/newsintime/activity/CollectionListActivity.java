@@ -8,18 +8,19 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 /*
@@ -33,10 +34,6 @@ import android.widget.TextView;
  */
 
 public class CollectionListActivity extends Activity {
-	private SimpleAdapter adapter;// 声明适配器对象
-	private ListView listView; // 声明列表视图对象
-	private List<Map<String, Object>> list;// 声明列表容器
-	public static CollectionListActivity ma;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -45,12 +42,13 @@ public class CollectionListActivity extends Activity {
 
 		NewsInTimeApp app = (NewsInTimeApp) getApplication();
 
-		CollectionListAdapter adapter = new CollectionListAdapter(this);
 		// get data dynamically
 		List<Collection> collections = app.getData().getCollectionList();
+		CollectionListAdapter adapter = new CollectionListAdapter(this,
+				collections);
 		adapter.setColls(collections);
 		// listView = new ListView(this);// 实例化列表视图
-		listView = (ListView) findViewById(R.id.collectionlist_lv);
+		ListView listView = (ListView) findViewById(R.id.collectionlist_lv);
 		listView.setAdapter(adapter);
 		listView.setItemsCanFocus(false);
 		listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -76,9 +74,12 @@ class CollectionListAdapter extends BaseAdapter {
 	private LayoutInflater mInflater;
 	private List<Collection> colls;
 	public static Map<Integer, Boolean> isSelected;
+	private Activity activity;
 
-	public CollectionListAdapter(Context context) {
-		mInflater = LayoutInflater.from(context);
+	public CollectionListAdapter(Activity a, List<Collection> c) {
+		activity = a;
+		colls = c;
+		mInflater = LayoutInflater.from(a);
 		// init();
 	}
 
@@ -127,10 +128,21 @@ class CollectionListAdapter extends BaseAdapter {
 
 						public void onCheckedChanged(CompoundButton arg0,
 								boolean arg1) {
-							
+							// TODO: bug fixing code here
 						}
-						
+
 					});
+			holder.btEdit = (Button) convertView
+					.findViewById(R.id.collectionlist_listview_btedit);
+			holder.btEdit.setOnClickListener(new OnClickListener() {
+
+				public void onClick(View arg0) {
+					Intent intent = new Intent(activity,
+							CollectionItemListActivity.class);
+					activity.startActivity(intent);
+				}
+			});
+
 			convertView.setTag(holder);
 		} else {
 			holder = (CollectionListViewHolder) convertView.getTag();
@@ -156,4 +168,5 @@ final class CollectionListViewHolder {
 	// public ImageView img;
 	public TextView title;
 	public CheckBox cBox;
+	public Button btEdit;
 }
