@@ -1,33 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- http://android.blog.51cto.com/268543/314262 http://blog.csdn.net/hellogv/article/details/4522125 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:orientation="horizontal" android:weightSum="10"
-	android:background="#FFFFFF">
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tableLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-	<RadioGroup android:id="@+id/radioSex" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:layout_weight="5">
+    <!-- 2 columns -->
 
-		<RadioButton android:id="@+id/collectionlistitemitem_rbSelect"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:checked="true" android:text="male" />
+    <TableRow
+        android:id="@+id/tableRow1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dip" >
 
-		<RadioButton android:id="@+id/collectionlistitemitem_rbManual"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:text="female" />
-	</RadioGroup>
+        <RadioGroup
+            android:id="@+id/collectionlistitemitem_rgSelect"
+            android:layout_width="30dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="5" >
 
-	<LinearLayout android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:layout_weight="5"
-		android:orientation="vertical">
-		<!-- <Spinner android:id="@+id/cmbName" android:layout_width="fill_parent" 
-			android:layout_height="wrap_content" /> -->
-		<Button android:id="@+id/collectionlistitemitem_btSelect"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="SELECT" android:height="24dp" android:width="80dp"></Button>
-		<EditText android:id="@+id/collectionlistitemitem_etManual"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:inputType="text" />
-	</LinearLayout>
+            <RadioButton
+                android:id="@+id/collectionlistitemitem_rbSelect"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="select" />
+        </RadioGroup>
 
-</LinearLayout>
+        <Button
+            android:id="@+id/collectionlistitemitem_btSelect"
+            android:text="select" />
+    </TableRow>
+
+    <!-- edittext span 2 column -->
+
+    <TableRow
+        android:id="@+id/tableRow2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dip" >
+
+        <RadioGroup
+            android:id="@+id/collectionlistitemitem_rgManual"
+            android:layout_width="30dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="5" >
+
+            <RadioButton
+                android:id="@+id/collectionlistitemitem_rbManual"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="manual" />
+        </RadioGroup>
+
+        <EditText
+            android:id="@+id/collectionlistitemitem_etManual"
+            android:text="" />
+    </TableRow>
+
+</TableLayout>
