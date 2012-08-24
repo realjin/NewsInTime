@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,11 +22,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 public class CollectionItemListActivity extends Activity {
@@ -143,38 +139,48 @@ class CollectionListItemAdapter extends BaseAdapter {
 			holder.btEdit.setOnClickListener(new OnClickListener() {
 
 				public void onClick(View v) {
-					LayoutInflater inflater = (LayoutInflater) activity
-							.getSystemService(activity.LAYOUT_INFLATER_SERVICE);
 
-					View pwView = inflater.inflate(
-							R.layout.collectionlistitemitem, null, false);
-					
-					RadioGroup rgp = (RadioGroup) pwView
-							.findViewById(R.id.radioSex);
-					final Spinner cmbName = (Spinner) pwView
-							.findViewById(R.id.cmbName);
-					final EditText etName = (EditText) pwView
-							.findViewById(R.id.etName);
-					rgp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-						public void onCheckedChanged(RadioGroup group,
-								int checkedId) {
-							if (checkedId == R.id.radioMale) {
-								etName.setEnabled(false);
-								cmbName.setEnabled(true);
-							} else {
-								etName.setEnabled(true);
-								cmbName.setEnabled(false);
-							}
-						}
-					});
-					
-					
-					PopupWindow pw = new PopupWindow(pwView, 300, 200, true);
-					// The code below assumes that the root container has an id
-					// called 'main'
-					pw.showAtLocation(
-							activity.findViewById(R.id.collectionlistitem_lv),
-							Gravity.CENTER, 0, 0);
+					Intent intent = new Intent(activity,
+							CollectionItemActivity.class);
+					// intent.putExtra("collid", h.coll.getId());
+					// intent.putExtra("collitemid", );
+					activity.startActivity(intent);
+
+					// ----old
+
+					// LayoutInflater inflater = (LayoutInflater) activity
+					// .getSystemService(activity.LAYOUT_INFLATER_SERVICE);
+					//
+					// View pwView = inflater.inflate(
+					// R.layout.collectionlistitemitem, null, false);
+					//
+					// RadioGroup rgp = (RadioGroup) pwView
+					// .findViewById(R.id.radioSex);
+					// final Button btSelect = (Button) pwView
+					// .findViewById(R.id.collectionlistitemitem_btSelect);
+					// final EditText etManual = (EditText) pwView
+					// .findViewById(R.id.collectionlistitemitem_etManual);
+					// rgp.setOnCheckedChangeListener(new
+					// RadioGroup.OnCheckedChangeListener() {
+					// public void onCheckedChanged(RadioGroup group,
+					// int checkedId) {
+					// if (checkedId == R.id.collectionlistitemitem_rbManual) {
+					// etManual.setEnabled(true);
+					// btSelect.setEnabled(false);
+					// } else {
+					// etManual.setEnabled(false);
+					// btSelect.setEnabled(true);
+					// }
+					// }
+					// });
+					//
+					// PopupWindow pw = new PopupWindow(pwView, 300, 200, true);
+					// // The code below assumes that the root container has an
+					// id
+					// // called 'main'
+					// pw.showAtLocation(
+					// activity.findViewById(R.id.collectionlistitem_lv),
+					// Gravity.CENTER, 0, 0);
 
 				}
 			});
