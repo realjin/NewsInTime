@@ -2,8 +2,9 @@ package info.realjin.newsintime.activity;
 
 import info.realjin.newsintime.NewsInTimeApp;
 import info.realjin.newsintime.R;
+import info.realjin.newsintime.activity.CollectionItemListActivity.Operation;
 import info.realjin.newsintime.domain.AppData;
-import info.realjin.newsintime.domain.Collection;
+import info.realjin.newsintime.domain.AppMessage;
 import info.realjin.newsintime.domain.CollectionItem;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,9 +36,33 @@ import android.widget.TextView;
 
 public class CollectionItemActivity extends Activity {
 
+	enum Operation {
+		ADD, UPDATE
+	}
+
+	private Operation operation;
+	private CollectionItem currentCi;
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.collectionlistitemitem);
+
+		NewsInTimeApp app = (NewsInTimeApp) getApplication();
+
+		String action = getIntent().getExtras().getString("action");
+		if (action.equals("update")) {
+			operation = Operation.UPDATE;
+
+			// get message
+			currentCi = (CollectionItem) app
+					.getMessage(AppMessage.MSG_CILACT_CIACT_ITEM);
+			// TODO: check if null!
+
+		} else if (action.equals("add")) {
+			operation = Operation.ADD;
+
+			currentCi = new CollectionItem("");
+		}
 
 		final RadioGroup rgSelect = (RadioGroup) this
 				.findViewById(R.id.collectionlistitemitem_rgSelect);
@@ -114,8 +140,10 @@ public class CollectionItemActivity extends Activity {
 						bt.setText(ci.getName());
 
 						// TODO: update cached data
+						currentCi.setName(ci.getName());
+						currentCi.setUrl(ci.getUrl());
 
-						//hide popup
+						// hide popup
 						pw.dismiss();
 					}
 				});
@@ -132,6 +160,21 @@ public class CollectionItemActivity extends Activity {
 						Gravity.CENTER, 0, 0);
 			}
 		});
+
+		Button btOk = (Button) findViewById(R.id.collectionlistitemitem_btOk);
+		btOk.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				// TODO: update DB!!! (put currentCi to db)
+
+				Intent intent = getIntent();
+				Bundle bundle = new Bundle();
+				bundle.putString("name", "This is from ShowMsg!");
+				intent.putExtras(bundle);
+				setResult(RESULT_OK, intent);
+				CollectionItemActivity.this.finish();
+			}
+		});
+		Button btCancel = (Button) findViewById(R.id.collectionlistitemitem_btCancel);
 
 	}
 }

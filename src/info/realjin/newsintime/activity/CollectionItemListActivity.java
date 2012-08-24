@@ -3,6 +3,7 @@ package info.realjin.newsintime.activity;
 import info.realjin.newsintime.NewsInTimeApp;
 import info.realjin.newsintime.R;
 import info.realjin.newsintime.domain.AppData;
+import info.realjin.newsintime.domain.AppMessage;
 import info.realjin.newsintime.domain.Collection;
 import info.realjin.newsintime.domain.CollectionItem;
 
@@ -12,6 +13,7 @@ import java.util.Map;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,11 +25,16 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 public class CollectionItemListActivity extends Activity {
+	enum Operation {
+		ADD, UPDATE
+	}
+
+	private Operation operation;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,7 +50,8 @@ public class CollectionItemListActivity extends Activity {
 				Intent intent = new Intent(CollectionItemListActivity.this,
 						CollectionItemActivity.class);
 				intent.putExtra("action", "add");
-				CollectionItemListActivity.this.startActivity(intent);
+				CollectionItemListActivity.this.startActivityForResult(intent,
+						200);
 			}
 		});
 
@@ -54,6 +62,7 @@ public class CollectionItemListActivity extends Activity {
 
 		String action = getIntent().getExtras().getString("action");
 		if (action.equals("update")) {
+			operation = Operation.UPDATE;
 			String collid = getIntent().getExtras().getString("collid");
 			// Log.e("===CILActivity===", "collid=" + collid);
 
@@ -91,6 +100,7 @@ public class CollectionItemListActivity extends Activity {
 				}
 			});
 		} else if (action.equals("add")) {
+			operation = Operation.ADD;
 			// change title
 			TextView tvTitle = (TextView) findViewById(R.id.collectionlistitem_title);
 			tvTitle.setText("Add new");
@@ -99,6 +109,23 @@ public class CollectionItemListActivity extends Activity {
 			etName.setText("");
 		}
 
+	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		// if (requestCode == REQUEST_CODE) {
+		// if (resultCode == RESULT_CANCELED)
+		// setTitle("cancle");
+		// else if (resultCode == RESULT_OK) {
+		// String temp = null;
+		// Bundle bundle = data.getExtras();
+		// if (bundle != null)
+		// temp = bundle.getString("name");
+		// setTitle(temp);
+		// }
+		// }
+		Log.e("OOOOOOOO", "onActivityResult");
 	}
 
 }
@@ -128,6 +155,8 @@ class CollectionListItemAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
+		CollectionItem ci = collitems.get(position);
+
 		CollectionListItemViewHolder holder = null;
 		// convertView为null的时候初始化convertView。
 		if (convertView == null) {
@@ -150,6 +179,7 @@ class CollectionListItemAdapter extends BaseAdapter {
 					});
 			holder.btEdit = (Button) convertView
 					.findViewById(R.id.collectionlistitem_listview_btedit);
+			holder.btEdit.setTag(holder);
 			holder.btEdit.setOnClickListener(new OnClickListener() {
 
 				public void onClick(View v) {
@@ -157,8 +187,18 @@ class CollectionListItemAdapter extends BaseAdapter {
 					Intent intent = new Intent(activity,
 							CollectionItemActivity.class);
 					// intent.putExtra("collid", h.coll.getId());
-					// intent.putExtra("collitemid", );
-					activity.startActivity(intent);
+
+					// set op
+					intent.putExtra("action", "update");
+
+					// send item to update as message(including id)
+					NewsInTimeApp app = (NewsInTimeApp) activity
+							.getApplication();
+					CollectionListItemViewHolder h = (CollectionListItemViewHolder) v
+							.getTag();
+					app.putMessage(AppMessage.MSG_CILACT_CIACT_ITEM, h.collItem);
+
+					activity.startActivityForResult(intent, 200);
 
 					// ----old
 
@@ -204,7 +244,8 @@ class CollectionListItemAdapter extends BaseAdapter {
 		}
 		// holder.img.setBackgroundResource((Integer) colls.get(position).get(
 		// "img"));
-		holder.title.setText(collitems.get(position).getUrl());
+
+		holder.title.setText(ci.getUrl());
 		// holder.cBox.setChecked(isSelected.get(position));
 		return convertView;
 	}

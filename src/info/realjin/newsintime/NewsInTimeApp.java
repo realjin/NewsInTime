@@ -4,6 +4,7 @@ import info.realjin.newsintime.activity.MainActivity;
 import info.realjin.newsintime.dao.CollectionDao;
 import info.realjin.newsintime.domain.AppConfig;
 import info.realjin.newsintime.domain.AppData;
+import info.realjin.newsintime.domain.AppMessage;
 import info.realjin.newsintime.domain.AppStatus;
 import info.realjin.newsintime.domain.Collection;
 import info.realjin.newsintime.domain.CollectionItem;
@@ -22,6 +23,7 @@ public class NewsInTimeApp extends Application {
 	private AppData data;
 	private AppConfig config;
 	private AppStatus status;
+	private AppMessage msg;
 
 	// activity pointers
 	MainActivity mainActivity;
@@ -39,6 +41,8 @@ public class NewsInTimeApp extends Application {
 		config = new AppConfig();
 		Log.i("===APP===", "3");
 		status = new AppStatus();
+		Log.i("===APP===", "4");
+		msg = new AppMessage();
 
 		// start retrieving news rss
 		// TODO: temp!!!
@@ -150,6 +154,14 @@ public class NewsInTimeApp extends Application {
 
 	public void setDbmService(DbManagerService dbmService) {
 		this.dbmService = dbmService;
+	}
+
+	public void putMessage(String name, Object m) {
+		msg.getMsgMap().put(name, m);
+	}
+
+	public Object getMessage(String name) {
+		return msg.getMsgMap().get(name);
 	}
 
 }
