@@ -31,6 +31,7 @@ import android.widget.TextView;
  * http://xniwdzef.blogbus.com/logs/175054319.html
  * http://webknox.com/q/checkbox-auto-call-oncheckedchange-when-listview-scroll
  * http://www.eoeandroid.com/thread-74855-1-1.html
+ * http://www.itivy.com/android/archive/2011/12/14/android-listview-checkbox-problem.html
  */
 
 public class CollectionListActivity extends Activity {
