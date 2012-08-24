@@ -22,6 +22,8 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -31,42 +33,71 @@ public class CollectionItemListActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.collectionlistitem);
 
-		String collid = getIntent().getExtras().getString("collid");
-		// Log.e("===CILActivity===", "collid=" + collid);
-
-		// get collection data
 		NewsInTimeApp app = (NewsInTimeApp) getApplication();
-		AppData data = app.getData();
-		Collection c = data.getCollectionById(collid, data.getCollectionList());
 
-		// change title
-		TextView tvTitle = (TextView) findViewById(R.id.collectionlistitem_title);
-		tvTitle.setText("Edit \"" + c.getName() + "\"");
-
-		// get data dynamically
-		// List<Collection> collections = app.getData().getCollectionList();
-		CollectionListItemAdapter adapter = new CollectionListItemAdapter(this,
-				c.getItems());
-
-		// listView = new ListView(this);// 实例化列表视图
-		ListView listView = (ListView) findViewById(R.id.collectionlistitem_lv);
-		listView.setAdapter(adapter);
-		listView.setItemsCanFocus(false);
-		listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		listView.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				CollectionListItemViewHolder vHollder = (CollectionListItemViewHolder) view
-						.getTag();
-				// 在每次获取点击的item时将对于的checkbox状态改变，同时修改map的值。
-				vHollder.cBox.toggle();
-				CollectionListAdapter.isSelected.put(position,
-						vHollder.cBox.isChecked());
+		// set listener
+		Button btAdd = (Button) findViewById(R.id.collectionlistitem_btadd);
+		btAdd.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Button bt = (Button) v;
+				Intent intent = new Intent(CollectionItemListActivity.this,
+						CollectionItemActivity.class);
+				intent.putExtra("action", "add");
+				CollectionItemListActivity.this.startActivity(intent);
 			}
 		});
 
-		// //显示列表视图
-		// this.setContentView(listView);
+		// get name field
+		EditText etName = (EditText) findViewById(R.id.collectionlistitem_etname);
+		// LinearLayout llName = (LinearLayout)
+		// findViewById(R.id.collectionlistitem_llname);
+
+		String action = getIntent().getExtras().getString("action");
+		if (action.equals("update")) {
+			String collid = getIntent().getExtras().getString("collid");
+			// Log.e("===CILActivity===", "collid=" + collid);
+
+			// get collection data
+			AppData data = app.getData();
+			Collection c = data.getCollectionById(collid,
+					data.getCollectionList());
+
+			// change title
+			TextView tvTitle = (TextView) findViewById(R.id.collectionlistitem_title);
+			tvTitle.setText("Edit \"" + c.getName() + "\"");
+
+			// change rename filed
+			etName.setText(c.getName());
+
+			// get data dynamically
+			// List<Collection> collections = app.getData().getCollectionList();
+			CollectionListItemAdapter adapter = new CollectionListItemAdapter(
+					this, c.getItems());
+
+			// listView = new ListView(this);// 实例化列表视图
+			ListView listView = (ListView) findViewById(R.id.collectionlistitem_lv);
+			listView.setAdapter(adapter);
+			listView.setItemsCanFocus(false);
+			listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+			listView.setOnItemClickListener(new OnItemClickListener() {
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					CollectionListItemViewHolder vHollder = (CollectionListItemViewHolder) view
+							.getTag();
+					// 在每次获取点击的item时将对于的checkbox状态改变，同时修改map的值。
+					vHollder.cBox.toggle();
+					CollectionListAdapter.isSelected.put(position,
+							vHollder.cBox.isChecked());
+				}
+			});
+		} else if (action.equals("add")) {
+			// change title
+			TextView tvTitle = (TextView) findViewById(R.id.collectionlistitem_title);
+			tvTitle.setText("Add new");
+
+			// change rename filed
+			etName.setText("");
+		}
 
 	}
 
@@ -83,8 +114,6 @@ class CollectionListItemAdapter extends BaseAdapter {
 		this.collitems = c;
 		mInflater = LayoutInflater.from(a);
 	}
-
-	
 
 	public int getCount() {
 		return collitems.size();

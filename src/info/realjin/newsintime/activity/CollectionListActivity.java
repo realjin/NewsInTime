@@ -43,6 +43,18 @@ public class CollectionListActivity extends Activity {
 
 		NewsInTimeApp app = (NewsInTimeApp) getApplication();
 
+		// set button listener
+		Button btAdd = (Button) findViewById(R.id.collectionlist_btadd);
+		btAdd.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Button bt = (Button) v;
+				Intent intent = new Intent(CollectionListActivity.this,
+						CollectionItemListActivity.class);
+				intent.putExtra("action", "add");
+				CollectionListActivity.this.startActivity(intent);
+			}
+		});
+
 		// get data dynamically
 		List<Collection> collections = app.getData().getCollectionList();
 		CollectionListAdapter adapter = new CollectionListAdapter(this,
@@ -68,7 +80,6 @@ public class CollectionListActivity extends Activity {
 		// //显示列表视图
 		// this.setContentView(listView);
 	}
-
 }
 
 class CollectionListAdapter extends BaseAdapter {
@@ -144,6 +155,7 @@ class CollectionListAdapter extends BaseAdapter {
 							.getTag();
 					Intent intent = new Intent(activity,
 							CollectionItemListActivity.class);
+					intent.putExtra("action", "update");
 					intent.putExtra("collid", h.coll.getId());
 					activity.startActivity(intent);
 

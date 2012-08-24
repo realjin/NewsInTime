@@ -45,7 +45,7 @@
             android:orientation="horizontal" >
 
             <Button
-                android:id="@+id/btAdd"
+                android:id="@+id/collectionlistitem_btadd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:height="24dp"
@@ -54,16 +54,35 @@
             </Button>
 
             <Button
-                android:id="@+id/btDelete"
+                android:id="@+id/collectionlistitem_btdelete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:height="24dp"
-                android:text="DELETE"
-                android:width="80dp" >
+                android:text="DEL"
+                android:width="60dp" >
             </Button>
         </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/collectionlistitem_llname"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#FF0000"
+        android:gravity="left|top"
+        android:height="32dp"
+        android:orientation="horizontal" >
+        <EditText
+	android:id="@+id/collectionlistitem_etname"  
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text=""/>
+        
+        </LinearLayout>
+    
+    
+    
     <ListView
         android:id="@+id/collectionlistitem_lv"
         android:layout_width="fill_parent"

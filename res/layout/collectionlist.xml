@@ -23,10 +23,10 @@
 			android:id="@+id/buttonlayout2" android:orientation="horizontal"
 			android:layout_height="wrap_content" android:gravity="right"
 			android:layout_width="fill_parent" android:layout_gravity="right|center_vertical">
-			<Button android:id="@+id/btAdd" android:layout_width="wrap_content"
+			<Button android:id="@+id/collectionlist_btadd" android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="ADD"
 				android:height="24dp" android:width="80dp"></Button>
-			<Button android:id="@+id/btDelete" android:layout_width="wrap_content"
+			<Button android:id="@+id/collectionlist_btdelete" android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="DELETE"
 				android:height="24dp" android:width="80dp"></Button>
 		</LinearLayout>
