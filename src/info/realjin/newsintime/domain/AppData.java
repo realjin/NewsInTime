@@ -13,6 +13,7 @@ public class AppData {
 	}
 
 	// proxy methods
+	// TODO: DB!!!
 	public List<Collection> getCollectionList() {
 		List<Collection> collList = new ArrayList<Collection>();
 		Collection coll1 = new Collection();
@@ -22,7 +23,6 @@ public class AppData {
 				"http://rss.sina.com.cn/roll/sports/hot_roll.xml");
 		ci1.setName("sina general");
 		coll1.getItems().add(ci1);
-		
 
 		Collection coll2 = new Collection();
 		coll2.setId("2");
@@ -39,7 +39,7 @@ public class AppData {
 				"http://rss.sina.com.cn/roll/finance/hot_roll.xml");
 		ci3.setName("sina finance");
 		coll3.getItems().add(ci3);
-		
+
 		Collection coll4 = new Collection();
 		coll4.setId("4");
 		coll4.setName("nyt global");
@@ -47,7 +47,7 @@ public class AppData {
 				"http://www.nytimes.com/services/xml/rss/nyt/International.xml");
 		ci4.setName("nyt global");
 		coll4.getItems().add(ci4);
-		
+
 		Collection coll5 = new Collection();
 		coll5.setId("5");
 		coll5.setName("wsj china");
@@ -55,7 +55,7 @@ public class AppData {
 				"http://chinese.wsj.com/gb/rssbch.xml");
 		ci5.setName("wsj china");
 		coll5.getItems().add(ci5);
-		
+
 		Collection coll6 = new Collection();
 		coll6.setId("6");
 		coll6.setName("wsj finance");
@@ -63,7 +63,7 @@ public class AppData {
 				"http://chinese.wsj.com/gb/rss01.xml");
 		ci6.setName("wsj finance");
 		coll6.getItems().add(ci6);
-		
+
 		collList.add(coll1);
 		collList.add(coll2);
 		collList.add(coll3);
@@ -71,6 +71,17 @@ public class AppData {
 		collList.add(coll5);
 		collList.add(coll6);
 		return collList;
+	}
+
+	// proxy methods
+	// TODO: DB!!!
+	public Collection getCollectionById(String id, List<Collection> collList) {
+		for (Collection c : collList) {
+			if (c.getId().equals(id)) {
+				return c;
+			}
+		}
+		return null;
 	}
 
 	// ----- setters and getters

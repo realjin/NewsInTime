@@ -134,12 +134,18 @@ class CollectionListAdapter extends BaseAdapter {
 					});
 			holder.btEdit = (Button) convertView
 					.findViewById(R.id.collectionlist_listview_btedit);
+			holder.btEdit.setTag(holder);
 			holder.btEdit.setOnClickListener(new OnClickListener() {
 
-				public void onClick(View arg0) {
+				public void onClick(View v) {
+					Button bt = (Button) v;
+					CollectionListViewHolder h = (CollectionListViewHolder) bt
+							.getTag();
 					Intent intent = new Intent(activity,
 							CollectionItemListActivity.class);
+					intent.putExtra("collid", h.coll.getId());
 					activity.startActivity(intent);
+
 				}
 			});
 
@@ -147,9 +153,13 @@ class CollectionListAdapter extends BaseAdapter {
 		} else {
 			holder = (CollectionListViewHolder) convertView.getTag();
 		}
+
+		Collection c = colls.get(position);
+		holder.coll = c;
+
 		// holder.img.setBackgroundResource((Integer) colls.get(position).get(
 		// "img"));
-		holder.title.setText(colls.get(position).getName());
+		holder.title.setText(c.getName());
 		// holder.cBox.setChecked(isSelected.get(position));
 		return convertView;
 	}
@@ -169,4 +179,5 @@ final class CollectionListViewHolder {
 	public TextView title;
 	public CheckBox cBox;
 	public Button btEdit;
+	public Collection coll;
 }

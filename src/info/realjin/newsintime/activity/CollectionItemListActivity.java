@@ -2,6 +2,8 @@ package info.realjin.newsintime.activity;
 
 import info.realjin.newsintime.NewsInTimeApp;
 import info.realjin.newsintime.R;
+import info.realjin.newsintime.domain.AppData;
+import info.realjin.newsintime.domain.Collection;
 import info.realjin.newsintime.domain.CollectionItem;
 
 import java.util.List;
@@ -26,17 +28,25 @@ public class CollectionItemListActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.collectionlistitem);
 
+		String collid = getIntent().getExtras().getString("collid");
+		// Log.e("===CILActivity===", "collid=" + collid);
+
+		// get collection data
 		NewsInTimeApp app = (NewsInTimeApp) getApplication();
+		AppData data = app.getData();
+		Collection c = data.getCollectionById(collid, data.getCollectionList());
+
+		// change title
+		TextView tvTitle = (TextView) findViewById(R.id.collectionlistitem_title);
+		tvTitle.setText("Edit \"" + c.getName() + "\"");
 
 		// get data dynamically
 		// List<Collection> collections = app.getData().getCollectionList();
-		if (1 == 1) {
-			return;
-		}
 		CollectionListItemAdapter adapter = new CollectionListItemAdapter(this,
-				null);
+				c.getItems());
+		
 		// listView = new ListView(this);// 实例化列表视图
-		ListView listView = (ListView) findViewById(R.id.collectionlist_lv);
+		ListView listView = (ListView) findViewById(R.id.collectionlistitem_lv);
 		listView.setAdapter(adapter);
 		listView.setItemsCanFocus(false);
 		listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -54,6 +64,7 @@ public class CollectionItemListActivity extends Activity {
 
 		// //显示列表视图
 		// this.setContentView(listView);
+		
 	}
 
 }
@@ -126,7 +137,7 @@ class CollectionListItemAdapter extends BaseAdapter {
 		}
 		// holder.img.setBackgroundResource((Integer) colls.get(position).get(
 		// "img"));
-		holder.title.setText(collitems.get(position).getName());
+		holder.title.setText(collitems.get(position).getUrl());
 		// holder.cBox.setChecked(isSelected.get(position));
 		return convertView;
 	}
