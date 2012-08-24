@@ -84,6 +84,22 @@ public class AppData {
 		return null;
 	}
 
+	// proxy methods
+	// TODO: DB!!!
+	public List<CollectionItem> getPredefinedCollectionItemList() {
+		List<CollectionItem> list = new ArrayList<CollectionItem>();
+		CollectionItem a = new CollectionItem(
+				"http://news.qq.com/newsgn/rss_newsgn.xml");
+		a.setName("腾讯国内新闻");
+		CollectionItem b = new CollectionItem(
+				"http://news.163.com/special/00011K6L/rss_hotnews.xml");
+		b.setName("网易深度新闻");
+		list.add(a);
+		list.add(b);
+
+		return list;
+	}
+
 	// ----- setters and getters
 	public NewsList getNewsList() {
 		return newsList;
