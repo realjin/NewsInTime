@@ -19,13 +19,14 @@ public class DbManagerService {
 
 	private SQLiteDatabase db;
 	private static MySQLiteOpenHelper helper;
-	private Application application;
+	private Context ctx;
 
 	private CollectionDao collectionDao;
 
-	public DbManagerService(Application app) {
-		application = app;
-		helper = new MySQLiteOpenHelper(app);
+	public DbManagerService(Context c) {
+		ctx = c;
+		helper = new MySQLiteOpenHelper(c);
+		Log.e("HELPER+=======", "" + helper);
 		db = helper.getWritableDatabase();
 
 		collectionDao = new CollectionDao(this);
@@ -74,7 +75,7 @@ public class DbManagerService {
 	}
 
 	public void open() {
-		helper = new MySQLiteOpenHelper(application);
+		helper = new MySQLiteOpenHelper(ctx);
 		if (!isOpen()) {
 			db = helper.getWritableDatabase();
 		}
@@ -118,7 +119,7 @@ public class DbManagerService {
 	}
 
 	private static class MySQLiteOpenHelper extends SQLiteOpenHelper {
-		private static final String DATABASE_NAME = "dbname";
+		private static final String DATABASE_NAME = "newsintime_test.db";
 		private static final int DATABASE_VERSION = 7;
 
 		private MySQLiteOpenHelper(Context context) {

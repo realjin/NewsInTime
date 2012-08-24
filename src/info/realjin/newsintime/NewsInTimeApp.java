@@ -32,9 +32,6 @@ public class NewsInTimeApp extends Application {
 	private NewsRetrieverService nrService;
 
 	public NewsInTimeApp() {
-		// init service
-		dbmService = new DbManagerService(this);
-
 		// init data
 		Log.i("===APP===", "1");
 		data = new AppData();
@@ -51,6 +48,12 @@ public class NewsInTimeApp extends Application {
 						"http://rss.sina.com.cn/news/marquee/ddt.xml"));
 		nrService = new NewsRetrieverService(data.getNewsList(), tempColl);
 		nrService.start();
+	}
+
+	public void notifyFirstActivityStart(MainActivity a) {
+		this.mainActivity = a;
+		// init db
+		dbmService = new DbManagerService(mainActivity);
 	}
 
 	// ----- method for animation

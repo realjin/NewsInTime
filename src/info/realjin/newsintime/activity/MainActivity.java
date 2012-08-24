@@ -68,7 +68,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.main);
 
 		NewsInTimeApp app = (NewsInTimeApp) getApplication();
-		app.setMainActivity(this);
+		app.notifyFirstActivityStart(this);
 
 		// get screen size and save it
 		Display display = getWindowManager().getDefaultDisplay();
