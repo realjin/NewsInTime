@@ -58,4 +58,20 @@
             android:text="" />
     </TableRow>
 
+    <TableRow
+        android:id="@+id/tableRow3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dip" >
+
+        <Button
+            android:id="@+id/collectionlistitemitem_btOk"
+            android:layout_width="wrap_content"
+            android:text="OK" />
+        <Button
+            android:id="@+id/collectionlistitemitem_btCancel"
+            android:layout_width="wrap_content"
+            android:text="CANCEL" />
+    </TableRow>
+
 </TableLayout>

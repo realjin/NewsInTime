@@ -3,6 +3,7 @@ package info.realjin.newsintime.activity;
 import info.realjin.newsintime.NewsInTimeApp;
 import info.realjin.newsintime.R;
 import info.realjin.newsintime.domain.AppData;
+import info.realjin.newsintime.domain.Collection;
 import info.realjin.newsintime.domain.CollectionItem;
 
 import java.util.List;
@@ -54,6 +55,7 @@ public class CollectionItemActivity extends Activity {
 
 		rgSelect.check(R.id.collectionlistitemitem_rbSelect);
 		rgManual.clearCheck();
+		etManual.setEnabled(false);
 
 		rbSelect.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
@@ -91,20 +93,34 @@ public class CollectionItemActivity extends Activity {
 				CollectionListItemSelectAdapter adapter = new CollectionListItemSelectAdapter(
 						CollectionItemActivity.this, data
 								.getPredefinedCollectionItemList());
+
+				final PopupWindow pw = new PopupWindow(pwView, 300, 400, true);
+
 				ListView lv = (ListView) pwView
 						.findViewById(R.id.lvCollectionlistitemitem_select);
 				lv.setAdapter(adapter);
 				lv.setItemsCanFocus(false);
 				lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 				lv.setOnItemClickListener(new OnItemClickListener() {
-					public void onItemClick(AdapterView<?> parent, View view,
+					public void onItemClick(AdapterView<?> parent, View v,
 							int position, long id) {
-						CollectionListItemSelectViewHolder vHollder = (CollectionListItemSelectViewHolder) view
+						CollectionListItemSelectViewHolder vHolder = (CollectionListItemSelectViewHolder) v
 								.getTag();
+						CollectionItem ci = vHolder.collItem;
+
+						// show name of selected
+						Button bt = (Button) CollectionItemActivity.this
+								.findViewById(R.id.collectionlistitemitem_btSelect); // btedit
+						bt.setText(ci.getName());
+
+						// TODO: update cached data
+
+						//hide popup
+						pw.dismiss();
 					}
 				});
 
-				PopupWindow pw = new PopupWindow(pwView, 300, 400, true);
+				// TODO: multiple times???
 				pw.setBackgroundDrawable(new BitmapDrawable());
 				// pw.setOutsideTouchable(true);
 				pw.setFocusable(true);
@@ -156,13 +172,20 @@ class CollectionListItemSelectAdapter extends BaseAdapter {
 			// holder.img = (ImageView) convertView.findViewById(R.id.co);
 			holder.title = (TextView) convertView
 					.findViewById(R.id.collectionlistitemitem_select_listview_tv);
+			holder.title.setTag(holder);
+
 			convertView.setTag(holder);
 		} else {
 			holder = (CollectionListItemSelectViewHolder) convertView.getTag();
 		}
+
+		CollectionItem ci = collitems.get(position);
+
+		holder.collItem = ci;
+
 		// holder.img.setBackgroundResource((Integer) colls.get(position).get(
 		// "img"));
-		holder.title.setText(collitems.get(position).getName());
+		holder.title.setText(ci.getName());
 		// holder.cBox.setChecked(isSelected.get(position));
 		return convertView;
 	}

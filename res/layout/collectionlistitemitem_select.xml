@@ -26,7 +26,8 @@
         android:dividerHeight="1dp"
         android:paddingLeft="2dp" >
     </ListView>
-
+    
+    <!--
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/buttonlayout5213"
@@ -34,7 +35,7 @@
         android:layout_height="wrap_content"
         android:background="#81BEF7"
         android:orientation="horizontal" >
-
+        
         <Button
             android:id="@+id/btOk"
             android:layout_width="wrap_content"
@@ -51,7 +52,8 @@
             android:height="24dp"
             android:text="CANCEL"
             android:width="80dp" >
-        </Button>
-    </LinearLayout>
+        </Button>    </LinearLayout>
+    -->
+
 
 </LinearLayout>
