@@ -19,32 +19,30 @@
 				android:gravity="center_vertical">
 			</TextView>
 		</LinearLayout>
-
 		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 			android:id="@+id/buttonlayout2" android:orientation="horizontal"
 			android:layout_height="wrap_content" android:gravity="right"
 			android:layout_width="fill_parent" android:layout_gravity="right|center_vertical">
-			<Button android:id="@+id/btnSave" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="Save"
-				android:height="15dp" android:width="70dp"></Button>
-			<Button android:id="@+id/btnClear" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="Clear"
-				android:height="15dp" android:width="70dp"></Button>
+			<Button android:id="@+id/btDelete" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="DELETE"
+				android:height="24dp" android:width="85dp"></Button>
 		</LinearLayout>
-
+		<!-- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+			android:id="@+id/buttonlayout2" android:orientation="horizontal" android:layout_height="wrap_content" 
+			android:gravity="right" android:layout_width="fill_parent" android:layout_gravity="right|center_vertical"> 
+			<Button android:id="@+id/btnSave" android:layout_width="wrap_content" android:layout_height="wrap_content" 
+			android:text="Save" android:height="15dp" android:width="70dp"></Button> 
+			<Button android:id="@+id/btnClear" android:layout_width="wrap_content" android:layout_height="wrap_content" 
+			android:text="Clear" android:height="15dp" android:width="70dp"></Button> 
+			</LinearLayout> -->
 	</LinearLayout>
 
 	<ListView android:id="@+id/collectionlist_lv"
 		android:layout_width="fill_parent" android:layout_height="wrap_content" />
-<!-- 
-	<TableLayout android:id="@+id/TableLayout01"
-		android:layout_width="fill_parent" android:layout_height="fill_parent">
-		<TableRow>
-			<ListView android:id="@+id/collectionlist_lv" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
-		</TableRow>
-	</TableLayout>
-	 -->
+	<!-- <TableLayout android:id="@+id/TableLayout01" android:layout_width="fill_parent" 
+		android:layout_height="fill_parent"> <TableRow> <ListView android:id="@+id/collectionlist_lv" 
+		android:layout_width="fill_parent" android:layout_height="wrap_content" /> 
+		</TableRow> </TableLayout> -->
 
 </LinearLayout>
 
