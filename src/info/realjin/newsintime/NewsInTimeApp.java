@@ -1,6 +1,7 @@
 package info.realjin.newsintime;
 
 import info.realjin.newsintime.activity.MainActivity;
+import info.realjin.newsintime.dao.CollectionDao;
 import info.realjin.newsintime.domain.AppConfig;
 import info.realjin.newsintime.domain.AppData;
 import info.realjin.newsintime.domain.AppStatus;
@@ -8,6 +9,7 @@ import info.realjin.newsintime.domain.Collection;
 import info.realjin.newsintime.domain.CollectionItem;
 import info.realjin.newsintime.domain.News;
 import info.realjin.newsintime.domain.NewsList;
+import info.realjin.newsintime.service.DbManagerService;
 import info.realjin.newsintime.service.newsretriever.NewsRetrieverService;
 import info.realjin.newsintime.view.VerticalSlider;
 
@@ -24,9 +26,15 @@ public class NewsInTimeApp extends Application {
 	// activity pointers
 	MainActivity mainActivity;
 
+	// services
+	private DbManagerService dbmService;
+
 	private NewsRetrieverService nrService;
 
 	public NewsInTimeApp() {
+		// init service
+		dbmService = new DbManagerService(this);
+
 		// init data
 		Log.i("===APP===", "1");
 		data = new AppData();
@@ -83,6 +91,15 @@ public class NewsInTimeApp extends Application {
 
 	}
 
+	// ----- helper methods
+	public CollectionDao getCollectionDao() {
+		return dbmService.getCollectionDao();
+	}
+
+	public void setCollectionDao(CollectionDao collectionDao) {
+		dbmService.setCollectionDao(collectionDao);
+	}
+
 	// ----- setters and getters
 	public AppData getData() {
 		return data;
@@ -123,4 +140,13 @@ public class NewsInTimeApp extends Application {
 	public void setNrService(NewsRetrieverService nrService) {
 		this.nrService = nrService;
 	}
+
+	public DbManagerService getDbmService() {
+		return dbmService;
+	}
+
+	public void setDbmService(DbManagerService dbmService) {
+		this.dbmService = dbmService;
+	}
+
 }
