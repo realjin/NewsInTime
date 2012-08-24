@@ -17,46 +17,57 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageView;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 /*
  * http://www.cnblogs.com/allin/archive/2010/05/11/1732200.html
  * http://appfulcrum.com/2010/09/12/listview-example-3-simple-multiple-selection-checkboxes/
  * http://gqdy365.iteye.com/blog/992340
+ * http://www.himigame.com/android-game/374.html
+ * http://xniwdzef.blogbus.com/logs/175054319.html
+ * http://webknox.com/q/checkbox-auto-call-oncheckedchange-when-listview-scroll
+ * http://www.eoeandroid.com/thread-74855-1-1.html
  */
 
 public class CollectionListActivity extends Activity {
-	protected void onCreate(Bundle savedInstanceState) {
+	private SimpleAdapter adapter;// 声明适配器对象
+	private ListView listView; // 声明列表视图对象
+	private List<Map<String, Object>> list;// 声明列表容器
+	public static CollectionListActivity ma;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.collectionlist);
 
 		NewsInTimeApp app = (NewsInTimeApp) getApplication();
 
-		ListView list = (ListView) findViewById(R.id.lv);
 		CollectionListAdapter adapter = new CollectionListAdapter(this);
-
 		// get data dynamically
 		List<Collection> collections = app.getData().getCollectionList();
 		adapter.setColls(collections);
-
-		list.setAdapter(adapter);
-		list.setItemsCanFocus(false);
-		list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
-		list.setOnItemClickListener(new OnItemClickListener() {
+		// listView = new ListView(this);// 实例化列表视图
+		listView = (ListView) findViewById(R.id.collectionlist_lv);
+		listView.setAdapter(adapter);
+		listView.setItemsCanFocus(false);
+		listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-//				CollectionListViewHolder vHollder = (CollectionListViewHolder) view
-//						.getTag();
-//				// 在每次获取点击的item时将对于的checkbox状态改变，同时修改map的值。
-//				vHollder.cBox.toggle();
-//				CollectionListAdapter.isSelected.put(position,
-//						vHollder.cBox.isChecked());
+				CollectionListViewHolder vHollder = (CollectionListViewHolder) view
+						.getTag();
+				// 在每次获取点击的item时将对于的checkbox状态改变，同时修改map的值。
+				vHollder.cBox.toggle();
+				CollectionListAdapter.isSelected.put(position,
+						vHollder.cBox.isChecked());
 			}
 		});
 
+		// //显示列表视图
+		// this.setContentView(listView);
 	}
 
 }
@@ -106,9 +117,20 @@ class CollectionListAdapter extends BaseAdapter {
 			holder = new CollectionListViewHolder();
 			convertView = mInflater.inflate(R.layout.collectionlist_listview,
 					null);
-			holder.img = (ImageView) convertView.findViewById(R.id.img);
-			holder.title = (TextView) convertView.findViewById(R.id.title);
-			holder.cBox = (CheckBox) convertView.findViewById(R.id.cb);
+			// holder.img = (ImageView) convertView.findViewById(R.id.co);
+			holder.title = (TextView) convertView
+					.findViewById(R.id.collectionlist_listview_text);
+			holder.cBox = (CheckBox) convertView
+					.findViewById(R.id.collectionlist_listview_checkbox);
+			holder.cBox
+					.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+
+						public void onCheckedChanged(CompoundButton arg0,
+								boolean arg1) {
+							
+						}
+						
+					});
 			convertView.setTag(holder);
 		} else {
 			holder = (CollectionListViewHolder) convertView.getTag();
@@ -131,7 +153,7 @@ class CollectionListAdapter extends BaseAdapter {
 }
 
 final class CollectionListViewHolder {
-	public ImageView img;
+	// public ImageView img;
 	public TextView title;
 	public CheckBox cBox;
 }

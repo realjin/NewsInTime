@@ -1,3 +1,5 @@
+
+<!-- not used yet -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent" android:background="#81BEF7"
@@ -32,13 +34,19 @@
 
 	</LinearLayout>
 
-
+	<ListView android:id="@+id/collectionlist_lv"
+		android:layout_width="fill_parent" android:layout_height="wrap_content" />
+<!-- 
 	<TableLayout android:id="@+id/TableLayout01"
 		android:layout_width="fill_parent" android:layout_height="fill_parent">
 		<TableRow>
-			<ListView android:id="@+id/lv" android:layout_width="fill_parent"
+			<ListView android:id="@+id/collectionlist_lv" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" />
 		</TableRow>
 	</TableLayout>
+	 -->
 
 </LinearLayout>
+
+
+
