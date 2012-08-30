@@ -2,9 +2,10 @@ package info.realjin.newsintime.activity;
 
 import info.realjin.newsintime.NewsInTimeApp;
 import info.realjin.newsintime.R;
-import info.realjin.newsintime.activity.CollectionItemListActivity.Operation;
+import info.realjin.newsintime.dao.CollectionDao;
 import info.realjin.newsintime.domain.AppData;
 import info.realjin.newsintime.domain.AppMessage;
+import info.realjin.newsintime.domain.Collection;
 import info.realjin.newsintime.domain.CollectionItem;
 
 import java.util.List;
@@ -36,36 +37,17 @@ import android.widget.TextView;
 
 public class CollectionItemActivity extends Activity {
 
-	enum Operation {
-		ADD, UPDATE
-	}
-
-	private Operation operation;
-	private CollectionItem currentCi;
+	private String currentCollId;
+	private CollectionItem newCi;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.collectionlistitemitem);
 
+		currentCollId = getIntent().getExtras().getString("collId");
+		Log.e("[Activity]CI", "collId=" + currentCollId);
+
 		NewsInTimeApp app = (NewsInTimeApp) getApplication();
-
-		String action = getIntent().getExtras().getString("action");
-		if (action.equals("update")) {
-			Log.e("[Activity]CI", "action=update");
-			operation = Operation.UPDATE;
-
-			// get message
-			currentCi = (CollectionItem) app
-					.getMessage(AppMessage.MSG_CILACT_CIACT_ITEM);
-			Log.e("[Activity]CI", "currentCi name=" + currentCi.getName());
-			// TODO: check if null!
-
-		} else if (action.equals("add")) {
-			Log.e("[Activity]CI", "action=add");
-			operation = Operation.ADD;
-
-			currentCi = new CollectionItem("");
-		}
 
 		final RadioGroup rgSelect = (RadioGroup) this
 				.findViewById(R.id.collectionlistitemitem_rgSelect);
@@ -143,8 +125,9 @@ public class CollectionItemActivity extends Activity {
 						bt.setText(ci.getName());
 
 						// TODO: update cached data
-						currentCi.setName(ci.getName());
-						currentCi.setUrl(ci.getUrl());
+						newCi = new CollectionItem();
+						newCi.setName(ci.getName());
+						newCi.setUrl(ci.getUrl());
 
 						// hide popup
 						pw.dismiss();
@@ -167,21 +150,19 @@ public class CollectionItemActivity extends Activity {
 		Button btOk = (Button) findViewById(R.id.collectionlistitemitem_btOk);
 		btOk.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				NewsInTimeApp app = (NewsInTimeApp) CollectionItemActivity.this
+						.getApplication();
+				CollectionDao dao = app.getDbmService().getCollectionDao();
+
 				// TODO: update DB!!! (put currentCi to db)
 
 				// put message before finish
-				NewsInTimeApp app = (NewsInTimeApp) CollectionItemActivity.this
-						.getApplication();
-				app.putMessage(AppMessage.MSG_CIACT_CILACT_ITEM, currentCi);
+
+				app.putMessage(AppMessage.MSG_CIACT_CILACT_NEWCOLLITEM, newCi);
 
 				Intent intent = getIntent();
 				Bundle bundle = new Bundle();
 				bundle.putString("name", "This is from ShowMsg!");
-				if (operation == Operation.ADD) {
-					bundle.putString("lastAction", "add");
-				} else if (operation == Operation.UPDATE) {
-					bundle.putString("lastAction", "update");
-				}
 				intent.putExtras(bundle);
 				setResult(RESULT_OK, intent);
 				CollectionItemActivity.this.finish();

@@ -42,11 +42,14 @@ public class DbManagerService {
 				+ Table_Collection.CNAME_ID + " INTEGER PRIMARY KEY,"
 				+ Table_Collection.CNAME_NAME + " TEXT,"
 				+ Table_Collection.CNAME_UPDATETIME + " TEXT);");
+		db.execSQL("CREATE TABLE IF NOT EXISTS" + Table_CollectionCollectionItem.TNAME + " ("
+				+ Table_CollectionCollectionItem.CNAME_ID + " INTEGER PRIMARY KEY,"
+				+ Table_CollectionCollectionItem.CNAME_COLLID + " TEXT,"
+				+ Table_CollectionCollectionItem.CNAME_COLLITEMID + " TEXT);");
 		db.execSQL("CREATE TABLE IF NOT EXISTS" + Table_CollectionItem.TNAME
 				+ " (" + Table_CollectionItem.CNAME_ID
 				+ " INTEGER PRIMARY KEY," + Table_CollectionItem.CNAME_NAME
 				+ " TEXT," + Table_CollectionItem.CNAME_URL + " TEXT,"
-				+ Table_CollectionItem.CNAME_COLLID + " TEXT,"
 				+ Table_CollectionItem.CNAME_TYPE + " TEXT,"
 				+ Table_CollectionItem.CNAME_PREDEFINED + " TEXT,"
 				+ Table_CollectionItem.CNAME_UPDATETIME + " TEXT);");
@@ -59,15 +62,23 @@ public class DbManagerService {
 		public static final String CNAME_UPDATETIME = "updatetime";
 	}
 
+	public static final class Table_CollectionCollectionItem implements BaseColumns {
+		public static final String TNAME = "NEWSINTIME_COLLECTION_COLLECTIONITEM";
+		public static final String CNAME_ID = "id";
+		public static final String CNAME_COLLID = "collid";
+		public static final String CNAME_COLLITEMID = "collitemid";
+	}
+	
 	public static final class Table_CollectionItem implements BaseColumns {
 		public static final String TNAME = "NEWSINTIME_COLLECTIONITEM";
 		public static final String CNAME_ID = "id";
 		public static final String CNAME_NAME = "name";
 		public static final String CNAME_URL = "url";
-		public static final String CNAME_COLLID = "collid";
+//		public static final String CNAME_COLLID = "collid";
 		public static final String CNAME_TYPE = "type";
 		public static final String CNAME_PREDEFINED = "predefined";
 		public static final String CNAME_UPDATETIME = "updatetime";
+		public static final String CNAME_OWNER = "owner";
 	}
 
 	public boolean isOpen() {

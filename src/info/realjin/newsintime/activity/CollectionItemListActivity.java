@@ -2,7 +2,6 @@ package info.realjin.newsintime.activity;
 
 import info.realjin.newsintime.NewsInTimeApp;
 import info.realjin.newsintime.R;
-import info.realjin.newsintime.activity.CollectionItemActivity.Operation;
 import info.realjin.newsintime.domain.AppData;
 import info.realjin.newsintime.domain.AppMessage;
 import info.realjin.newsintime.domain.Collection;
@@ -35,11 +34,15 @@ public class CollectionItemListActivity extends Activity {
 	}
 
 	private Operation operation;
+	private String currentCollId;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.collectionlistitem);
+
+		currentCollId = getIntent().getExtras().getString("collId");
+		Log.e("[Activity]CIL", "collId=" + currentCollId);
 
 		NewsInTimeApp app = (NewsInTimeApp) getApplication();
 
@@ -47,10 +50,13 @@ public class CollectionItemListActivity extends Activity {
 		Button btAdd = (Button) findViewById(R.id.collectionlistitem_btadd);
 		btAdd.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Button bt = (Button) v;
+				// ((NewsInTimeApp)
+				// getApplication().putMessage(AppMessage.MSG_CILACT_CIACT_COLL,
+				// );
+
 				Intent intent = new Intent(CollectionItemListActivity.this,
 						CollectionItemActivity.class);
-				intent.putExtra("action", "add");
+				intent.putExtra("collId", currentCollId);
 				CollectionItemListActivity.this.startActivityForResult(intent,
 						200);
 			}
@@ -64,12 +70,11 @@ public class CollectionItemListActivity extends Activity {
 		String action = getIntent().getExtras().getString("action");
 		if (action.equals("update")) {
 			operation = Operation.UPDATE;
-			String collid = getIntent().getExtras().getString("collid");
 			// Log.e("===CILActivity===", "collid=" + collid);
 
 			// get collection data
 			AppData data = app.getData();
-			Collection c = data.getCollectionById(collid,
+			Collection c = data.getCollectionById(currentCollId,
 					data.getCollectionList());
 
 			// change title
@@ -127,19 +132,14 @@ public class CollectionItemListActivity extends Activity {
 		// }
 		// }
 
+		// TODO: check if from back button!
+
 		// TODO: check result code!
 		NewsInTimeApp app = (NewsInTimeApp) getApplication();
-		CollectionItem ci = (CollectionItem) app
-				.getMessage(AppMessage.MSG_CIACT_CILACT_ITEM);
+		CollectionItem newCi = (CollectionItem) app
+				.getMessage(AppMessage.MSG_CIACT_CILACT_NEWCOLLITEM);
 
 		Bundle bundle = data.getExtras();
-		String lastAction = bundle.getString("lastAction");
-		if (lastAction.equals("update")) {
-			Log.e("[Activity]CIL", "lastAction=update");
-			// TODO: check if null!
-		} else if (lastAction.equals("add")) {
-			Log.e("[Activity]CIL", "lastAction=add");
-		}
 
 		Log.e("OOOOOOOO", "onActivityResult");
 	}

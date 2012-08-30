@@ -156,7 +156,7 @@ class CollectionListAdapter extends BaseAdapter {
 					Intent intent = new Intent(activity,
 							CollectionItemListActivity.class);
 					intent.putExtra("action", "update");
-					intent.putExtra("collid", h.coll.getId());
+					intent.putExtra("collId", h.coll.getId());
 					activity.startActivity(intent);
 
 				}

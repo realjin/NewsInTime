@@ -6,6 +6,8 @@ public class CollectionItem {
 
 	private String url;
 
+	public CollectionItem() {
+	}
 	public CollectionItem(String url) {
 		this.url = url;
 	}
