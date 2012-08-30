@@ -27,6 +27,13 @@ public class CollectionDao extends GenericDao {
 		cv.put(DbManagerService.Table_Collection.CNAME_NAME, coll.getName());
 		getDb().insert(DbManagerService.Table_Collection.TNAME, null, cv);
 	}
+	
+	public void addCollectionWithItems(Collection coll) {
+		ContentValues cv = new ContentValues();
+		// cv.put(DbManagerService.Table_Collection.IMEI, "123456789012345");
+		cv.put(DbManagerService.Table_Collection.CNAME_NAME, coll.getName());
+		getDb().insert(DbManagerService.Table_Collection.TNAME, null, cv);
+	}
 
 	public void addCollectionItem(Collection coll, CollectionItem collItem) {
 		// add in CI table

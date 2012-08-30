@@ -106,7 +106,7 @@
             android:orientation="horizontal" >
 
             <Button
-                android:id="@+id/btSave"
+                android:id="@+id/collectionlistitem_btsave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -116,7 +116,7 @@
             </Button>
 
             <Button
-                android:id="@+id/btCancel"
+                android:id="@+id/collectionlistitem_btcancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"

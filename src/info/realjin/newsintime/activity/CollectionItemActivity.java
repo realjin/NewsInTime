@@ -5,7 +5,6 @@ import info.realjin.newsintime.R;
 import info.realjin.newsintime.dao.CollectionDao;
 import info.realjin.newsintime.domain.AppData;
 import info.realjin.newsintime.domain.AppMessage;
-import info.realjin.newsintime.domain.Collection;
 import info.realjin.newsintime.domain.CollectionItem;
 
 import java.util.List;
@@ -154,7 +153,7 @@ public class CollectionItemActivity extends Activity {
 						.getApplication();
 				CollectionDao dao = app.getDbmService().getCollectionDao();
 
-				// TODO: update DB!!! (put currentCi to db)
+				// TODO: update DB!!! (put currentCi to db); no!
 
 				// put message before finish
 

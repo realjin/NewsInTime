@@ -51,6 +51,7 @@ public class CollectionListActivity extends Activity {
 				Intent intent = new Intent(CollectionListActivity.this,
 						CollectionItemListActivity.class);
 				intent.putExtra("action", "add");
+				intent.putExtra("lastActivity", CollectionListActivity.class.getCanonicalName());
 				CollectionListActivity.this.startActivity(intent);
 			}
 		});
@@ -155,6 +156,7 @@ class CollectionListAdapter extends BaseAdapter {
 							.getTag();
 					Intent intent = new Intent(activity,
 							CollectionItemListActivity.class);
+					intent.putExtra("lastActivity", CollectionListActivity.class.getCanonicalName());
 					intent.putExtra("action", "update");
 					intent.putExtra("collId", h.coll.getId());
 					activity.startActivity(intent);
