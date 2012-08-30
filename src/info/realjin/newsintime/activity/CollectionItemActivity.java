@@ -51,14 +51,17 @@ public class CollectionItemActivity extends Activity {
 
 		String action = getIntent().getExtras().getString("action");
 		if (action.equals("update")) {
+			Log.e("[Activity]CI", "action=update");
 			operation = Operation.UPDATE;
 
 			// get message
 			currentCi = (CollectionItem) app
 					.getMessage(AppMessage.MSG_CILACT_CIACT_ITEM);
+			Log.e("[Activity]CI", "currentCi name=" + currentCi.getName());
 			// TODO: check if null!
 
 		} else if (action.equals("add")) {
+			Log.e("[Activity]CI", "action=add");
 			operation = Operation.ADD;
 
 			currentCi = new CollectionItem("");
@@ -166,16 +169,25 @@ public class CollectionItemActivity extends Activity {
 			public void onClick(View v) {
 				// TODO: update DB!!! (put currentCi to db)
 
+				// put message before finish
+				NewsInTimeApp app = (NewsInTimeApp) CollectionItemActivity.this
+						.getApplication();
+				app.putMessage(AppMessage.MSG_CIACT_CILACT_ITEM, currentCi);
+
 				Intent intent = getIntent();
 				Bundle bundle = new Bundle();
 				bundle.putString("name", "This is from ShowMsg!");
+				if (operation == Operation.ADD) {
+					bundle.putString("lastAction", "add");
+				} else if (operation == Operation.UPDATE) {
+					bundle.putString("lastAction", "update");
+				}
 				intent.putExtras(bundle);
 				setResult(RESULT_OK, intent);
 				CollectionItemActivity.this.finish();
 			}
 		});
 		Button btCancel = (Button) findViewById(R.id.collectionlistitemitem_btCancel);
-
 	}
 }
 

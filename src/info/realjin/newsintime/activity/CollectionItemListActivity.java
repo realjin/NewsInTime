@@ -2,6 +2,7 @@ package info.realjin.newsintime.activity;
 
 import info.realjin.newsintime.NewsInTimeApp;
 import info.realjin.newsintime.R;
+import info.realjin.newsintime.activity.CollectionItemActivity.Operation;
 import info.realjin.newsintime.domain.AppData;
 import info.realjin.newsintime.domain.AppMessage;
 import info.realjin.newsintime.domain.Collection;
@@ -95,7 +96,7 @@ public class CollectionItemListActivity extends Activity {
 							.getTag();
 					// 在每次获取点击的item时将对于的checkbox状态改变，同时修改map的值。
 					vHollder.cBox.toggle();
-					CollectionListAdapter.isSelected.put(position,
+					CollectionListItemAdapter.isSelected.put(position,
 							vHollder.cBox.isChecked());
 				}
 			});
@@ -125,6 +126,21 @@ public class CollectionItemListActivity extends Activity {
 		// setTitle(temp);
 		// }
 		// }
+
+		// TODO: check result code!
+		NewsInTimeApp app = (NewsInTimeApp) getApplication();
+		CollectionItem ci = (CollectionItem) app
+				.getMessage(AppMessage.MSG_CIACT_CILACT_ITEM);
+
+		Bundle bundle = data.getExtras();
+		String lastAction = bundle.getString("lastAction");
+		if (lastAction.equals("update")) {
+			Log.e("[Activity]CIL", "lastAction=update");
+			// TODO: check if null!
+		} else if (lastAction.equals("add")) {
+			Log.e("[Activity]CIL", "lastAction=add");
+		}
+
 		Log.e("OOOOOOOO", "onActivityResult");
 	}
 
@@ -177,67 +193,35 @@ class CollectionListItemAdapter extends BaseAdapter {
 						}
 
 					});
-			holder.btEdit = (Button) convertView
-					.findViewById(R.id.collectionlistitem_listview_btedit);
-			holder.btEdit.setTag(holder);
-			holder.btEdit.setOnClickListener(new OnClickListener() {
+			// holder.btEdit = (Button) convertView
+			// .findViewById(R.id.collectionlistitem_listview_btedit);
+			// holder.btEdit.setTag(holder);
+			// holder.btEdit.setOnClickListener(new OnClickListener() {
+			//
+			// public void onClick(View v) {
+			//
+			// Intent intent = new Intent(activity,
+			// CollectionItemActivity.class);
+			// // intent.putExtra("collid", h.coll.getId());
+			//
+			// // set op
+			// intent.putExtra("action", "update");
+			//
+			// // send item to update as message(including id)
+			// NewsInTimeApp app = (NewsInTimeApp) activity
+			// .getApplication();
+			// CollectionListItemViewHolder h = (CollectionListItemViewHolder) v
+			// .getTag();
+			// app.putMessage(AppMessage.MSG_CILACT_CIACT_ITEM, h.collItem);
+			//
+			// activity.startActivityForResult(intent, 200);
+			//
+			//
+			//
+			// }
+			// });
+			holder.collItem = ci;
 
-				public void onClick(View v) {
-
-					Intent intent = new Intent(activity,
-							CollectionItemActivity.class);
-					// intent.putExtra("collid", h.coll.getId());
-
-					// set op
-					intent.putExtra("action", "update");
-
-					// send item to update as message(including id)
-					NewsInTimeApp app = (NewsInTimeApp) activity
-							.getApplication();
-					CollectionListItemViewHolder h = (CollectionListItemViewHolder) v
-							.getTag();
-					app.putMessage(AppMessage.MSG_CILACT_CIACT_ITEM, h.collItem);
-
-					activity.startActivityForResult(intent, 200);
-
-					// ----old
-
-					// LayoutInflater inflater = (LayoutInflater) activity
-					// .getSystemService(activity.LAYOUT_INFLATER_SERVICE);
-					//
-					// View pwView = inflater.inflate(
-					// R.layout.collectionlistitemitem, null, false);
-					//
-					// RadioGroup rgp = (RadioGroup) pwView
-					// .findViewById(R.id.radioSex);
-					// final Button btSelect = (Button) pwView
-					// .findViewById(R.id.collectionlistitemitem_btSelect);
-					// final EditText etManual = (EditText) pwView
-					// .findViewById(R.id.collectionlistitemitem_etManual);
-					// rgp.setOnCheckedChangeListener(new
-					// RadioGroup.OnCheckedChangeListener() {
-					// public void onCheckedChanged(RadioGroup group,
-					// int checkedId) {
-					// if (checkedId == R.id.collectionlistitemitem_rbManual) {
-					// etManual.setEnabled(true);
-					// btSelect.setEnabled(false);
-					// } else {
-					// etManual.setEnabled(false);
-					// btSelect.setEnabled(true);
-					// }
-					// }
-					// });
-					//
-					// PopupWindow pw = new PopupWindow(pwView, 300, 200, true);
-					// // The code below assumes that the root container has an
-					// id
-					// // called 'main'
-					// pw.showAtLocation(
-					// activity.findViewById(R.id.collectionlistitem_lv),
-					// Gravity.CENTER, 0, 0);
-
-				}
-			});
 			convertView.setTag(holder);
 		} else {
 			holder = (CollectionListItemViewHolder) convertView.getTag();
@@ -246,6 +230,7 @@ class CollectionListItemAdapter extends BaseAdapter {
 		// "img"));
 
 		holder.title.setText(ci.getUrl());
+
 		// holder.cBox.setChecked(isSelected.get(position));
 		return convertView;
 	}
@@ -263,6 +248,6 @@ final class CollectionListItemViewHolder {
 	// public ImageView img;
 	public TextView title;
 	public CheckBox cBox;
-	public Button btEdit;
+	// public Button btEdit;
 	public CollectionItem collItem;
 }

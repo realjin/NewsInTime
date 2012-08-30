@@ -6,6 +6,7 @@ import java.util.Map;
 public class AppMessage {
 	private Map<String, Object> msgMap;
 	public static final String MSG_CILACT_CIACT_ITEM = "CILACT_CIACT_ITEM";
+	public static final String MSG_CIACT_CILACT_ITEM = "CIACT_CILACT_ITEM";
 
 	public AppMessage() {
 		msgMap = new HashMap<String, Object>();
