@@ -2,6 +2,7 @@ package info.realjin.newsintime.activity;
 
 import info.realjin.newsintime.NewsInTimeApp;
 import info.realjin.newsintime.R;
+import info.realjin.newsintime.dao.CollectionDao;
 import info.realjin.newsintime.domain.Collection;
 
 import java.util.List;
@@ -86,10 +87,24 @@ public class CollectionListActivity extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
-		
-		//check if from CIL activity
-		
-		//refresh view from db
+
+		NewsInTimeApp app = (NewsInTimeApp) getApplication();
+
+		// check if from CIL activity
+		Bundle bundle = data.getExtras();
+		String lastActivityName = bundle.getString("lastActivity");
+		if (lastActivityName.equals(CollectionItemListActivity.class
+				.getCanonicalName())) {
+			// refresh view from db
+			CollectionDao dao = app.getDbmService().getCollectionDao();
+			List<Collection> collList = dao.getAllCollections();
+			ListView listView = (ListView) findViewById(R.id.collectionlist_lv);
+			CollectionListAdapter adapter = (CollectionListAdapter) listView
+					.getAdapter();
+			adapter.setColls(collList);
+			adapter.notifyDataSetChanged();
+		}
+
 	}
 }
 

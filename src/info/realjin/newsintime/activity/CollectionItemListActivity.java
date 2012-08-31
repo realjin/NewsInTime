@@ -163,6 +163,8 @@ public class CollectionItemListActivity extends Activity {
 					Intent intent = getIntent();
 					Bundle bundle = new Bundle();
 					bundle.putString("name", "This is from ShowMsg!");
+					bundle.putString("lastActivity",
+							CollectionItemListActivity.class.getCanonicalName());
 					intent.putExtras(bundle);
 					setResult(RESULT_OK, intent);
 					CollectionItemListActivity.this.finish();

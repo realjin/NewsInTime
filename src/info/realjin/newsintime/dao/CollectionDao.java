@@ -3,12 +3,18 @@ package info.realjin.newsintime.dao;
 import info.realjin.newsintime.domain.Collection;
 import info.realjin.newsintime.domain.CollectionItem;
 import info.realjin.newsintime.service.DbManagerService;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.ContentValues;
+import android.database.Cursor;
 
 /**
  * collection, collectionitem, etc.
+ * 
  * @author realjin
- *
+ * 
  */
 public class CollectionDao extends GenericDao {
 
@@ -27,7 +33,7 @@ public class CollectionDao extends GenericDao {
 		cv.put(DbManagerService.Table_Collection.CNAME_NAME, coll.getName());
 		getDb().insert(DbManagerService.Table_Collection.TNAME, null, cv);
 	}
-	
+
 	public void addCollectionWithItems(Collection coll) {
 		ContentValues cv = new ContentValues();
 		// cv.put(DbManagerService.Table_Collection.IMEI, "123456789012345");
@@ -55,12 +61,29 @@ public class CollectionDao extends GenericDao {
 				"");
 	}
 
-	/**
-	 * with collection item!!
-	 * 
-	 * @param coll
-	 */
-	public void addCollection(Collection coll) {
+	public List<Collection> getAllCollections() {
+		Cursor c = getDb().rawQuery(
+				"SELECT name FROM " + DbManagerService.Table_Collection.TNAME
+						+ " WHERE 1=1", null);
+		List<Collection> collList = new ArrayList<Collection>();
+		if (c != null) {
+			while (c.moveToNext()) {
+				String id = c
+						.getString(c
+								.getColumnIndex(DbManagerService.Table_Collection.CNAME_ID));
+				String name = c
+						.getString(c
+								.getColumnIndex(DbManagerService.Table_Collection.CNAME_NAME));
+
+				Collection coll = new Collection();
+				coll.setId(id);
+				coll.setName(name);
+
+				collList.add(coll);
+			}
+		}
+		c.close();
+		return collList;
 	}
 
 	public void removeCollection() {
