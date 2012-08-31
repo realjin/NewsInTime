@@ -51,8 +51,9 @@ public class CollectionListActivity extends Activity {
 				Intent intent = new Intent(CollectionListActivity.this,
 						CollectionItemListActivity.class);
 				intent.putExtra("action", "add");
-				intent.putExtra("lastActivity", CollectionListActivity.class.getCanonicalName());
-				CollectionListActivity.this.startActivity(intent);
+				intent.putExtra("lastActivity",
+						CollectionListActivity.class.getCanonicalName());
+				CollectionListActivity.this.startActivityForResult(intent, 200);
 			}
 		});
 
@@ -80,6 +81,15 @@ public class CollectionListActivity extends Activity {
 
 		// //显示列表视图
 		// this.setContentView(listView);
+	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		//check if from CIL activity
+		
+		//refresh view from db
 	}
 }
 
@@ -156,7 +166,8 @@ class CollectionListAdapter extends BaseAdapter {
 							.getTag();
 					Intent intent = new Intent(activity,
 							CollectionItemListActivity.class);
-					intent.putExtra("lastActivity", CollectionListActivity.class.getCanonicalName());
+					intent.putExtra("lastActivity",
+							CollectionListActivity.class.getCanonicalName());
 					intent.putExtra("action", "update");
 					intent.putExtra("collId", h.coll.getId());
 					activity.startActivity(intent);

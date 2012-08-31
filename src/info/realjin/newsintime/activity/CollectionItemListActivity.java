@@ -156,7 +156,16 @@ public class CollectionItemListActivity extends Activity {
 				NewsInTimeApp app = (NewsInTimeApp) getApplication();
 				CollectionDao dao = app.getDbmService().getCollectionDao();
 				if (operation == Operation.ADD) {
-					dao.addCollectionWithoutItems(coll);
+					// save to db
+					dao.addCollectionWithoutItems(newColl);
+
+					// return to CL activity and refresh view
+					Intent intent = getIntent();
+					Bundle bundle = new Bundle();
+					bundle.putString("name", "This is from ShowMsg!");
+					intent.putExtras(bundle);
+					setResult(RESULT_OK, intent);
+					CollectionItemListActivity.this.finish();
 				}
 			}
 		});
