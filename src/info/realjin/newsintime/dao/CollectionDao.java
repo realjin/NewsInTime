@@ -9,6 +9,7 @@ import java.util.List;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.util.Log;
 
 /**
  * collection, collectionitem, etc.
@@ -30,15 +31,41 @@ public class CollectionDao extends GenericDao {
 	public void addCollectionWithoutItems(Collection coll) {
 		ContentValues cv = new ContentValues();
 		// cv.put(DbManagerService.Table_Collection.IMEI, "123456789012345");
+		Log.e("CDAO", "addCollectionWithoutItems: name=" + coll.getName());
 		cv.put(DbManagerService.Table_Collection.CNAME_NAME, coll.getName());
 		getDb().insert(DbManagerService.Table_Collection.TNAME, null, cv);
 	}
 
 	public void addCollectionWithItems(Collection coll) {
-		ContentValues cv = new ContentValues();
-		// cv.put(DbManagerService.Table_Collection.IMEI, "123456789012345");
-		cv.put(DbManagerService.Table_Collection.CNAME_NAME, coll.getName());
-		getDb().insert(DbManagerService.Table_Collection.TNAME, null, cv);
+		// 1. save coll
+		ContentValues cvColl = new ContentValues();
+		cvColl.put(DbManagerService.Table_Collection.CNAME_NAME, coll.getName());
+		long collId = getDb().insert(DbManagerService.Table_Collection.TNAME,
+				null, cvColl);
+
+		// 2. save collitems and coll_collitem relations
+		for (CollectionItem ci : coll.getItems()) {
+			ContentValues cvCollItem = new ContentValues();
+			cvCollItem.put(DbManagerService.Table_CollectionItem.CNAME_NAME,
+					ci.getName());
+			cvCollItem.put(DbManagerService.Table_CollectionItem.CNAME_URL,
+					ci.getUrl());
+			Long collItemId = getDb().insert(
+					DbManagerService.Table_CollectionItem.TNAME, null,
+					cvCollItem);
+
+			ContentValues cvColl_CollItem = new ContentValues();
+			cvColl_CollItem
+					.put(DbManagerService.Table_CollectionCollectionItem.CNAME_COLLID,
+							collId);
+			cvColl_CollItem
+					.put(DbManagerService.Table_CollectionCollectionItem.CNAME_COLLITEMID,
+							collItemId);
+			getDb().insert(
+					DbManagerService.Table_CollectionCollectionItem.TNAME,
+					null, cvColl_CollItem);
+		}
+
 	}
 
 	public void addCollectionItem(Collection coll, CollectionItem collItem) {
@@ -63,13 +90,20 @@ public class CollectionDao extends GenericDao {
 
 	public List<Collection> getAllCollections() {
 		Cursor c = getDb().rawQuery(
-				"SELECT name FROM " + DbManagerService.Table_Collection.TNAME
+				"SELECT * FROM " + DbManagerService.Table_Collection.TNAME
 						+ " WHERE 1=1", null);
 		List<Collection> collList = new ArrayList<Collection>();
 		if (c != null) {
 			while (c.moveToNext()) {
-				String id = c
-						.getString(c
+				Log.e("CDAO", "getAllCollections ITERATION");
+				Log.e("CDAO",
+						"getAllCollections id columnid="
+								+ c.getColumnIndex(DbManagerService.Table_Collection.CNAME_ID));
+				Log.e("CDAO",
+						"getAllCollections name columnid="
+								+ c.getColumnIndex(DbManagerService.Table_Collection.CNAME_NAME));
+				String id = ""
+						+ c.getInt(c
 								.getColumnIndex(DbManagerService.Table_Collection.CNAME_ID));
 				String name = c
 						.getString(c

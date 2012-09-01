@@ -58,6 +58,7 @@ public class NewsInTimeApp extends Application {
 		this.mainActivity = a;
 		// init db
 		dbmService = new DbManagerService(mainActivity);
+		dbmService.initDatabase();
 	}
 
 	// ----- method for animation

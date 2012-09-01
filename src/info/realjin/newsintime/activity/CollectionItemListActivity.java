@@ -157,7 +157,10 @@ public class CollectionItemListActivity extends Activity {
 				CollectionDao dao = app.getDbmService().getCollectionDao();
 				if (operation == Operation.ADD) {
 					// save to db
-					dao.addCollectionWithoutItems(newColl);
+					EditText etName = (EditText) findViewById(R.id.collectionlistitem_etname);
+					String collName = etName.getText().toString();
+					newColl.setName(collName);
+					dao.addCollectionWithItems(newColl);
 
 					// return to CL activity and refresh view
 					Intent intent = getIntent();

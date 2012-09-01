@@ -38,15 +38,15 @@ public class DbManagerService {
 	public void initDatabase() {
 		checkDbState();
 		Log.i("===DBM===", "** init db");
-		db.execSQL("CREATE TABLE IF NOT EXISTS" + Table_Collection.TNAME + " ("
+		db.execSQL("CREATE TABLE IF NOT EXISTS " + Table_Collection.TNAME + " ("
 				+ Table_Collection.CNAME_ID + " INTEGER PRIMARY KEY,"
 				+ Table_Collection.CNAME_NAME + " TEXT,"
 				+ Table_Collection.CNAME_UPDATETIME + " TEXT);");
-		db.execSQL("CREATE TABLE IF NOT EXISTS" + Table_CollectionCollectionItem.TNAME + " ("
+		db.execSQL("CREATE TABLE IF NOT EXISTS " + Table_CollectionCollectionItem.TNAME + " ("
 				+ Table_CollectionCollectionItem.CNAME_ID + " INTEGER PRIMARY KEY,"
-				+ Table_CollectionCollectionItem.CNAME_COLLID + " TEXT,"
-				+ Table_CollectionCollectionItem.CNAME_COLLITEMID + " TEXT);");
-		db.execSQL("CREATE TABLE IF NOT EXISTS" + Table_CollectionItem.TNAME
+				+ Table_CollectionCollectionItem.CNAME_COLLID + " INTEGER,"
+				+ Table_CollectionCollectionItem.CNAME_COLLITEMID + " INTEGER);");
+		db.execSQL("CREATE TABLE IF NOT EXISTS " + Table_CollectionItem.TNAME
 				+ " (" + Table_CollectionItem.CNAME_ID
 				+ " INTEGER PRIMARY KEY," + Table_CollectionItem.CNAME_NAME
 				+ " TEXT," + Table_CollectionItem.CNAME_URL + " TEXT,"
