@@ -38,7 +38,7 @@ public class CollectionItemListActivity extends Activity {
 	}
 
 	private Operation operation;
-	private String currentCollId;
+	private Integer currentCollId;
 
 	// for add
 	private Collection newColl;
@@ -95,13 +95,15 @@ public class CollectionItemListActivity extends Activity {
 		if (action.equals("update")) {
 			operation = Operation.UPDATE;
 
-			currentCollId = getIntent().getExtras().getString("collId");
+			currentCollId = getIntent().getExtras().getInt("collId");
 			Log.e("[Activity]CIL", "collId=" + currentCollId);
 
 			// get collection data
 			AppData data = app.getData();
-			Collection c = data.getCollectionById(currentCollId,
-					data.getCollectionList());
+			CollectionDao dao = app.getDbmService().getCollectionDao();
+			Collection c = dao.getCollectionWithItems(currentCollId);
+//			Collection c = dao.getCollectionById(currentCollId,
+//					data.getCollectionList());
 
 			// change title
 			TextView tvTitle = (TextView) findViewById(R.id.collectionlistitem_title);

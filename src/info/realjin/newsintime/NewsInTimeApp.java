@@ -36,7 +36,7 @@ public class NewsInTimeApp extends Application {
 	public NewsInTimeApp() {
 		// init data
 		Log.i("===APP===", "1");
-		data = new AppData();
+		data = new AppData(this);
 		Log.i("===APP===", "2");
 		config = new AppConfig();
 		Log.i("===APP===", "3");
@@ -51,7 +51,7 @@ public class NewsInTimeApp extends Application {
 				new CollectionItem(
 						"http://rss.sina.com.cn/news/marquee/ddt.xml"));
 		nrService = new NewsRetrieverService(data.getNewsList(), tempColl);
-//		nrService.start();
+		// nrService.start();
 	}
 
 	public void notifyFirstActivityStart(MainActivity a) {

@@ -1,7 +1,7 @@
 package info.realjin.newsintime.domain;
 
 public class CollectionItem {
-	private String id;
+	private Integer id;
 	private String name;
 
 	private String url;
@@ -12,11 +12,11 @@ public class CollectionItem {
 		this.url = url;
 	}
 
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

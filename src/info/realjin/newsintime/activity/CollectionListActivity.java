@@ -97,7 +97,7 @@ public class CollectionListActivity extends Activity {
 				.getCanonicalName())) {
 			// refresh view from db
 			CollectionDao dao = app.getDbmService().getCollectionDao();
-			List<Collection> collList = dao.getAllCollections();
+			List<Collection> collList = dao.getAllCollectionsWithItems();
 			ListView listView = (ListView) findViewById(R.id.collectionlist_lv);
 			CollectionListAdapter adapter = (CollectionListAdapter) listView
 					.getAdapter();

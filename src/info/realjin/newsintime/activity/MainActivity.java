@@ -142,7 +142,7 @@ public class MainActivity extends Activity {
 	}
 
 	private void showColSelector() {
-		
+
 		if (colSelector == null) {
 			Log.d("===MainActivity===", "colSelector creating");
 			LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -196,15 +196,14 @@ public class MainActivity extends Activity {
 									.getAdapter();
 							// mmm: right? position or id?
 							Collection coll = (Collection) a.getItem(position);
-							//hide pw
+							// hide pw
 							pwCols.dismiss();
 							Toast.makeText(MainActivity.this,
 									"Collection \"" + coll.getName() + "\"",
 									Toast.LENGTH_LONG).show();
 							NewsInTimeApp app = (NewsInTimeApp) getApplication();
 							app.getNrService().restartByNewColItem(coll);
-							
-							
+
 						}
 					};
 					lvCols.setOnItemClickListener(lvColsOnItemClickListener);
@@ -437,7 +436,7 @@ class GroupAdapter extends BaseAdapter {
 
 	static class ViewHolder {
 		TextView groupItem;
-		String collId;
+		Integer collId;
 	}
 
 	public List<Collection> getList() {

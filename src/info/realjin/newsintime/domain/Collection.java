@@ -5,18 +5,18 @@ import java.util.List;
 
 public class Collection {
 	private List<CollectionItem> items;
-	private String id;
+	private Integer id;
 	private String name;
 
 	public Collection() {
 		items = new ArrayList<CollectionItem>();
 	}
 
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
