@@ -162,7 +162,7 @@ public class CollectionItemListActivity extends Activity {
 					EditText etName = (EditText) findViewById(R.id.collectionlistitem_etname);
 					String collName = etName.getText().toString();
 					newColl.setName(collName);
-					dao.addCollectionWithItems(newColl);
+					Integer collId = dao.addCollectionWithItems(newColl);
 
 					// return to CL activity and refresh view
 					Intent intent = getIntent();
@@ -170,6 +170,7 @@ public class CollectionItemListActivity extends Activity {
 					bundle.putString("name", "This is from ShowMsg!");
 					bundle.putString("lastActivity",
 							CollectionItemListActivity.class.getCanonicalName());
+					bundle.putInt("newCollId", collId);
 					intent.putExtras(bundle);
 					setResult(RESULT_OK, intent);
 					CollectionItemListActivity.this.finish();
@@ -180,6 +181,14 @@ public class CollectionItemListActivity extends Activity {
 
 	}
 
+//	public void onBackPressed() {
+//	   Log.e("CIL Activity", "onBackPressed Called");
+//	   Intent setIntent = new Intent(Intent.ACTION_MAIN);
+//	   setIntent.addCategory(Intent.CATEGORY_HOME);
+//	   setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//	   startActivity(setIntent);
+//	}
+	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);

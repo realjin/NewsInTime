@@ -291,6 +291,8 @@ public class MainActivity extends Activity {
 
 		case Menu.FIRST + 1:
 			Intent intent = new Intent(this, CollectionListActivity.class);
+			intent.putExtra("lastActivity",
+					MainActivity.class.getCanonicalName());
 			this.startActivity(intent);
 
 			break;

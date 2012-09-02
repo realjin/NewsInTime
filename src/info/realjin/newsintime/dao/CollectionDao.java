@@ -5,7 +5,9 @@ import info.realjin.newsintime.domain.CollectionItem;
 import info.realjin.newsintime.service.DbManagerService;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -36,12 +38,15 @@ public class CollectionDao extends GenericDao {
 		getDb().insert(DbManagerService.Table_Collection.TNAME, null, cv);
 	}
 
-	public void addCollectionWithItems(Collection coll) {
+	public Integer addCollectionWithItems(Collection coll) {
+		Integer collId = null;
+
 		// 1. save coll
 		ContentValues cvColl = new ContentValues();
 		cvColl.put(DbManagerService.Table_Collection.CNAME_NAME, coll.getName());
-		Long collId = getDb().insert(DbManagerService.Table_Collection.TNAME,
-				null, cvColl);
+		collId = new Long(getDb().insert(
+				DbManagerService.Table_Collection.TNAME, null, cvColl))
+				.intValue();
 
 		// 2. save collitems and coll_collitem relations
 		for (CollectionItem ci : coll.getItems()) {
@@ -66,6 +71,7 @@ public class CollectionDao extends GenericDao {
 					null, cvColl_CollItem);
 		}
 
+		return collId;
 	}
 
 	public List<Collection> getAllCollectionsWithoutItems() {
@@ -177,8 +183,25 @@ public class CollectionDao extends GenericDao {
 		return coll;
 	}
 
-	public void removeCollection() {
+	// TODO: only read coll that flag is true too!
+	public void deleteCollection(Integer collId) {
+		// 1. delete collection
+		int delResult = getDb()
+				.delete(DbManagerService.Table_Collection.TNAME,
+						DbManagerService.Table_Collection.CNAME_ID + "="
+								+ collId, null);
+		if (delResult == 0) {
+			Log.e("CDAO", "deleteCollection: delResult zero");
+		}
 
+		// 2. delete collectionitems
+		Set<Integer> collItemIds = getCollectionItemIdsByCollId(collId);
+		for (Integer collItemId : collItemIds) {
+			deleteCollectionItem(collItemId);
+		}
+
+		// 3. delete collection_collectionitem relation
+		deleteCollection_CollectionItem(collId);
 	}
 
 	/*---------------
@@ -187,7 +210,7 @@ public class CollectionDao extends GenericDao {
 
 	// TODO: using complex sql!
 	public List<CollectionItem> getCollectionItemsByCollId(Integer collId) {
-		List<Integer> collItemIdList = getCollectionItemIdsByCollId(collId);
+		Set<Integer> collItemIdList = getCollectionItemIdsByCollId(collId);
 
 		List<CollectionItem> collItemList = new ArrayList<CollectionItem>();
 		for (Integer collItemId : collItemIdList) {
@@ -198,8 +221,8 @@ public class CollectionDao extends GenericDao {
 		return collItemList;
 	}
 
-	public List<Integer> getCollectionItemIdsByCollId(Integer collId) {
-		List<Integer> collItemIdsList = new ArrayList<Integer>();
+	public Set<Integer> getCollectionItemIdsByCollId(Integer collId) {
+		Set<Integer> collItemIdsList = new HashSet<Integer>();
 
 		Cursor c = getDb()
 				.rawQuery(
@@ -220,6 +243,16 @@ public class CollectionDao extends GenericDao {
 		}
 		c.close();
 		return collItemIdsList;
+	}
+	
+	public void deleteCollection_CollectionItem(Integer collId) {
+		int delResult = getDb().delete(
+				DbManagerService.Table_CollectionCollectionItem.TNAME,
+				DbManagerService.Table_CollectionCollectionItem.CNAME_COLLID + "="
+						+ collId, null);
+		if (delResult == 0) {
+			Log.e("CDAO", "deleteCollection_CollectionItem: delResult zero");
+		}
 	}
 
 	/*---------------
@@ -273,5 +306,15 @@ public class CollectionDao extends GenericDao {
 		}
 
 		return collItem;
+	}
+
+	public void deleteCollectionItem(Integer collItemId) {
+		int delResult = getDb().delete(
+				DbManagerService.Table_CollectionItem.TNAME,
+				DbManagerService.Table_CollectionItem.CNAME_ID + "="
+						+ collItemId, null);
+		if (delResult == 0) {
+			Log.e("CDAO", "deleteCollectionItem: delResult zero");
+		}
 	}
 }
