@@ -11,5 +11,5 @@ when news retrieving, pressing "play" will cause the app crash!
 *** bug fix of checkbox in listview
 *** db
 *** cil onActivityResult check if from backbutton
-
+***** delete flag bit (db SQL)
 
