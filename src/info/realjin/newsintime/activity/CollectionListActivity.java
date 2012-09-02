@@ -5,12 +5,15 @@ import info.realjin.newsintime.R;
 import info.realjin.newsintime.dao.CollectionDao;
 import info.realjin.newsintime.domain.Collection;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,8 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -87,6 +88,31 @@ public class CollectionListActivity extends Activity {
 		 * database, and the id is cached for rollback use
 		 */
 		Button btDelete = (Button) findViewById(R.id.collectionlist_btdelete);
+		btDelete.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Log.e("CI", "ondelete");
+				NewsInTimeApp app = (NewsInTimeApp) getApplication();
+				CollectionDao dao = app.getDbmService().getCollectionDao();
+
+				ListView lv = (ListView) findViewById(R.id.collectionlist_lv);
+				CollectionListAdapter a = (CollectionListAdapter) lv
+						.getAdapter();
+
+				for (Integer i : a.getSelected().keySet()) {
+					if (a.getSelected().get(i) == true) {
+						Log.e("CI", "pos i=" + i);
+						Collection c = a.getColls().get(i);
+						Log.e("CI", "collid=" + c.getId());
+						// 1. cache all ids for rollback use
+						deleted.add(c.getId());
+						// 2. hide all
+						dao.hideCollection(c.getId());
+					}
+				}
+				// refresh view from db
+				refreshListView();
+			}
+		});
 
 		// get data dynamically
 		List<Collection> collections = app.getData().getCollectionList();
@@ -98,40 +124,103 @@ public class CollectionListActivity extends Activity {
 		listView.setAdapter(adapter);
 		listView.setItemsCanFocus(false);
 		listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		listView.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				CollectionListViewHolder vHollder = (CollectionListViewHolder) view
-						.getTag();
-				// 在每次获取点击的item时将对于的checkbox状态改变，同时修改map的值。
-				vHollder.cBox.toggle();
-				CollectionListAdapter.isSelected.put(position,
-						vHollder.cBox.isChecked());
-			}
-		});
+		// TODO: useless!
+		// listView.setOnItemClickListener(new OnItemClickListener() {
+		// public void onItemClick(AdapterView<?> parent, View view,
+		// int position, long id) {
+		// Log.e("CL Activity", "lv item selected");
+		// CollectionListViewHolder vHollder = (CollectionListViewHolder) view
+		// .getTag();
+		// // 在每次获取点击的item时将对于的checkbox状态改变，同时修改map的值。
+		// vHollder.cBox.toggle();
+		// CollectionListAdapter.isSelected.put(position,
+		// vHollder.cBox.isChecked());
+		// }
+		// });
 
 		// //显示列表视图
 		// this.setContentView(listView);
 
 		// set button listener
-		Button btCancel = (Button) findViewById(R.id.collectionlist_btcancel);
-		btCancel.setOnClickListener(new OnClickListener() {
+		// Button btCancel = (Button)
+		// findViewById(R.id.collectionlist_btcancel);
+		// btCancel.setOnClickListener(new OnClickListener() {
+		// public void onClick(View v) {
+		// abandonModification();
+		// setResult(RESULT_CANCELED, null);
+		// CollectionListActivity.this.finish();
+		// }
+		// });
+
+		Button btSave = (Button) findViewById(R.id.collectionlist_btsave);
+		btSave.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				NewsInTimeApp app = (NewsInTimeApp) getApplication();
-				CollectionDao dao = app.getDbmService().getCollectionDao();
-				//1. delete the added
-				for(Integer collId: added){
-					dao.deleteCollection(collId);
-				}
-				//2. restore the flag bit of deleted
-				
-				
-				
+				saveModification();
 				setResult(RESULT_CANCELED, null);
 				CollectionListActivity.this.finish();
 			}
 		});
 
+	}
+
+	public void onBackPressed() {
+		AlertDialog.Builder adbd = new AlertDialog.Builder(this)
+				.setTitle("Warning")
+				.setMessage("Save modification?")
+				.setNegativeButton("CANCEL",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface arg0, int arg1) {
+								abandonModification();
+								setResult(RESULT_CANCELED, null);
+								CollectionListActivity.this.finish();
+							}
+						})
+				.setPositiveButton("SAVE", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface arg0, int arg1) {
+						saveModification();
+						setResult(RESULT_OK, null);
+						CollectionListActivity.this.finish();
+					}
+				});
+
+		adbd.show();
+
+		// super.onBackPressed();
+	}
+
+	private void abandonModification() {
+
+		NewsInTimeApp app = (NewsInTimeApp) getApplication();
+		CollectionDao dao = app.getDbmService().getCollectionDao();
+		// 1. delete the added
+		for (Integer collId : added) {
+			dao.deleteCollection(collId);
+		}
+		// 2. restore the flag bit of deleted
+		for (Integer collId : deleted) {
+			dao.unhideCollection(collId);
+		}
+		// 3. clear cache
+		added.clear();
+		deleted.clear();
+
+	}
+
+	private void saveModification() {
+		Log.e("DELLLL", "saveModification");
+		
+		NewsInTimeApp app = (NewsInTimeApp) getApplication();
+		CollectionDao dao = app.getDbmService().getCollectionDao();
+
+		// 1. delete the hided permanently
+		for (Integer collId : deleted) {
+			Log.e("DELLLL", "collid="+collId);
+			dao.deleteCollection(collId);
+		}
+
+		// 2. clear cache
+		added.clear();
+		deleted.clear();
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -162,24 +251,34 @@ public class CollectionListActivity extends Activity {
 		NewsInTimeApp app = (NewsInTimeApp) getApplication();
 		CollectionDao dao = app.getDbmService().getCollectionDao();
 		List<Collection> collList = dao.getAllCollectionsWithItems();
-		ListView listView = (ListView) findViewById(R.id.collectionlist_lv);
-		CollectionListAdapter adapter = (CollectionListAdapter) listView
-				.getAdapter();
-		adapter.setColls(collList);
-		adapter.notifyDataSetChanged();
+		ListView lv = (ListView) findViewById(R.id.collectionlist_lv);
+		CollectionListAdapter a = (CollectionListAdapter) lv.getAdapter();
+		a.setColls(collList);
+		a.notifyDataSetChanged();
+
+		// clear checkbox
+		for (int i = 0; i < a.getCount(); i++) {
+			View v = lv.getChildAt(i);
+			CheckBox cb = (CheckBox) v
+					.findViewById(R.id.collectionlist_listview_checkbox);
+			cb.setChecked(false);
+		}
+		a.getSelected().clear();
 	}
 }
 
 class CollectionListAdapter extends BaseAdapter {
 	private LayoutInflater mInflater;
 	private List<Collection> colls;
-	public static Map<Integer, Boolean> isSelected;
+	// public static Map<Integer, Boolean> isSelected;
+	private Map<Integer, Boolean> selected;
 	private Activity activity;
 
 	public CollectionListAdapter(Activity a, List<Collection> c) {
 		activity = a;
 		colls = c;
 		mInflater = LayoutInflater.from(a);
+		selected = new HashMap<Integer, Boolean>();
 		// init();
 	}
 
@@ -213,6 +312,7 @@ class CollectionListAdapter extends BaseAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		CollectionListViewHolder holder = null;
+		final int pos = position;
 		// convertView为null的时候初始化convertView。
 		if (convertView == null) {
 			holder = new CollectionListViewHolder();
@@ -226,12 +326,18 @@ class CollectionListAdapter extends BaseAdapter {
 			holder.cBox
 					.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
 
-						public void onCheckedChanged(CompoundButton arg0,
-								boolean arg1) {
+						public void onCheckedChanged(CompoundButton cb,
+								boolean flag) {
+							CollectionListViewHolder h = (CollectionListViewHolder) cb
+									.getTag();
+							// Log.e("OCC", "collname=" + h.coll.getName());
+							// Log.e("OCC", "selected=" + flag);
+							selected.put(pos, flag);
 							// TODO: bug fixing code here
 						}
 
 					});
+			holder.cBox.setTag(holder);
 			holder.btEdit = (Button) convertView
 					.findViewById(R.id.collectionlist_listview_btedit);
 			holder.btEdit.setTag(holder);
@@ -273,6 +379,14 @@ class CollectionListAdapter extends BaseAdapter {
 
 	public void setColls(List<Collection> colls) {
 		this.colls = colls;
+	}
+
+	public Map<Integer, Boolean> getSelected() {
+		return selected;
+	}
+
+	public void setSelected(Map<Integer, Boolean> selected) {
+		this.selected = selected;
 	}
 
 }

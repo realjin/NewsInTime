@@ -57,9 +57,11 @@
 			<Button android:id="@+id/collectionlist_btsave" android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="SAVE"
 				android:height="24dp" android:width="80dp" android:layout_alignParentLeft="true"></Button>
+			<!-- 
 			<Button android:id="@+id/collectionlist_btcancel" android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="CANCEL"
 				android:height="24dp" android:width="80dp" android:layout_alignParentRight="true"></Button>
+			 -->
 		</RelativeLayout>
 	</LinearLayout>
 </LinearLayout>

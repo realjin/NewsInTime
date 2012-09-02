@@ -210,6 +210,9 @@ public class CollectionItemListActivity extends Activity {
 		NewsInTimeApp app = (NewsInTimeApp) getApplication();
 		CollectionItem newCi = (CollectionItem) app
 				.getMessage(AppMessage.MSG_CIACT_CILACT_NEWCOLLITEM);
+		if(newCi==null){
+			return;
+		}
 
 		if (operation == Operation.ADD) {
 			// update cache

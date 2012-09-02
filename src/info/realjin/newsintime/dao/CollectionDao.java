@@ -35,6 +35,8 @@ public class CollectionDao extends GenericDao {
 		// cv.put(DbManagerService.Table_Collection.IMEI, "123456789012345");
 		Log.e("CDAO", "addCollectionWithoutItems: name=" + coll.getName());
 		cv.put(DbManagerService.Table_Collection.CNAME_NAME, coll.getName());
+		cv.put(DbManagerService.Table_Collection.CNAME_ENABLED,
+				DbManagerService.Table_Collection.DEFAULTVALUE_ENABLED_TRUE);
 		getDb().insert(DbManagerService.Table_Collection.TNAME, null, cv);
 	}
 
@@ -44,6 +46,8 @@ public class CollectionDao extends GenericDao {
 		// 1. save coll
 		ContentValues cvColl = new ContentValues();
 		cvColl.put(DbManagerService.Table_Collection.CNAME_NAME, coll.getName());
+		cvColl.put(DbManagerService.Table_Collection.CNAME_ENABLED,
+				DbManagerService.Table_Collection.DEFAULTVALUE_ENABLED_TRUE);
 		collId = new Long(getDb().insert(
 				DbManagerService.Table_Collection.TNAME, null, cvColl))
 				.intValue();
@@ -75,9 +79,15 @@ public class CollectionDao extends GenericDao {
 	}
 
 	public List<Collection> getAllCollectionsWithoutItems() {
-		Cursor c = getDb().rawQuery(
-				"SELECT * FROM " + DbManagerService.Table_Collection.TNAME
-						+ " WHERE 1=1", null);
+		Cursor c = getDb()
+				.rawQuery(
+						"SELECT * FROM "
+								+ DbManagerService.Table_Collection.TNAME
+								+ " WHERE "
+								+ DbManagerService.Table_Collection.CNAME_ENABLED
+								+ "="
+								+ DbManagerService.Table_Collection.DEFAULTVALUE_ENABLED_TRUE,
+						null);
 		List<Collection> collList = new ArrayList<Collection>();
 		if (c != null) {
 			while (c.moveToNext()) {
@@ -101,11 +111,19 @@ public class CollectionDao extends GenericDao {
 
 	// get one complete
 	public Collection getCollectionWithItems(Integer collId) {
-		Cursor c = getDb().rawQuery(
-				"SELECT * FROM " + DbManagerService.Table_Collection.TNAME
-						+ " WHERE "
-						+ DbManagerService.Table_Collection.CNAME_ID + "="
-						+ collId, null);
+		Cursor c = getDb()
+				.rawQuery(
+						"SELECT * FROM "
+								+ DbManagerService.Table_Collection.TNAME
+								+ " WHERE "
+								+ DbManagerService.Table_Collection.CNAME_ID
+								+ "="
+								+ collId
+								+ " AND "
+								+ DbManagerService.Table_Collection.CNAME_ENABLED
+								+ "="
+								+ DbManagerService.Table_Collection.DEFAULTVALUE_ENABLED_TRUE,
+						null);
 		Collection coll = null;
 		if (c != null) {
 			if (c.moveToNext()) {
@@ -130,9 +148,15 @@ public class CollectionDao extends GenericDao {
 
 	// get many complete
 	public List<Collection> getAllCollectionsWithItems() {
-		Cursor c = getDb().rawQuery(
-				"SELECT * FROM " + DbManagerService.Table_Collection.TNAME
-						+ " WHERE 1=1", null);
+		Cursor c = getDb()
+				.rawQuery(
+						"SELECT * FROM "
+								+ DbManagerService.Table_Collection.TNAME
+								+ " WHERE "
+								+ DbManagerService.Table_Collection.CNAME_ENABLED
+								+ "="
+								+ DbManagerService.Table_Collection.DEFAULTVALUE_ENABLED_TRUE,
+						null);
 		List<Collection> collList = new ArrayList<Collection>();
 		if (c != null) {
 			while (c.moveToNext()) {
@@ -159,9 +183,17 @@ public class CollectionDao extends GenericDao {
 
 	// not tested
 	public Collection getCollectionWithoutItems(Long collId) {
-		Cursor c = getDb().rawQuery(
-				"SELECT * FROM " + DbManagerService.Table_Collection.TNAME
-						+ " WHERE id=" + collId, null);
+		Cursor c = getDb()
+				.rawQuery(
+						"SELECT * FROM "
+								+ DbManagerService.Table_Collection.TNAME
+								+ " WHERE id="
+								+ collId
+								+ " AND "
+								+ DbManagerService.Table_Collection.CNAME_ENABLED
+								+ "="
+								+ DbManagerService.Table_Collection.DEFAULTVALUE_ENABLED_TRUE,
+						null);
 		Collection coll = null;
 
 		if (c != null) {
@@ -204,6 +236,40 @@ public class CollectionDao extends GenericDao {
 		deleteCollection_CollectionItem(collId);
 	}
 
+	public void hideCollection(Integer collId) {
+		Cursor c = getDb()
+				.rawQuery(
+						"UPDATE "
+								+ DbManagerService.Table_Collection.TNAME
+								+ " SET "
+								+ DbManagerService.Table_Collection.CNAME_ENABLED
+								+ "="
+								+ DbManagerService.Table_Collection.DEFAULTVALUE_ENABLED_FALSE
+								+ " WHERE "
+								+ DbManagerService.Table_Collection.CNAME_ID
+								+ "=" + collId, null);
+		c.moveToFirst();
+		c.close();
+		// mmm: no check of cursor
+	}
+
+	public void unhideCollection(Integer collId) {
+		Cursor c = getDb()
+				.rawQuery(
+						"UPDATE "
+								+ DbManagerService.Table_Collection.TNAME
+								+ " SET "
+								+ DbManagerService.Table_Collection.CNAME_ENABLED
+								+ "="
+								+ DbManagerService.Table_Collection.DEFAULTVALUE_ENABLED_TRUE
+								+ " WHERE "
+								+ DbManagerService.Table_Collection.CNAME_ID
+								+ "=" + collId, null);
+		c.moveToFirst();
+		c.close();
+		// mmm: no check of cursor
+	}
+
 	/*---------------
 	 * collection_collectionitem operations 
 	 *---------------*/
@@ -224,6 +290,7 @@ public class CollectionDao extends GenericDao {
 	public Set<Integer> getCollectionItemIdsByCollId(Integer collId) {
 		Set<Integer> collItemIdsList = new HashSet<Integer>();
 
+		// no need for flag filter here!
 		Cursor c = getDb()
 				.rawQuery(
 						"SELECT * FROM "
@@ -244,12 +311,12 @@ public class CollectionDao extends GenericDao {
 		c.close();
 		return collItemIdsList;
 	}
-	
+
 	public void deleteCollection_CollectionItem(Integer collId) {
 		int delResult = getDb().delete(
 				DbManagerService.Table_CollectionCollectionItem.TNAME,
-				DbManagerService.Table_CollectionCollectionItem.CNAME_COLLID + "="
-						+ collId, null);
+				DbManagerService.Table_CollectionCollectionItem.CNAME_COLLID
+						+ "=" + collId, null);
 		if (delResult == 0) {
 			Log.e("CDAO", "deleteCollection_CollectionItem: delResult zero");
 		}

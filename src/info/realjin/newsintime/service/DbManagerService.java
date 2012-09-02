@@ -1,7 +1,6 @@
 package info.realjin.newsintime.service;
 
 import info.realjin.newsintime.dao.CollectionDao;
-import android.app.Application;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -38,14 +37,18 @@ public class DbManagerService {
 	public void initDatabase() {
 		checkDbState();
 		Log.i("===DBM===", "** init db");
-		db.execSQL("CREATE TABLE IF NOT EXISTS " + Table_Collection.TNAME + " ("
-				+ Table_Collection.CNAME_ID + " INTEGER PRIMARY KEY,"
+		db.execSQL("CREATE TABLE IF NOT EXISTS " + Table_Collection.TNAME
+				+ " (" + Table_Collection.CNAME_ID + " INTEGER PRIMARY KEY,"
 				+ Table_Collection.CNAME_NAME + " TEXT,"
+				+ Table_Collection.CNAME_ENABLED + " INTEGER,"
 				+ Table_Collection.CNAME_UPDATETIME + " TEXT);");
-		db.execSQL("CREATE TABLE IF NOT EXISTS " + Table_CollectionCollectionItem.TNAME + " ("
-				+ Table_CollectionCollectionItem.CNAME_ID + " INTEGER PRIMARY KEY,"
+		db.execSQL("CREATE TABLE IF NOT EXISTS "
+				+ Table_CollectionCollectionItem.TNAME + " ("
+				+ Table_CollectionCollectionItem.CNAME_ID
+				+ " INTEGER PRIMARY KEY,"
 				+ Table_CollectionCollectionItem.CNAME_COLLID + " INTEGER,"
-				+ Table_CollectionCollectionItem.CNAME_COLLITEMID + " INTEGER);");
+				+ Table_CollectionCollectionItem.CNAME_COLLITEMID
+				+ " INTEGER);");
 		db.execSQL("CREATE TABLE IF NOT EXISTS " + Table_CollectionItem.TNAME
 				+ " (" + Table_CollectionItem.CNAME_ID
 				+ " INTEGER PRIMARY KEY," + Table_CollectionItem.CNAME_NAME
@@ -59,22 +62,28 @@ public class DbManagerService {
 		public static final String TNAME = "NEWSINTIME_COLLECTION";
 		public static final String CNAME_ID = "id";
 		public static final String CNAME_NAME = "name";
+		public static final String CNAME_ENABLED = "enabled";
 		public static final String CNAME_UPDATETIME = "updatetime";
+
+		public static final int DEFAULTVALUE_ENABLED_FALSE = -1;
+		public static final int DEFAULTVALUE_ENABLED_TRUE = 0;
+
 	}
 
-	public static final class Table_CollectionCollectionItem implements BaseColumns {
+	public static final class Table_CollectionCollectionItem implements
+			BaseColumns {
 		public static final String TNAME = "NEWSINTIME_COLLECTION_COLLECTIONITEM";
 		public static final String CNAME_ID = "id";
 		public static final String CNAME_COLLID = "collid";
 		public static final String CNAME_COLLITEMID = "collitemid";
 	}
-	
+
 	public static final class Table_CollectionItem implements BaseColumns {
 		public static final String TNAME = "NEWSINTIME_COLLECTIONITEM";
 		public static final String CNAME_ID = "id";
 		public static final String CNAME_NAME = "name";
 		public static final String CNAME_URL = "url";
-//		public static final String CNAME_COLLID = "collid";
+		// public static final String CNAME_COLLID = "collid";
 		public static final String CNAME_TYPE = "type";
 		public static final String CNAME_PREDEFINED = "predefined";
 		public static final String CNAME_UPDATETIME = "updatetime";
