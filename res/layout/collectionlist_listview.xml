@@ -1,29 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+<!--
+     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
 	android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent"> 
 	<CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" 
 	android:id="@+id/collectionlist_listview_checkbox" /> <TextView android:layout_width="120dip" 
 	android:layout_height="wrap_content" android:textSize="16sp" android:id="@+id/collectionlist_listview_text" 
 	/> <Button android:layout_width="wrap_content" android:layout_height="wrap_content" 
 	android:text="EDIT" android:id="@+id/collectionlist_listview_btedit" android:gravity="right" 
-	/> </LinearLayout> -->
-
+	/> </LinearLayout>
+-->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="horizontal" android:layout_width="fill_parent"
-	android:layout_height="wrap_content">
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:orientation="horizontal" android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:layout_alignParentLeft="true">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
 
-		<CheckBox android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:id="@+id/collectionlist_listview_checkbox" />
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:orientation="horizontal" >
 
-		<TextView android:layout_width="120dip"
-			android:layout_height="wrap_content" android:textSize="16sp"
-			android:id="@+id/collectionlist_listview_text" />
-	</LinearLayout>
-	<Button android:layout_width="60dip" android:layout_height="wrap_content"
-		android:text="EDIT" android:id="@+id/collectionlist_listview_btedit"
-		android:layout_alignParentRight="true" />
+        <CheckBox
+            android:id="@+id/collectionlist_listview_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/collectionlist_listview_text"
+            android:layout_width="120dip"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/collectionlist_listview_btedit"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="true"
+        android:textColor="#0e3da8" 
+        android:textSize="16dp"
+        android:text="EDIT" />
+
 </RelativeLayout>

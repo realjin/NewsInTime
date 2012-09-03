@@ -13,3 +13,7 @@ when news retrieving, pressing "play" will cause the app crash!
 *** cil onActivityResult check if from backbutton
 
 *** check delete coll and save cycle!
+***** replace +/- text button with img button!
+
+
+*** clist edit button --- see android call history "call" button (splitter and transparent button)

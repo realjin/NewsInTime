@@ -3,7 +3,7 @@
     android:id="@+id/rlCollectionList"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#2B60DE"
+    android:background="#e1e1e1"
     android:orientation="vertical"
     android:scrollbars="vertical" >
 
@@ -30,6 +30,12 @@
             android:gravity="left|center_vertical"
             android:orientation="horizontal" >
 
+            <ImageView 
+   android:id="@+id/test_image"
+   android:src="@drawable/leaf_32x32_white"
+   android:layout_width="wrap_content"
+   android:layout_height="wrap_content"
+   />
             <TextView
                 android:id="@+id/txtTest"
                 android:layout_width="fill_parent"
@@ -50,16 +56,24 @@
             android:gravity="right"
             android:orientation="horizontal" >
             
+            <ImageButton  android:id="@+id/collectionlist_btsave"
+    android:background="@android:color/transparent"
+	android:src="@drawable/yes_64x32_blue"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" />
+/>
+            
+            <!--
 			<Button
                 android:id="@+id/collectionlist_btsave"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
-                android:background="@android:color/transparent"
                 android:textSize="16dp"
                 android:textColor="#000000" 
                 android:text="SAVE"
                 android:width="80dp" >
             </Button>
+            -->
             
         </LinearLayout>
         <!--
@@ -90,41 +104,37 @@
         android:id="@+id/buttonlayout4"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#2B60DE"
+        android:background="#e1e1e1"
         android:orientation="vertical" >
 
         <RelativeLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/buttonlayout5"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_alignParentBottom="true"
-            android:background="#FFFFFF"
+            android:background="#b7b7b7"
             android:orientation="horizontal" >
 
 <!-- 	 -->
 
-			<Button
+			<ImageButton
                 android:id="@+id/collectionlist_btadd"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
+				android:layout_height="wrap_content" 
                 android:layout_alignParentLeft="true"
-                android:text="+"
+                android:layout_centerVertical="true"
                 android:background="@android:color/transparent"
-                android:textSize="16dp"
-                android:width="80dp" >
-            </Button>
+				android:src="@drawable/add_64x32_white" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/collectionlist_btdelete"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
+				android:layout_height="wrap_content" 
                 android:layout_alignParentRight="true"
-                android:text="-"
+                android:layout_centerVertical="true"
                 android:background="@android:color/transparent"
-                android:textSize="16dp"
-                android:width="80dp" >
-            </Button>
+				android:src="@drawable/delete_64x32_white" />
 
 
             

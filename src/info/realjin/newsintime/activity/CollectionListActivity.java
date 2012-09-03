@@ -25,6 +25,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -70,10 +71,10 @@ public class CollectionListActivity extends Activity {
 		 * when add pressed, any added is persisted and id of it is cached for
 		 * rollback use
 		 */
-		Button btAdd = (Button) findViewById(R.id.collectionlist_btadd);
+		ImageButton btAdd = (ImageButton) findViewById(R.id.collectionlist_btadd);
 		btAdd.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Button bt = (Button) v;
+				ImageButton bt = (ImageButton) v;
 				Intent intent = new Intent(CollectionListActivity.this,
 						CollectionItemListActivity.class);
 				intent.putExtra("action", "add");
@@ -87,7 +88,7 @@ public class CollectionListActivity extends Activity {
 		 * when delete pressed, the flag column of any deleted is set in
 		 * database, and the id is cached for rollback use
 		 */
-		Button btDelete = (Button) findViewById(R.id.collectionlist_btdelete);
+		ImageButton btDelete = (ImageButton) findViewById(R.id.collectionlist_btdelete);
 		btDelete.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Log.e("CI", "ondelete");
@@ -152,7 +153,7 @@ public class CollectionListActivity extends Activity {
 		// }
 		// });
 
-		Button btSave = (Button) findViewById(R.id.collectionlist_btsave);
+		ImageButton btSave = (ImageButton) findViewById(R.id.collectionlist_btsave);
 		btSave.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				saveModification();
