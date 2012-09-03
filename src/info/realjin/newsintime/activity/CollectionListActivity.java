@@ -164,26 +164,35 @@ public class CollectionListActivity extends Activity {
 	}
 
 	public void onBackPressed() {
-		AlertDialog.Builder adbd = new AlertDialog.Builder(this)
-				.setTitle("Warning")
-				.setMessage("Save modification?")
-				.setNegativeButton("CANCEL",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface arg0, int arg1) {
-								abandonModification();
-								setResult(RESULT_CANCELED, null);
-								CollectionListActivity.this.finish();
-							}
-						})
-				.setPositiveButton("SAVE", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface arg0, int arg1) {
-						saveModification();
-						setResult(RESULT_OK, null);
-						CollectionListActivity.this.finish();
-					}
-				});
+		if ((added == null || added.size() == 0)
+				&& (deleted == null || deleted.size() == 0)) {
+			setResult(RESULT_CANCELED, null);
+			CollectionListActivity.this.finish();
+		} else {
+			AlertDialog.Builder adbd = new AlertDialog.Builder(this)
+					.setTitle("Warning")
+					.setMessage("Save modification?")
+					.setNegativeButton("CANCEL",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface arg0,
+										int arg1) {
+									abandonModification();
+									setResult(RESULT_CANCELED, null);
+									CollectionListActivity.this.finish();
+								}
+							})
+					.setPositiveButton("SAVE",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface arg0,
+										int arg1) {
+									saveModification();
+									setResult(RESULT_OK, null);
+									CollectionListActivity.this.finish();
+								}
+							});
 
-		adbd.show();
+			adbd.show();
+		}
 
 		// super.onBackPressed();
 	}
@@ -208,13 +217,13 @@ public class CollectionListActivity extends Activity {
 
 	private void saveModification() {
 		Log.e("DELLLL", "saveModification");
-		
+
 		NewsInTimeApp app = (NewsInTimeApp) getApplication();
 		CollectionDao dao = app.getDbmService().getCollectionDao();
 
 		// 1. delete the hided permanently
 		for (Integer collId : deleted) {
-			Log.e("DELLLL", "collid="+collId);
+			Log.e("DELLLL", "collid=" + collId);
 			dao.deleteCollection(collId);
 		}
 
@@ -257,8 +266,11 @@ public class CollectionListActivity extends Activity {
 		a.notifyDataSetChanged();
 
 		// clear checkbox
-		for (int i = 0; i < a.getCount(); i++) {
+		Log.e("", "a count = " + a.getCount());
+		Log.e("", "lv = " + lv);
+		for (int i = 0; i < lv.getChildCount(); i++) {
 			View v = lv.getChildAt(i);
+			Log.e("", "v = " + v);
 			CheckBox cb = (CheckBox) v
 					.findViewById(R.id.collectionlist_listview_checkbox);
 			cb.setChecked(false);
