@@ -351,13 +351,13 @@ class CollectionListAdapter extends BaseAdapter {
 
 					});
 			holder.cBox.setTag(holder);
-			holder.btEdit = (Button) convertView
+			holder.btEdit = (ImageButton) convertView
 					.findViewById(R.id.collectionlist_listview_btedit);
 			holder.btEdit.setTag(holder);
 			holder.btEdit.setOnClickListener(new OnClickListener() {
 
 				public void onClick(View v) {
-					Button bt = (Button) v;
+					ImageButton bt = (ImageButton) v;
 					CollectionListViewHolder h = (CollectionListViewHolder) bt
 							.getTag();
 					Intent intent = new Intent(activity,
@@ -408,6 +408,6 @@ final class CollectionListViewHolder {
 	// public ImageView img;
 	public TextView title;
 	public CheckBox cBox;
-	public Button btEdit;
+	public ImageButton btEdit;
 	public Collection coll;
 }

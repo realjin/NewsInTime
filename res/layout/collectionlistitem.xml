@@ -46,23 +46,18 @@
             android:gravity="right"
             android:orientation="horizontal" >
 
-            <Button
-                android:id="@+id/collectionlistitem_btadd"
+            
+            <ImageButton
+                android:id="@+id/collectionlistitem_btsave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:height="24dp"
-                android:text="ADD"
-                android:width="60dp" >
-            </Button>
+              android:background="@android:color/transparent"
+	android:src="@drawable/yes_64x32_blue">
+            </ImageButton>
 
-            <Button
-                android:id="@+id/collectionlistitem_btdelete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:height="24dp"
-                android:text="DEL"
-                android:width="60dp" >
-            </Button>
+            
+            
+            
         </LinearLayout>
     </LinearLayout>
 
@@ -90,43 +85,46 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
-    <LinearLayout
+    <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/buttonlayout4"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:gravity="right"
+        android:background="#e1e1e1"
         android:orientation="vertical" >
 
         <RelativeLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/buttonlayout5"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="#81BEF7"
-            android:gravity="bottom"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/collectionlistitem_btsave"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+             android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:background="#b7b7b7"
+            android:orientation="horizontal">
+<ImageButton
+                android:id="@+id/collectionlistitem_btadd"
+               android:layout_width="wrap_content"
+				android:layout_height="wrap_content" 
                 android:layout_alignParentLeft="true"
-                android:height="24dp"
-                android:text="SAVE"
-                android:width="80dp" >
-            </Button>
+                android:layout_centerVertical="true"
+                android:background="@android:color/transparent"
+                android:src="@drawable/add_64x32_white"
+                >
+            </ImageButton>
 
-            <Button
-                android:id="@+id/collectionlistitem_btcancel"
+            <ImageButton
+                android:id="@+id/collectionlistitem_btdelete"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+				android:layout_height="wrap_content" 
                 android:layout_alignParentRight="true"
-                android:height="24dp"
-                android:text="CANCEL"
-                android:width="80dp" >
-            </Button>
+                android:layout_centerVertical="true"
+                android:background="@android:color/transparent"
+                android:src="@drawable/delete_64x32_white"
+                >
+            </ImageButton>
+            
+           
         </RelativeLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

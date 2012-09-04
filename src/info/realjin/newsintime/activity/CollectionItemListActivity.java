@@ -25,10 +25,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -69,7 +69,7 @@ public class CollectionItemListActivity extends Activity {
 		NewsInTimeApp app = (NewsInTimeApp) getApplication();
 
 		// set listener
-		Button btAdd = (Button) findViewById(R.id.collectionlistitem_btadd);
+		ImageButton btAdd = (ImageButton) findViewById(R.id.collectionlistitem_btadd);
 		btAdd.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				// ((NewsInTimeApp)
@@ -151,7 +151,7 @@ public class CollectionItemListActivity extends Activity {
 		});
 
 		// init button "save" and "cancel"
-		Button btSave = (Button) findViewById(R.id.collectionlistitem_btsave);
+		ImageButton btSave = (ImageButton) findViewById(R.id.collectionlistitem_btsave);
 		btSave.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				// save to db
@@ -177,7 +177,7 @@ public class CollectionItemListActivity extends Activity {
 				}
 			}
 		});
-		Button btCancel = (Button) findViewById(R.id.collectionlistitem_btcancel);
+//		ImageButton btCancel = (ImageButton) findViewById(R.id.collectionlistitem_btcancel);
 
 	}
 

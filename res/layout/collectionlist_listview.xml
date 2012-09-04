@@ -1,47 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+<!-- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
 	android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent"> 
 	<CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" 
 	android:id="@+id/collectionlist_listview_checkbox" /> <TextView android:layout_width="120dip" 
 	android:layout_height="wrap_content" android:textSize="16sp" android:id="@+id/collectionlist_listview_text" 
 	/> <Button android:layout_width="wrap_content" android:layout_height="wrap_content" 
 	android:text="EDIT" android:id="@+id/collectionlist_listview_btedit" android:gravity="right" 
-	/> </LinearLayout>
--->
+	/> </LinearLayout> -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+	android:layout_width="fill_parent" android:layout_height="wrap_content"
+	android:orientation="horizontal">
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignParentLeft="true"
-        android:orientation="horizontal" >
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/ssssssLayout" android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:layout_alignParentLeft="true"
+		android:orientation="horizontal">
 
-        <CheckBox
-            android:id="@+id/collectionlist_listview_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+		<CheckBox android:id="@+id/collectionlist_listview_checkbox"
+			android:layout_width="wrap_content" android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/collectionlist_listview_text"
-            android:layout_width="120dip"
-            android:layout_height="wrap_content"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-    </LinearLayout>
+		<TextView android:id="@+id/collectionlist_listview_text"
+			android:layout_width="120dip" android:layout_height="wrap_content"
+			android:textColor="#000000" android:textSize="16sp" />
+	</LinearLayout>
 
-    <Button
-        android:id="@+id/collectionlist_listview_btedit"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_alignParentRight="true"
-        android:textColor="#0e3da8" 
-        android:textSize="16dp"
-        android:text="EDIT" />
+	<!-- android:layout_width="3px" android:layout_height="fill_parent" <bitmap 
+		android:src="@drawable/splitter" android:tileMode="repeat" android:layout_toLeftOf="@+id/collectionlist_listview_btedit"/> -->
+
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/s2222Layout" android:layout_width="wrap_content"
+		android:layout_height="fill_parent" android:layout_alignParentRight="true"
+		android:orientation="horizontal">
+
+
+		<LinearLayout android:id="@+id/tttttttLayout"
+			android:layout_width="wrap_content" android:layout_height="fill_parent"
+			android:orientation="vertical" android:background="@drawable/splitter_repeat"
+			android:tileMode="repeat" />
+		<LinearLayout android:id="@+id/spaceLayout"
+			android:layout_width="5dp" android:layout_height="fill_parent"
+			android:orientation="vertical" />
+		<!-- -->
+
+		<ImageButton android:id="@+id/collectionlist_listview_btedit"
+			android:layout_width="wrap_content" android:layout_height="fill_parent"
+			android:textColor="#0e3da8" android:textSize="16dp"
+			android:background="@android:color/transparent" android:src="@drawable/editbutton" />
+
+	</LinearLayout>
 
 </RelativeLayout>
