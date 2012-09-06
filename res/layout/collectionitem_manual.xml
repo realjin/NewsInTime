@@ -1,0 +1,5 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/collectionitem_manual_llRoot" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:background="#e1e1e1"
+	android:orientation="vertical" android:scrollbars="vertical">
+</LinearLayout>

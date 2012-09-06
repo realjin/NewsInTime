@@ -1,0 +1,24 @@
+<!-- not used yet -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/collectionitem_select_llRoot" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:background="#e1e1e1"
+	android:orientation="vertical" android:scrollbars="vertical">
+	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/collectionitem_select_rlTop" android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:background="#e1e1e1"
+		android:orientation="vertical">
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:id="@+id/collectionitem_select_llSelect"
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:background="#e1e1e1" android:orientation="vertical"
+			android:scrollbars="vertical">
+			<TextView android:id="@+id/collectionitem_select_tvType"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:text="aaaa" />
+			<Spinner android:id="@+id/collectionitem_select_spnType"
+				android:layout_width="fill_parent" android:layout_height="wrap_content" />
+		</LinearLayout>
+	</RelativeLayout>
+	<ListView android:id="@+id/collectionitem_select_lv"
+		android:layout_width="fill_parent" android:layout_height="wrap_content" />
+</LinearLayout>
