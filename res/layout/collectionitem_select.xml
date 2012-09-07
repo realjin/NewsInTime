@@ -23,10 +23,14 @@
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
 			android:background="#e1e1e1" android:orientation="horizontal"
 			android:scrollbars="vertical" android:layout_centerHorizontal="true">
-			<TextView android:id="@+id/collectionitem_select_tvType"
+			<!-- <TextView android:id="@+id/collectionitem_select_tvType" android:layout_width="wrap_content" 
+				android:layout_height="wrap_content" android:text="type " /> <Spinner android:id="@+id/collectionitem_select_spnType" 
+				android:layout_width="wrap_content" android:layout_height="wrap_content" 
+				/> -->
+			<TextView android:id="@+id/collectionitem_select_tvCategory"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:text="type " />
-			<Spinner android:id="@+id/collectionitem_select_spnType"
+				android:text="Category " />
+			<Spinner android:id="@+id/collectionitem_select_spnCategory"
 				android:layout_width="wrap_content" android:layout_height="wrap_content" />
 		</LinearLayout>
 	</RelativeLayout>

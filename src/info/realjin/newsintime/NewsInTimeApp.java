@@ -11,6 +11,7 @@ import info.realjin.newsintime.domain.CollectionItem;
 import info.realjin.newsintime.domain.News;
 import info.realjin.newsintime.domain.NewsList;
 import info.realjin.newsintime.service.DbManagerService;
+import info.realjin.newsintime.service.PredefinedDataManagerService;
 import info.realjin.newsintime.service.newsretriever.NewsRetrieverService;
 import info.realjin.newsintime.view.VerticalSlider;
 
@@ -30,10 +31,12 @@ public class NewsInTimeApp extends Application {
 
 	// services
 	private DbManagerService dbmService;
+	private PredefinedDataManagerService pddmService;
 
 	private NewsRetrieverService nrService;
 
 	public NewsInTimeApp() {
+
 		// init data
 		Log.i("===APP===", "1");
 		data = new AppData(this);
@@ -43,6 +46,9 @@ public class NewsInTimeApp extends Application {
 		status = new AppStatus();
 		Log.i("===APP===", "4");
 		msg = new AppMessage();
+
+		// init predefined data service
+		pddmService = new PredefinedDataManagerService(this);
 
 		// start retrieving news rss
 		// TODO: temp!!!
@@ -59,6 +65,9 @@ public class NewsInTimeApp extends Application {
 		// init db
 		dbmService = new DbManagerService(mainActivity);
 		dbmService.initDatabase();
+
+		// init predefined data
+		pddmService.loadPredefinedToAppdata();
 	}
 
 	// ----- method for animation

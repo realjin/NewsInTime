@@ -116,11 +116,12 @@ public class CollectionListActivity extends Activity {
 		});
 
 		// get data dynamically
-		List<Collection> collections = app.getData().getCollectionList();
+		CollectionDao dao = app.getDbmService().getCollectionDao();
+		List<Collection> collections = dao.getAllCollectionsWithItems();
 		CollectionListAdapter adapter = new CollectionListAdapter(this,
 				collections);
 		adapter.setColls(collections);
-		// listView = new ListView(this);// 实例化列表视图
+		// listView = new ListView(this);// 实锟斤拷锟叫憋拷锟斤拷图
 		ListView listView = (ListView) findViewById(R.id.collectionlist_lv);
 		listView.setAdapter(adapter);
 		listView.setItemsCanFocus(false);
@@ -132,14 +133,14 @@ public class CollectionListActivity extends Activity {
 		// Log.e("CL Activity", "lv item selected");
 		// CollectionListViewHolder vHollder = (CollectionListViewHolder) view
 		// .getTag();
-		// // 在每次获取点击的item时将对于的checkbox状态改变，同时修改map的值。
+		// // 锟斤拷每锟轿伙拷取锟斤拷锟斤拷锟絠tem时锟斤拷锟斤拷锟节碉拷checkbox状态锟侥变，同时锟睫革拷map锟斤拷值锟斤拷
 		// vHollder.cBox.toggle();
 		// CollectionListAdapter.isSelected.put(position,
 		// vHollder.cBox.isChecked());
 		// }
 		// });
 
-		// //显示列表视图
+		// //锟斤拷示锟叫憋拷锟斤拷图
 		// this.setContentView(listView);
 
 		// set button listener
@@ -295,16 +296,16 @@ class CollectionListAdapter extends BaseAdapter {
 		// init();
 	}
 
-	// 初始化
+	// 锟斤拷始锟斤拷
 	private void init() {
 		// mData = new ArrayList<Map<String, Object>>();
 		// for (int i = 0; i < 5; i++) {
 		// Map<String, Object> map = new HashMap<String, Object>();
 		// map.put("img", R.drawable.ic_launcher);
-		// map.put("title", "第" + (i + 1) + "行的标题");
+		// map.put("title", "锟斤拷" + (i + 1) + "锟叫的憋拷锟斤拷");
 		// mData.add(map);
 		// }
-		// 这儿定义isSelected这个map是记录每个listitem的状态，初始状态全部为false。
+		// 锟斤拷锟斤拷锟絠sSelected锟斤拷锟絤ap锟角硷拷录每锟斤拷listitem锟斤拷状态锟斤拷锟斤拷始状态全锟斤拷为false锟斤拷
 		// isSelected = new HashMap<Integer, Boolean>();
 		// for (int i = 0; i < mData.size(); i++) {
 		// isSelected.put(i, false);
@@ -326,7 +327,7 @@ class CollectionListAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		CollectionListViewHolder holder = null;
 		final int pos = position;
-		// convertView为null的时候初始化convertView。
+		// convertView为null锟斤拷时锟斤拷锟绞硷拷锟絚onvertView锟斤拷
 		if (convertView == null) {
 			holder = new CollectionListViewHolder();
 			convertView = mInflater.inflate(R.layout.collectionlist_listview,

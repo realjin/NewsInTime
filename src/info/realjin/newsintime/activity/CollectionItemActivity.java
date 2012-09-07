@@ -6,6 +6,7 @@ import info.realjin.newsintime.dao.CollectionDao;
 import info.realjin.newsintime.domain.AppData;
 import info.realjin.newsintime.domain.AppMessage;
 import info.realjin.newsintime.domain.CollectionItem;
+import info.realjin.newsintime.domain.PredefinedCollectionItem;
 
 import java.util.List;
 import java.util.Map;
@@ -173,11 +174,11 @@ public class CollectionItemActivity extends Activity {
 
 class CollectionListItemSelectAdapter extends BaseAdapter {
 	private LayoutInflater mInflater;
-	private List<CollectionItem> collitems;
+	private List<PredefinedCollectionItem> collitems;
 	public static Map<Integer, Boolean> isSelected;
 	private Activity activity;
 
-	public CollectionListItemSelectAdapter(Activity a, List<CollectionItem> c) {
+	public CollectionListItemSelectAdapter(Activity a, List<PredefinedCollectionItem> c) {
 		this.activity = a;
 		this.collitems = c;
 		Log.e("COLLITEMSIN CollectionListItemSelectAdapter, size=",
@@ -199,7 +200,7 @@ class CollectionListItemSelectAdapter extends BaseAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		CollectionListItemSelectViewHolder holder = null;
-		// convertViewÎªnullµÄÊ±ºò³õÊ¼»¯convertView¡£
+		// convertViewÎªnullï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½convertViewï¿½ï¿½
 		if (convertView == null) {
 			holder = new CollectionListItemSelectViewHolder();
 			convertView = mInflater.inflate(
@@ -225,11 +226,11 @@ class CollectionListItemSelectAdapter extends BaseAdapter {
 		return convertView;
 	}
 
-	public List<CollectionItem> getCollitems() {
+	public List<PredefinedCollectionItem> getCollitems() {
 		return collitems;
 	}
 
-	public void setCollitems(List<CollectionItem> collitems) {
+	public void setCollitems(List<PredefinedCollectionItem> collitems) {
 		this.collitems = collitems;
 	}
 }

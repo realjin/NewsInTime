@@ -2,24 +2,39 @@ package info.realjin.newsintime.domain;
 
 import info.realjin.newsintime.NewsInTimeApp;
 import info.realjin.newsintime.dao.CollectionDao;
+import info.realjin.newsintime.service.PredefinedDataManagerService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AppData {
 	private NewsList newsList;
 	private NewsInTimeApp app;
-	int scrWidth;
-	int scrHeight;
+	private int scrWidth;
+	private int scrHeight;
+	// private PredefinedDataManagerService pdData;
+
+	// predefined data
+	private List<PredefinedCategory> pdCategoryList;
+	private Map<String, String> pdCategoryMap;
+	private List<PredefinedCollectionItem> pdCiList;
 
 	public AppData(NewsInTimeApp app) {
+		// this.pdData = pdData;
 		newsList = new NewsList();
 		this.app = app;
+
+		// init predefined data
+		pdCategoryList = new ArrayList<PredefinedCategory>();
+		pdCategoryMap = new HashMap<String, String>();
+		pdCiList = new ArrayList<PredefinedCollectionItem>();
 	}
 
 	// proxy methods
 	// TODO: DB!!!
-	public List<Collection> getCollectionList() {
+	public List<Collection> getCollectionListNewDeprecated() {
 		CollectionDao dao = app.getDbmService().getCollectionDao();
 		List<Collection> collList = dao.getAllCollectionsWithItems();
 		return collList;
@@ -87,26 +102,25 @@ public class AppData {
 	// proxy methods
 	// TODO: DB!!!
 	/*
-	public Collection getCollectionById(String id, List<Collection> collList) {
-		for (Collection c : collList) {
-			if (c.getId().equals(id)) {
-				return c;
-			}
-		}
-		return null;
+	 * public Collection getCollectionById(String id, List<Collection> collList)
+	 * { for (Collection c : collList) { if (c.getId().equals(id)) { return c; }
+	 * } return null; }
+	 */
+
+	public List<PredefinedCollectionItem> getPredefinedCollectionItemList() {
+		return pdCiList;
 	}
-	*/
 
 	// proxy methods
 	// TODO: DB!!!
-	public List<CollectionItem> getPredefinedCollectionItemList() {
+	public List<CollectionItem> getPredefinedCollectionItemListOld() {
 		List<CollectionItem> list = new ArrayList<CollectionItem>();
-		CollectionItem a = new CollectionItem(
-				"http://news.qq.com/newsgn/rss_newsgn.xml");
-		a.setName("腾讯国内新闻");
-		CollectionItem b = new CollectionItem(
-				"http://news.163.com/special/00011K6L/rss_hotnews.xml");
-		b.setName("网易深度新闻");
+		PredefinedCollectionItem a = new PredefinedCollectionItem();
+		a.setUrl("http://news.qq.com/newsgn/rss_newsgn.xml");
+		a.setName("鑵捐鍥藉唴鏂伴椈");
+		PredefinedCollectionItem b = new PredefinedCollectionItem();
+		b.setUrl("http://news.163.com/special/00011K6L/rss_hotnews.xml");
+		b.setName("缃戞槗娣卞害鏂伴椈");
 		list.add(a);
 		list.add(b);
 
@@ -140,6 +154,30 @@ public class AppData {
 
 	public String toString() {
 		return "[APPDATA] scr: " + scrWidth + " X " + scrHeight;
+	}
+
+	public List<PredefinedCategory> getPdCategoryList() {
+		return pdCategoryList;
+	}
+
+	public void setPdCategoryList(List<PredefinedCategory> pdCategoryList) {
+		this.pdCategoryList = pdCategoryList;
+	}
+
+	public Map<String, String> getPdCategoryMap() {
+		return pdCategoryMap;
+	}
+
+	public void setPdCategoryMap(Map<String, String> pdCategoryMap) {
+		this.pdCategoryMap = pdCategoryMap;
+	}
+
+	public List<PredefinedCollectionItem> getPdCiList() {
+		return pdCiList;
+	}
+
+	public void setPdCiList(List<PredefinedCollectionItem> pdCiList) {
+		this.pdCiList = pdCiList;
 	}
 
 }

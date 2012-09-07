@@ -3,6 +3,7 @@ package info.realjin.newsintime.activity;
 import info.realjin.newsintime.NewsInTimeApp;
 import info.realjin.newsintime.R;
 import info.realjin.newsintime.anim.LongTextMovingAnimation;
+import info.realjin.newsintime.dao.CollectionDao;
 import info.realjin.newsintime.domain.AppConfig;
 import info.realjin.newsintime.domain.Collection;
 import info.realjin.newsintime.view.VerticalListView;
@@ -215,12 +216,13 @@ public class MainActivity extends Activity {
 					((LinearLayout) vPwCols).addView(lvCols);
 
 					// = (ListView) vPwCols.findViewById(R.id.lvCols);
-					// ¼ÓÔØÊý¾Ý
+					// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					// List<String> collNames = new ArrayList<String>();
 
 					// load collection data from database
 					NewsInTimeApp app = (NewsInTimeApp) getApplication();
-					List<Collection> colls = app.getData().getCollectionList();
+					CollectionDao dao = app.getDbmService().getCollectionDao();
+					List<Collection> colls = dao.getAllCollectionsWithItems();
 					// for (Collection coll : colls) {
 					// collNames.add(coll.getName());
 					// }
@@ -261,21 +263,21 @@ public class MainActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		/*
 		 * 
-		 * add()·½·¨µÄËÄ¸ö²ÎÊý£¬ÒÀ´ÎÊÇ£º
+		 * add()ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç£ï¿½
 		 * 
-		 * 1¡¢×é±ð£¬Èç¹û²»·Ö×éµÄ»°¾ÍÐ´Menu.NONE,
+		 * 1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½Ð´Menu.NONE,
 		 * 
-		 * 2¡¢Id£¬Õâ¸öºÜÖØÒª£¬Android¸ù¾ÝÕâ¸öIdÀ´È·¶¨²»Í¬µÄ²Ëµ¥
+		 * 2ï¿½ï¿½Idï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½Androidï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Idï¿½ï¿½È·ï¿½ï¿½ï¿½ï¿½Í¬ï¿½Ä²Ëµï¿½
 		 * 
-		 * 3¡¢Ë³Ðò£¬ÄÇ¸ö²Ëµ¥ÏÖÔÚÔÚÇ°ÃæÓÉÕâ¸ö²ÎÊýµÄ´óÐ¡¾ö¶¨
+		 * 3ï¿½ï¿½Ë³ï¿½ï¿½ï¿½Ç¸ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½
 		 * 
-		 * 4¡¢ÎÄ±¾£¬²Ëµ¥µÄÏÔÊ¾ÎÄ±¾
+		 * 4ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½Ä±ï¿½
 		 */
 
 		menu.add(Menu.NONE, Menu.FIRST + 1, 1, "Edit Collection").setIcon(
 				android.R.drawable.ic_menu_edit);
-		// setIcon()·½·¨Îª²Ëµ¥ÉèÖÃÍ¼±ê£¬ÕâÀïÊ¹ÓÃµÄÊÇÏµÍ³×Ô´øµÄÍ¼±ê£¬Í¬Ñ§ÃÇÁôÒâÒ»ÏÂ,ÒÔ
-		// android.R¿ªÍ·µÄ×ÊÔ´ÊÇÏµÍ³Ìá¹©µÄ£¬ÎÒÃÇ×Ô¼ºÌá¹©µÄ×ÊÔ´ÊÇÒÔR¿ªÍ·µÄ
+		// setIcon()ï¿½ï¿½ï¿½ï¿½Îªï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ê£¬ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ãµï¿½ï¿½ï¿½ÏµÍ³ï¿½Ô´ï¿½ï¿½Í¼ï¿½ê£¬Í¬Ñ§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½,ï¿½ï¿½
+		// android.Rï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ÏµÍ³ï¿½á¹©ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½á¹©ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½Rï¿½ï¿½Í·ï¿½ï¿½
 		menu.add(Menu.NONE, Menu.FIRST + 2, 2, "Play").setIcon(
 				android.R.drawable.ic_media_play);
 		menu.add(Menu.NONE, Menu.FIRST + 3, 5, "Menu3").setIcon(
