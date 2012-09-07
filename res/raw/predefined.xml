@@ -1,0 +1,14 @@
+<predefined>
+	<category-list>
+		<category id="cn.general">综合</category>
+	</category-list>
+	<ci-list>
+		<ci url="http://news.qq.com/newsgn/rss_newsgn.xml" category="cn.general">
+			<name>腾讯国内新闻</name>
+		</ci>
+		<ci url="http://news.163.com/special/00011K6L/rss_hotnews.xml"
+			category="cn.general">
+			<name>网易深度新闻</name>
+		</ci>
+	</ci-list>
+</predefined>
