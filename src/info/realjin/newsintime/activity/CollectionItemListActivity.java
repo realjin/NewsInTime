@@ -1,5 +1,6 @@
 package info.realjin.newsintime.activity;
 
+import info.realjin.newsintime.Constants;
 import info.realjin.newsintime.NewsInTimeApp;
 import info.realjin.newsintime.R;
 import info.realjin.newsintime.dao.CollectionDao;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -69,18 +71,20 @@ public class CollectionItemListActivity extends Activity {
 		NewsInTimeApp app = (NewsInTimeApp) getApplication();
 
 		// set listener
-		ImageButton btAdd = (ImageButton) findViewById(R.id.collectionlistitem_btadd);
+		ImageButton btAdd = (ImageButton) findViewById(R.id.collectionlistitem_btaddselect);
 		btAdd.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				// ((NewsInTimeApp)
 				// getApplication().putMessage(AppMessage.MSG_CILACT_CIACT_COLL,
 				// );
 
-				Intent intent = new Intent(CollectionItemListActivity.this,
-						CollectionItemActivity.class);
-				intent.putExtra("collId", currentCollId);
-				CollectionItemListActivity.this.startActivityForResult(intent,
-						200);
+				// Intent intent = new Intent(CollectionItemListActivity.this,
+				// CollectionItemActivity.class);
+				showDialog(Constants.DIALOGID_CISELECT);
+
+				// intent.putExtra("collId", currentCollId);
+				// CollectionItemListActivity.this.startActivityForResult(intent,
+				// 200);
 			}
 		});
 
@@ -102,8 +106,8 @@ public class CollectionItemListActivity extends Activity {
 			AppData data = app.getData();
 			CollectionDao dao = app.getDbmService().getCollectionDao();
 			Collection c = dao.getCollectionWithItems(currentCollId);
-//			Collection c = dao.getCollectionById(currentCollId,
-//					data.getCollectionList());
+			// Collection c = dao.getCollectionById(currentCollId,
+			// data.getCollectionList());
 
 			// change title
 			TextView tvTitle = (TextView) findViewById(R.id.collectionlistitem_title);
@@ -177,18 +181,19 @@ public class CollectionItemListActivity extends Activity {
 				}
 			}
 		});
-//		ImageButton btCancel = (ImageButton) findViewById(R.id.collectionlistitem_btcancel);
+		// ImageButton btCancel = (ImageButton)
+		// findViewById(R.id.collectionlistitem_btcancel);
 
 	}
 
-//	public void onBackPressed() {
-//	   Log.e("CIL Activity", "onBackPressed Called");
-//	   Intent setIntent = new Intent(Intent.ACTION_MAIN);
-//	   setIntent.addCategory(Intent.CATEGORY_HOME);
-//	   setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//	   startActivity(setIntent);
-//	}
-	
+	// public void onBackPressed() {
+	// Log.e("CIL Activity", "onBackPressed Called");
+	// Intent setIntent = new Intent(Intent.ACTION_MAIN);
+	// setIntent.addCategory(Intent.CATEGORY_HOME);
+	// setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	// startActivity(setIntent);
+	// }
+
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
@@ -210,7 +215,7 @@ public class CollectionItemListActivity extends Activity {
 		NewsInTimeApp app = (NewsInTimeApp) getApplication();
 		CollectionItem newCi = (CollectionItem) app
 				.getMessage(AppMessage.MSG_CIACT_CILACT_NEWCOLLITEM);
-		if(newCi==null){
+		if (newCi == null) {
 			return;
 		}
 
@@ -237,6 +242,18 @@ public class CollectionItemListActivity extends Activity {
 		Bundle bundle = data.getExtras();
 
 		Log.e("OOOOOOOO", "onActivityResult");
+	}
+
+	protected Dialog onCreateDialog(int id) {
+		Dialog dialog;
+		switch (id) {
+		case Constants.DIALOGID_CISELECT:
+			dialog = new CollectionItemSelectDialog(this);
+			break;
+		default:
+			dialog = null;
+		}
+		return dialog;
 	}
 
 }

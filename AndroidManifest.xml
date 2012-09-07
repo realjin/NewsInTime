@@ -29,6 +29,9 @@
         <activity
             android:name=".activity.CollectionItemActivity"
             android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name=".activity.CollectionItemSelectActivity"
+            android:theme="@android:style/Theme.NoTitleBar" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

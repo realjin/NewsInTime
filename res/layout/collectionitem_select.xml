@@ -3,20 +3,31 @@
 	android:id="@+id/collectionitem_select_llRoot" android:layout_width="fill_parent"
 	android:layout_height="fill_parent" android:background="#e1e1e1"
 	android:orientation="vertical" android:scrollbars="vertical">
+
+	<LinearLayout android:orientation="vertical"
+		android:layout_width="fill_parent" android:layout_height="wrap_content">
+		<TextView android:id="@+id/collectionitem_select_tvTitle"
+			android:paddingRight="8dip" android:paddingLeft="8dip"
+			android:layout_width="wrap_content" android:textColor="#FF0000"
+			android:text="New source" android:textSize="20dp"
+			android:layout_height="wrap_content" />
+	</LinearLayout>
+
+
 	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:id="@+id/collectionitem_select_rlTop" android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:background="#e1e1e1"
-		android:orientation="vertical">
+		android:layout_height="wrap_content" android:background="#e1e1e1"
+		android:orientation="horizontal">
 		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 			android:id="@+id/collectionitem_select_llSelect"
-			android:layout_width="fill_parent" android:layout_height="fill_parent"
-			android:background="#e1e1e1" android:orientation="vertical"
-			android:scrollbars="vertical">
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:background="#e1e1e1" android:orientation="horizontal"
+			android:scrollbars="vertical" android:layout_centerHorizontal="true">
 			<TextView android:id="@+id/collectionitem_select_tvType"
-				android:layout_width="fill_parent" android:layout_height="wrap_content"
-				android:text="aaaa" />
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:text="type " />
 			<Spinner android:id="@+id/collectionitem_select_spnType"
-				android:layout_width="fill_parent" android:layout_height="wrap_content" />
+				android:layout_width="wrap_content" android:layout_height="wrap_content" />
 		</LinearLayout>
 	</RelativeLayout>
 	<ListView android:id="@+id/collectionitem_select_lv"
