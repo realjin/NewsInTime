@@ -102,14 +102,15 @@ public class CollectionItemSelectDialog extends Dialog {
 				newCi.setName(ci.getName());
 				newCi.setUrl(ci.getUrl());
 
-//				NewsInTimeApp app = (NewsInTimeApp) ((activity)
-//						.getApplication());
+				// NewsInTimeApp app = (NewsInTimeApp) ((activity)
+				// .getApplication());
 				// put message before finish
-//				app.putMessage(AppMessage.MSG_CIACT_CILACT_NEWCOLLITEM, newCi);
+				// app.putMessage(AppMessage.MSG_CIACT_CILACT_NEWCOLLITEM,
+				// newCi);
 
 				CollectionItemSelectDialog.this.dismiss();
 				activity.onCollectionItemSelectDialogReturn(newCi);
-				
+
 			}
 		});
 	}
@@ -228,7 +229,7 @@ class CollectionItemCategoryAdapter extends ArrayAdapter<PredefinedCategory> {
 		}
 
 		((TextView) convertView).setWidth(60);
-		((TextView) convertView).setTextColor(Color.RED);
+		((TextView) convertView).setTextColor(Color.BLACK);
 		((TextView) convertView).setText(c.getName());
 		convertView.setTag(c);
 
