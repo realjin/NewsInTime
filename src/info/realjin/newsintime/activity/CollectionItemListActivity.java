@@ -5,7 +5,6 @@ import info.realjin.newsintime.NewsInTimeApp;
 import info.realjin.newsintime.R;
 import info.realjin.newsintime.dao.CollectionDao;
 import info.realjin.newsintime.domain.AppData;
-import info.realjin.newsintime.domain.AppMessage;
 import info.realjin.newsintime.domain.Collection;
 import info.realjin.newsintime.domain.CollectionItem;
 
@@ -124,7 +123,7 @@ public class CollectionItemListActivity extends Activity {
 			operation = Operation.ADD;
 			// change title
 			TextView tvTitle = (TextView) findViewById(R.id.collectionlistitem_title);
-			tvTitle.setText("Add new");
+			tvTitle.setText("New collection");
 
 			// change rename filed
 			etName.setText("");
@@ -137,7 +136,7 @@ public class CollectionItemListActivity extends Activity {
 					new ArrayList<CollectionItem>());
 		}
 
-		// ÊµÀý»¯ÁÐ±íÊÓÍ¼
+		// Êµï¿½ï¿½ï¿½Ð±ï¿½ï¿½ï¿½Í¼
 		ListView listView = (ListView) findViewById(R.id.collectionlistitem_lv);
 		listView.setAdapter(adapter);
 		listView.setItemsCanFocus(false);
@@ -147,7 +146,7 @@ public class CollectionItemListActivity extends Activity {
 					int position, long id) {
 				CollectionListItemViewHolder vHollder = (CollectionListItemViewHolder) view
 						.getTag();
-				// ÔÚÃ¿´Î»ñÈ¡µã»÷µÄitemÊ±½«¶ÔÓÚµÄcheckbox×´Ì¬¸Ä±ä£¬Í¬Ê±ÐÞ¸ÄmapµÄÖµ¡£
+				// ï¿½ï¿½Ã¿ï¿½Î»ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½itemÊ±ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½checkbox×´Ì¬ï¿½Ä±ä£¬Í¬Ê±ï¿½Þ¸ï¿½mapï¿½ï¿½Öµï¿½ï¿½
 				vHollder.cBox.toggle();
 				CollectionListItemAdapter.isSelected.put(position,
 						vHollder.cBox.isChecked());
@@ -194,53 +193,22 @@ public class CollectionItemListActivity extends Activity {
 	// startActivity(setIntent);
 	// }
 
+	public void onCollectionItemSelectDialogReturn(CollectionItem newCi) {
+		newColl.getItems().add(newCi);
+
+		// refresh listview using cache
+		ListView listView = (ListView) findViewById(R.id.collectionlistitem_lv);
+		// Log.e("0830", "listview=" + listView);
+		CollectionListItemAdapter adapter = (CollectionListItemAdapter) listView
+				.getAdapter();
+		// Log.e("0830", "adapter=" + adapter);
+		// Log.e("0830", "newColl=" + newColl);
+		adapter.setCollitems(newColl.getItems());
+		adapter.notifyDataSetChanged();
+	}
+
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
-		// if (requestCode == REQUEST_CODE) {
-		// if (resultCode == RESULT_CANCELED)
-		// setTitle("cancle");
-		// else if (resultCode == RESULT_OK) {
-		// String temp = null;
-		// Bundle bundle = data.getExtras();
-		// if (bundle != null)
-		// temp = bundle.getString("name");
-		// setTitle(temp);
-		// }
-		// }
-
-		// TODO: check if from back button!
-
-		// TODO: check result code!
-		NewsInTimeApp app = (NewsInTimeApp) getApplication();
-		CollectionItem newCi = (CollectionItem) app
-				.getMessage(AppMessage.MSG_CIACT_CILACT_NEWCOLLITEM);
-		if (newCi == null) {
-			return;
-		}
-
-		if (operation == Operation.ADD) {
-			// update cache
-			newColl.getItems().add(newCi);
-
-			// refresh listview using cache
-			ListView listView = (ListView) findViewById(R.id.collectionlistitem_lv);
-			Log.e("0830", "listview=" + listView);
-			CollectionListItemAdapter adapter = (CollectionListItemAdapter) listView
-					.getAdapter();
-			Log.e("0830", "adapter=" + adapter);
-			Log.e("0830", "newColl=" + newColl);
-			adapter.setCollitems(newColl.getItems());
-			adapter.notifyDataSetChanged();
-
-		} else if (operation == Operation.UPDATE) {
-			// cache toadd
-			toAddCi.add(newCi);
-
-		}
-
-		Bundle bundle = data.getExtras();
-
 		Log.e("OOOOOOOO", "onActivityResult");
 	}
 
@@ -286,7 +254,7 @@ class CollectionListItemAdapter extends BaseAdapter {
 		CollectionItem ci = collitems.get(position);
 
 		CollectionListItemViewHolder holder = null;
-		// convertViewÎªnullµÄÊ±ºò³õÊ¼»¯convertView¡£
+		// convertViewÎªnullï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½convertViewï¿½ï¿½
 		if (convertView == null) {
 			holder = new CollectionListItemViewHolder();
 			convertView = mInflater.inflate(
@@ -341,7 +309,7 @@ class CollectionListItemAdapter extends BaseAdapter {
 		// holder.img.setBackgroundResource((Integer) colls.get(position).get(
 		// "img"));
 
-		holder.title.setText(ci.getUrl());
+		holder.title.setText(ci.getName());
 
 		// holder.cBox.setChecked(isSelected.get(position));
 		return convertView;

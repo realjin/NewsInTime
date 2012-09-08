@@ -18,3 +18,9 @@ when news retrieving, pressing "play" will cause the app crash!
 
 *** clist edit button --- see android call history "call" button (splitter and transparent button)
 **** collitem no selection return bug
+
+**** bug: item select dialog data null or duplicated if press home and return back
+
+**** item select dialog: multiple selection/"all in one category"  selection
+
+*** collection modify: delete col item

@@ -3,6 +3,7 @@ package info.realjin.newsintime.activity;
 import info.realjin.newsintime.NewsInTimeApp;
 import info.realjin.newsintime.R;
 import info.realjin.newsintime.domain.AppData;
+import info.realjin.newsintime.domain.AppMessage;
 import info.realjin.newsintime.domain.CollectionItem;
 import info.realjin.newsintime.domain.PredefinedCategory;
 import info.realjin.newsintime.domain.PredefinedCollectionItem;
@@ -13,13 +14,16 @@ import java.util.Map;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -27,16 +31,16 @@ import android.widget.TextView;
 
 public class CollectionItemSelectDialog extends Dialog {
 
-	private Context ctx;
+	// private Context ctx;
+	private CollectionItemListActivity activity;
 
-	public CollectionItemSelectDialog(Context context) {
-		super(context);
-		this.ctx = context;
+	public CollectionItemSelectDialog(CollectionItemListActivity a) {
+		super(a);
+		this.activity = a;
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.collectionitem_select);
 
-		NewsInTimeApp app = (NewsInTimeApp) (((Activity) context)
-				.getApplication());
+		NewsInTimeApp app = (NewsInTimeApp) (a.getApplication());
 		AppData data = app.getData();
 
 		// setTitle("New source");
@@ -45,14 +49,13 @@ public class CollectionItemSelectDialog extends Dialog {
 		Spinner spnCat = (Spinner) findViewById(R.id.collectionitem_select_spnCategory);
 
 		CollectionItemCategoryAdapter spnCatAdapter = new CollectionItemCategoryAdapter(
-				context, data.getPdCategoryList());
+				a, data.getPdCategoryList());
 		spnCat.setAdapter(spnCatAdapter);
 		spnCat.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			public void onItemSelected(AdapterView<?> adapterView, View v,
 					int position, long id) {
-				NewsInTimeApp app = (NewsInTimeApp) (((Activity) ctx)
-						.getApplication());
+				NewsInTimeApp app = (NewsInTimeApp) (activity.getApplication());
 				AppData data = app.getData();
 
 				// TextView tv = (TextView)v;
@@ -73,15 +76,7 @@ public class CollectionItemSelectDialog extends Dialog {
 					Log.e("spnCat onItemSelected ", "pdcat is null");
 
 				}
-				// Log.e("view class=", v.getClass().getCanonicalName());
 
-				// // Here you get the current item (a User object) that is
-				// // selected by its position
-				// User user = adapter.getItem(position);
-				// // Here you can do the action you want to...
-				// Toast.makeText(Main.this,
-				// "ID: " + user.getId() + "\nName: " + user.getName(),
-				// Toast.LENGTH_SHORT).show();
 			}
 
 			public void onNothingSelected(AdapterView<?> adapter) {
@@ -89,14 +84,34 @@ public class CollectionItemSelectDialog extends Dialog {
 		});
 
 		// 2. config listview
-
 		// add listview
 		CollectionItemSelectAdapter adapter = new CollectionItemSelectAdapter(
-				context, data.getPredefinedCollectionItemList());
+				activity, data.getPredefinedCollectionItemList());
 		ListView lv = (ListView) findViewById(R.id.collectionitem_select_lv);
 		lv.setAdapter(adapter);
 		lv.setItemsCanFocus(false);
-		lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		lv.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View v,
+					int position, long id) {
+				CollectionItemSelectViewHolder vHolder = (CollectionItemSelectViewHolder) v
+						.getTag();
+				CollectionItem ci = vHolder.collItem;
+
+				CollectionItem newCi = new CollectionItem();
+				newCi.setName(ci.getName());
+				newCi.setUrl(ci.getUrl());
+
+//				NewsInTimeApp app = (NewsInTimeApp) ((activity)
+//						.getApplication());
+				// put message before finish
+//				app.putMessage(AppMessage.MSG_CIACT_CILACT_NEWCOLLITEM, newCi);
+
+				CollectionItemSelectDialog.this.dismiss();
+				activity.onCollectionItemSelectDialogReturn(newCi);
+				
+			}
+		});
 	}
 }
 
@@ -170,13 +185,14 @@ final class CollectionItemSelectViewHolder {
 	public CollectionItem collItem;
 }
 
-class CollectionItemCategoryAdapter extends BaseAdapter {
+class CollectionItemCategoryAdapter extends ArrayAdapter<PredefinedCategory> {
 	private LayoutInflater mInflater;
 	private List<PredefinedCategory> pdCats;
 	public static Map<Integer, Boolean> isSelected;
 	private Context context;
 
 	public CollectionItemCategoryAdapter(Context ctx, List<PredefinedCategory> c) {
+		super(ctx, android.R.layout.simple_spinner_item, c);
 		this.context = ctx;
 		this.pdCats = c;
 		Log.e("CollectionItemSelectDialog CollectionItemCategoryAdapter, size=",
@@ -188,7 +204,7 @@ class CollectionItemCategoryAdapter extends BaseAdapter {
 		return pdCats.size();
 	}
 
-	public Object getItem(int position) {
+	public PredefinedCategory getItem(int position) {
 		return null;
 	}
 
@@ -211,8 +227,33 @@ class CollectionItemCategoryAdapter extends BaseAdapter {
 			// holder = (CollectionItemSelectViewHolder) convertView.getTag();
 		}
 
+		((TextView) convertView).setWidth(60);
+		((TextView) convertView).setTextColor(Color.RED);
 		((TextView) convertView).setText(c.getName());
 		convertView.setTag(c);
+
+		return convertView;
+	}
+
+	public View getDropDownView(int position, View convertView, ViewGroup parent) {
+		PredefinedCategory c = pdCats.get(position);
+
+		if (convertView == null) {
+			convertView = mInflater.inflate(
+					R.layout.collectionitem_select_spinner_dropdown, null);
+		} else {
+		}
+
+		TextView tv = (TextView) convertView.findViewById(R.id.label);
+		tv.setText(c.getName());
+		// label.setText(getItem(position));
+
+		// if (spinner.getSelectedItemPosition() == position) {
+		// label.setTextColor(getResources().getColor(R.color.selected_fg));
+		// view.setBackgroundColor(getResources()
+		// .getColor(R.color.selected_bg));
+		// view.findViewById(R.id.icon).setVisibility(View.VISIBLE);
+		// }
 
 		return convertView;
 	}

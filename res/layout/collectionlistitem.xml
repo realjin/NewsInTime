@@ -25,22 +25,16 @@
 			android:id="@+id/buttonlayout2" android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:layout_gravity="right|center_vertical"
 			android:gravity="right" android:orientation="horizontal">
-
-
 			<ImageButton android:id="@+id/collectionlistitem_btsave"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:background="@android:color/transparent" android:src="@drawable/yes_64x32_blue">
 			</ImageButton>
-
-
-
-
 		</LinearLayout>
 	</LinearLayout>
 
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:id="@+id/collectionlistitem_llname" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:background="#FF0000"
+		android:layout_height="wrap_content" android:background="@android:color/transparent"
 		android:gravity="left|top" android:height="32dp" android:orientation="horizontal">
 		<EditText android:id="@+id/collectionlistitem_etname"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
