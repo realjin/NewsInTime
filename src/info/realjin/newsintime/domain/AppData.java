@@ -2,7 +2,6 @@ package info.realjin.newsintime.domain;
 
 import info.realjin.newsintime.NewsInTimeApp;
 import info.realjin.newsintime.dao.CollectionDao;
-import info.realjin.newsintime.service.PredefinedDataManagerService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -109,6 +108,18 @@ public class AppData {
 
 	public List<PredefinedCollectionItem> getPredefinedCollectionItemList() {
 		return pdCiList;
+	}
+
+	public List<PredefinedCollectionItem> getPredefinedCollectionItemListByCat(
+			String catId) {
+		List<PredefinedCollectionItem> listByCat = new ArrayList<PredefinedCollectionItem>();
+		for (PredefinedCollectionItem ci : pdCiList) {
+			if (ci.getCategoryId().equals(catId)) {
+				listByCat.add(ci);
+			}
+		}
+
+		return listByCat;
 	}
 
 	// proxy methods

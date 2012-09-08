@@ -6,6 +6,7 @@ import info.realjin.newsintime.domain.AppData;
 import info.realjin.newsintime.domain.PredefinedCategory;
 import info.realjin.newsintime.domain.PredefinedCollectionItem;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
@@ -40,6 +41,11 @@ public class PredefinedDataManagerService {
 		Log.e("PredefinedDataManagerService", "000");
 
 		AppData data = app.getData();
+		// clear
+		data.getPdCategoryMap().clear();
+		data.getPdCategoryList().clear();
+		data.getPdCiList().clear();
+
 		InputStream is = app.getResources().openRawResource(R.raw.predefined);
 		try {
 			if (is == null) {
@@ -86,6 +92,12 @@ public class PredefinedDataManagerService {
 				data.getPdCiList().add(ci);
 			}
 			loaded = true;
+
+			try {
+				is.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
 		} catch (DocumentException e) {
 			data.getPdCiList().clear();

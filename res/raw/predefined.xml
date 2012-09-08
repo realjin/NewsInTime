@@ -1,6 +1,7 @@
 <predefined>
 	<category-list>
 		<category id="cn.general">综合</category>
+		<category id="cn.sports">体育</category>
 	</category-list>
 	<ci-list>
 		<ci url="http://news.qq.com/newsgn/rss_newsgn.xml" category="cn.general">
@@ -9,6 +10,14 @@
 		<ci url="http://news.163.com/special/00011K6L/rss_hotnews.xml"
 			category="cn.general">
 			<name>网易深度新闻</name>
+		</ci>
+		<ci url="http://rss.sina.com.cn/roll/sports/hot_roll.xml"
+			category="cn.sports">
+			<name>新浪体育新闻</name>
+		</ci>
+		<ci url="http://rss.sina.com.cn/sports/global/focus.xml"
+			category="cn.sports">
+			<name>新浪国际足坛</name>
 		</ci>
 	</ci-list>
 </predefined>
