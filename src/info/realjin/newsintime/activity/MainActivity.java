@@ -52,9 +52,10 @@ public class MainActivity extends Activity {
 	private View vPwCols;
 	// TODO: no calc!!!
 	int colSelectorWidth;// = 300;
-	int colSelectorHeight = 400;
+	int colSelectorHeight = 50;
 	int colSelectorLeft = 125;
 	int colSelectorTop = 390;
+	final int colSelectorTextPadding = 20;
 
 	//
 	// private Button btPlay;
@@ -162,12 +163,17 @@ public class MainActivity extends Activity {
 			final TextView tvColSel = new VerticalTextView(this);
 			tvColSel.setText(colls.get(0).getName());
 			tvColSel.setTextSize(28.0f);
+			// TODO: heuristic! may be not correct under certain circumstance!
+			tvColSel.setPadding(5, -10, 0, 0);
+
 			// tvColSel.setInputType(InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
 			RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
 					new ViewGroup.MarginLayoutParams(
 							RelativeLayout.LayoutParams.FILL_PARENT,
 							RelativeLayout.LayoutParams.FILL_PARENT));
-			lp.setMargins(0, 0, 0, 0);
+			lp.addRule(RelativeLayout.CENTER_IN_PARENT, 0); // or -1
+			// lp.setMargins(0, colSelectorTextPadding, 0,
+			// colSelectorTextPadding);
 			tvColSel.setLayoutParams(lp);
 			// TextView tvColSel = (TextView) colSelectorView
 			// .findViewById(R.id.tvTest1);
@@ -180,14 +186,15 @@ public class MainActivity extends Activity {
 					v.setVisibility(View.GONE);
 
 					// 2.
-
 					LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 					vPwCols = layoutInflater.inflate(R.layout.colselector_menu,
 							null);
+					
 
 					AdapterView lvCols;
 					lvCols = new VerticalListView(MainActivity.this);
+					
 					AdapterView.OnItemClickListener lvColsOnItemClickListener = new AdapterView.OnItemClickListener() {
 						public void onItemClick(AdapterView<?> adapter,
 								View arg1, int position, long id) {
@@ -259,10 +266,11 @@ public class MainActivity extends Activity {
 			for (Collection col : colls) {
 				mw = tvColSel.getPaint().measureText(col.getName());
 				if (mw > wLongestColName) {
+					wLongestColName = mw;
 					colLongestColName = col;
 				}
 			}
-			colSelectorWidth = (int) (mw + 2);
+			colSelectorWidth = (int) (wLongestColName + 2 * colSelectorTextPadding);
 
 			// prepare colsel view
 			LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -270,7 +278,8 @@ public class MainActivity extends Activity {
 			colSelectorView = layoutInflater
 					.inflate(R.layout.colselector, null);
 
-			colSelector = new PopupWindow(colSelectorView, 30, colSelectorWidth);
+			colSelector = new PopupWindow(colSelectorView, colSelectorHeight,
+					colSelectorWidth);
 			colSelector.setBackgroundDrawable(new BitmapDrawable());
 			colSelector.setOutsideTouchable(true);
 			colSelector.setFocusable(true);
