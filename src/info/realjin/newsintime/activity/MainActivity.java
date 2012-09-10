@@ -51,9 +51,9 @@ public class MainActivity extends Activity {
 	private PopupWindow pwCols;
 	private View vPwCols;
 	// TODO: no calc!!!
-	int colSelectorWidth = 300;
+	int colSelectorWidth;// = 300;
 	int colSelectorHeight = 400;
-	int colSelectorLeft = 25;
+	int colSelectorLeft = 125;
 	int colSelectorTop = 390;
 
 	//
@@ -143,22 +143,24 @@ public class MainActivity extends Activity {
 	}
 
 	private void showColSelector() {
+		// load collection data from database
+		NewsInTimeApp app = (NewsInTimeApp) getApplication();
+		CollectionDao dao = app.getDbmService().getCollectionDao();
+		List<Collection> colls = dao.getAllCollectionsWithItems();
+
+		// check if there is any collection loaded
+		if (colls == null || colls.size() == 0) {
+			Log.e("===MainActivity===", "showColSelector: coll empty!");
+			return;
+			// TODO: show "NULL" text selector which is disabled(just a view)
+		}
 
 		if (colSelector == null) {
 			Log.d("===MainActivity===", "colSelector creating");
-			LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-			colSelectorView = layoutInflater
-					.inflate(R.layout.colselector, null);
-
-			colSelector = new PopupWindow(colSelectorView, colSelectorWidth,
-					colSelectorHeight);
-			colSelector.setBackgroundDrawable(new BitmapDrawable());
-			colSelector.setOutsideTouchable(true);
-			colSelector.setFocusable(true);
-
+			// prepare text
 			final TextView tvColSel = new VerticalTextView(this);
-			tvColSel.setText("collections");
+			tvColSel.setText(colls.get(0).getName());
 			tvColSel.setTextSize(28.0f);
 			// tvColSel.setInputType(InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
 			RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
@@ -219,14 +221,13 @@ public class MainActivity extends Activity {
 					// �������
 					// List<String> collNames = new ArrayList<String>();
 
-					// load collection data from database
-					NewsInTimeApp app = (NewsInTimeApp) getApplication();
-					CollectionDao dao = app.getDbmService().getCollectionDao();
-					List<Collection> colls = dao.getAllCollectionsWithItems();
 					// for (Collection coll : colls) {
 					// collNames.add(coll.getName());
 					// }
 
+					NewsInTimeApp app = (NewsInTimeApp) getApplication();
+					CollectionDao dao = app.getDbmService().getCollectionDao();
+					List<Collection> colls = dao.getAllCollectionsWithItems();
 					GroupAdapter groupAdapter = new GroupAdapter(
 							MainActivity.this, colls);
 					lvCols.setAdapter(groupAdapter);
@@ -251,7 +252,39 @@ public class MainActivity extends Activity {
 				}
 			});
 
+			// get longest colname
+			Collection colLongestColName;
+			float wLongestColName = 0;
+			float mw = 0;
+			for (Collection col : colls) {
+				mw = tvColSel.getPaint().measureText(col.getName());
+				if (mw > wLongestColName) {
+					colLongestColName = col;
+				}
+			}
+			colSelectorWidth = (int) (mw + 2);
+
+			// prepare colsel view
+			LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+			colSelectorView = layoutInflater
+					.inflate(R.layout.colselector, null);
+
+			colSelector = new PopupWindow(colSelectorView, 30, colSelectorWidth);
+			colSelector.setBackgroundDrawable(new BitmapDrawable());
+			colSelector.setOutsideTouchable(true);
+			colSelector.setFocusable(true);
+
+			// add tv to colsel view
 			// colSelector.showAsDropDown(llMain, 200, 200);
+			Log.e("===0910===", "tv mlen=" + tvColSel.getMeasuredWidth()
+					+ ", mheight=" + tvColSel.getMeasuredHeight());
+			Log.e("===0910===", "tv len=" + tvColSel.getWidth() + ", height="
+					+ tvColSel.getHeight());
+			Log.e("===0910===",
+					"tv measuretext.w="
+							+ tvColSel.getPaint().measureText(
+									tvColSel.getText().toString()));
 			((LinearLayout) colSelectorView).addView(tvColSel);
 		}
 		Log.d("===MainActivity===", "colSelector created");
