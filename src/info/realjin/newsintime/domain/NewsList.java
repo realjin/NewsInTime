@@ -67,10 +67,10 @@ public class NewsList {
 			// && d1.getHours() == d2.getHours()
 			// && d1.getMinutes() == d2.getMinutes()
 			// && d1.getSeconds() == d2.getSeconds()) {
-//			Log.e("===TEMP===", "dm=" + dm + ", dn=" + dn);
-//			Log.e("===TEMP===", "dn text=" + n.getText());
-//			Log.e("===TEMP===", "dmgettime=" + dm.getTime() + ", dngettime="
-//					+ dn.getTime());
+			// Log.e("===TEMP===", "dm=" + dm + ", dn=" + dn);
+			// Log.e("===TEMP===", "dn text=" + n.getText());
+			// Log.e("===TEMP===", "dmgettime=" + dm.getTime() + ", dngettime="
+			// + dn.getTime());
 			if (dm.getTime() == dn.getTime()) {
 				if (m.getSubid() > maxSubId) {
 					maxSubId = m.getSubid();
@@ -384,6 +384,9 @@ public class NewsList {
 
 	// ---- util methods
 	public static String newsListToString(List<News> nl) {
+		Log.e("===0910===", "nl =" + nl);
+		Log.e("===0910===", "nl size=" + nl.size());
+
 		StringBuilder sb = new StringBuilder();
 		for (News n : nl) {
 			sb.append(n.toString()).append(' ');

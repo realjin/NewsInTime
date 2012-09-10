@@ -57,7 +57,7 @@ public class NewsInTimeApp extends Application {
 				new CollectionItem(
 						"http://rss.sina.com.cn/news/marquee/ddt.xml"));
 		nrService = new NewsRetrieverService(data.getNewsList(), tempColl);
-		// nrService.start();
+		nrService.start();
 	}
 
 	public void notifyFirstActivityStart(MainActivity a) {

@@ -93,6 +93,7 @@ public class NewsRetrieverServiceThread implements Runnable {
 			}
 
 			// if source changed
+			Log.e("===NRS===", "loop()");
 
 		}
 		Log.e("===NRS===", "loop() end");
@@ -220,16 +221,16 @@ public class NewsRetrieverServiceThread implements Runnable {
 		public RSSHandler() {
 		}
 
-		// µ÷ÓÃË³Ðò¸ú´úÂëÎ»ÖÃÎÞ¹Ø
+		// ï¿½ï¿½ï¿½ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½Þ¹ï¿½
 		public RssFeed getFeed() {
 			return rssFeed;
 		}
 
-		// ¿ªÊ¼ÎÄµµÊ±µ÷ÓÃ
+		// ï¿½ï¿½Ê¼ï¿½Äµï¿½Ê±ï¿½ï¿½ï¿½ï¿½
 		public void startDocument() throws SAXException {
 //			System.out.println("startDocument");
 
-			// ÊµÀý»¯Á½¸ö¶ÔÏó
+			// Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			rssFeed = new RssFeed();
 			rssItem = new RssItem();
 		}
@@ -274,7 +275,7 @@ public class NewsRetrieverServiceThread implements Runnable {
 
 		public void endElement(String namespaceURI, String localName,
 				String qName) throws SAXException {
-			// Èç¹û½âÎöÒ»¸öitem½Úµã½áÊø£¬¾Í½«rssItemÌí¼Óµ½rssFeedÖÐ¡£
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½itemï¿½Úµï¿½ï¿½ï¿½ï¿½Í½ï¿½rssItemï¿½ï¿½Óµï¿½rssFeedï¿½Ð¡ï¿½
 			if (qName.equals("item")) {
 				rssFeed.addItem(rssItem);
 				return;
