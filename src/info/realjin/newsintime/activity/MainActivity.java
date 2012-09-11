@@ -53,10 +53,10 @@ public class MainActivity extends Activity {
 	private View vPwColSelectorMenu;
 
 	// TODO: no calc!!!
-	int colSelectorWidth;// = 300;
-	int colSelectorHeight = 50;
-	int colSelectorLeft = 125;
-	int colSelectorTop = 390;
+	int colSelectorBarWidth;// = 300;
+	int colSelectorBarHeight = 50;
+	int colSelectorBarLeft = 125;
+	int colSelectorBarTop = 390;
 	final int colSelectorTextPadding = 20;
 
 	//
@@ -85,6 +85,7 @@ public class MainActivity extends Activity {
 
 		tvMain = new VerticalTextView(this);
 		tvMain.setText("");
+		tvMain.setTextColor(0xfff12938);
 		tvMain.setTextSize(28.0f);
 		tvMain.setInputType(InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
 
@@ -149,11 +150,11 @@ public class MainActivity extends Activity {
 			Log.d("===MainActivity===", "colSelector creating");
 
 			// prepare text
-			final TextView tvColSel = new VerticalTextView(this);
-			tvColSel.setText(colls.get(0).getName());
-			tvColSel.setTextSize(28.0f);
+			final TextView tvColSelBar = new VerticalTextView(this);
+			tvColSelBar.setText(colls.get(0).getName());
+			tvColSelBar.setTextSize(28.0f);
 			// TODO: heuristic! may be not correct under certain circumstance!
-			tvColSel.setPadding(5, -10, 0, 0);
+			tvColSelBar.setPadding(5, -10, 0, 0);
 
 			// tvColSel.setInputType(InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
 			RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
@@ -163,34 +164,33 @@ public class MainActivity extends Activity {
 			lp.addRule(RelativeLayout.CENTER_IN_PARENT, 0); // or -1
 			// lp.setMargins(0, colSelectorTextPadding, 0,
 			// colSelectorTextPadding);
-			tvColSel.setLayoutParams(lp);
-			// TextView tvColSel = (TextView) colSelectorView
-			// .findViewById(R.id.tvTest1);
-			tvColSel.setOnClickListener(new OnClickListener() {
-
+			tvColSelBar.setLayoutParams(lp);
+			tvColSelBar.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					NewsInTimeApp app = (NewsInTimeApp) MainActivity.this.getApplication();
+					NewsInTimeApp app = (NewsInTimeApp) MainActivity.this
+							.getApplication();
 					AppConfig cfg = app.getConfig();
-					
+
 					Log.e("===MainActivity===", "tvCol onclick!");
 
 					// 1. hide this tv
 					v.setVisibility(View.GONE);
 
-					// 2.
+					// 2. create menu view
 					LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
 					vPwColSelectorMenu = layoutInflater.inflate(
 							R.layout.colselector_menu, null);
 					String strColorPwColSelectorMenu = cfg.getProperty(
-							AppConfig.CFGNAME_COLOR_BG_COLSELECTOR_MENU, "0xFFFFFF");
-					Integer colorPwColSelectorMenu = Integer.decode(strColorPwColSelectorMenu);
+							AppConfig.CFGNAME_COLOR_BG_COLSELECTOR_MENU,
+							"0xFFFFFF");
+					Integer colorPwColSelectorMenu = Integer
+							.decode(strColorPwColSelectorMenu);
 					vPwColSelectorMenu
 							.setBackgroundColor(0xFF000000 + colorPwColSelectorMenu);
 
-					AdapterView lvCols;
-					lvCols = new VerticalListView(MainActivity.this);
-
+					// 3. create menu listview
+					AdapterView lvColSelectorMenu;
+					lvColSelectorMenu = new VerticalListView(MainActivity.this);
 					AdapterView.OnItemClickListener lvColsOnItemClickListener = new AdapterView.OnItemClickListener() {
 						public void onItemClick(AdapterView<?> adapter,
 								View arg1, int position, long id) {
@@ -212,30 +212,25 @@ public class MainActivity extends Activity {
 
 						}
 					};
-					lvCols.setOnItemClickListener(lvColsOnItemClickListener);
-
+					lvColSelectorMenu.setOnItemClickListener(lvColsOnItemClickListener);
 					LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 							LinearLayout.LayoutParams.FILL_PARENT,
 							LinearLayout.LayoutParams.WRAP_CONTENT);
-					lvCols.setLayoutParams(lp);
-					((LinearLayout) vPwColSelectorMenu).addView(lvCols);
+					lvColSelectorMenu.setLayoutParams(lp);
+					
+					// 3. add menu listview to menu view
+					((LinearLayout) vPwColSelectorMenu).addView(lvColSelectorMenu);
 
-					// = (ListView) vPwCols.findViewById(R.id.lvCols);
-					// �������
-					// List<String> collNames = new ArrayList<String>();
-
-					// for (Collection coll : colls) {
-					// collNames.add(coll.getName());
-					// }
-
+					// 4. set menu listview data
 					CollectionDao dao = app.getDbmService().getCollectionDao();
 					List<Collection> colls = dao.getAllCollectionsWithItems();
 					GroupAdapter groupAdapter = new GroupAdapter(
 							MainActivity.this, colls);
-					lvCols.setAdapter(groupAdapter);
+					lvColSelectorMenu.setAdapter(groupAdapter);
 
+					// 5. create menu popup based on the menu view
 					pwColSelectorMenu = new PopupWindow(vPwColSelectorMenu,
-							colSelectorWidth - 5, colSelectorWidth - 5);
+							colSelectorBarWidth - 5, colSelectorBarWidth - 5);
 					pwColSelectorMenu
 							.setBackgroundDrawable(new BitmapDrawable());
 					pwColSelectorMenu.setOutsideTouchable(true);
@@ -244,17 +239,18 @@ public class MainActivity extends Activity {
 							.setOnDismissListener(new OnDismissListener() {
 
 								public void onDismiss() {
-									tvColSel.setVisibility(View.VISIBLE);
+									tvColSelBar.setVisibility(View.VISIBLE);
 								}
 							});
 
 					// Log.e("===VIEW===", "top="
 					// + colSelector.getContentView().getTop() + ", left="
 					// + colSelector.getContentView().getLeft());
-					pwColSelectorMenu
-							.showAtLocation(vPwColSelectorMenu,
-									Gravity.NO_GRAVITY, colSelectorLeft,
-									colSelectorTop);
+					
+					// 5. show menu popup
+					pwColSelectorMenu.showAtLocation(vPwColSelectorMenu,
+							Gravity.NO_GRAVITY, colSelectorBarLeft,
+							colSelectorBarTop);
 				}
 			});
 
@@ -263,47 +259,49 @@ public class MainActivity extends Activity {
 			float wLongestColName = 0;
 			float mw = 0;
 			for (Collection col : colls) {
-				mw = tvColSel.getPaint().measureText(col.getName());
+				mw = tvColSelBar.getPaint().measureText(col.getName());
 				if (mw > wLongestColName) {
 					wLongestColName = mw;
 					colLongestColName = col;
 				}
 			}
-			colSelectorWidth = (int) (wLongestColName + 2 * colSelectorTextPadding);
+			colSelectorBarWidth = (int) (wLongestColName + 2 * colSelectorTextPadding);
 
-			// prepare colsel view
+			// create bar view
 			LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 			vPwColSelectorBar = layoutInflater.inflate(
 					R.layout.colselector_bar, null);
 			String strColorPwColSelectorBar = cfg.getProperty(
 					AppConfig.CFGNAME_COLOR_BG_COLSELECTOR_BAR, "0xFFFFFF");
-			Integer colorPwColSelectorBar = Integer.decode(strColorPwColSelectorBar);
+			Integer colorPwColSelectorBar = Integer
+					.decode(strColorPwColSelectorBar);
 			vPwColSelectorBar
 					.setBackgroundColor(0xFF000000 + colorPwColSelectorBar);
 
+			// create bar popup
 			pwColSelectorBar = new PopupWindow(vPwColSelectorBar,
-					colSelectorHeight, colSelectorWidth);
+					colSelectorBarHeight, colSelectorBarWidth);
 			pwColSelectorBar.setBackgroundDrawable(new BitmapDrawable());
 			pwColSelectorBar.setOutsideTouchable(true);
 			pwColSelectorBar.setFocusable(true);
 
-			// add tv to colsel view
+			// add tv to bar view
 			// colSelector.showAsDropDown(llMain, 200, 200);
-			Log.e("===0910===", "tv mlen=" + tvColSel.getMeasuredWidth()
-					+ ", mheight=" + tvColSel.getMeasuredHeight());
-			Log.e("===0910===", "tv len=" + tvColSel.getWidth() + ", height="
-					+ tvColSel.getHeight());
+			Log.e("===0910===", "tv mlen=" + tvColSelBar.getMeasuredWidth()
+					+ ", mheight=" + tvColSelBar.getMeasuredHeight());
+			Log.e("===0910===", "tv len=" + tvColSelBar.getWidth()
+					+ ", height=" + tvColSelBar.getHeight());
 			Log.e("===0910===",
 					"tv measuretext.w="
-							+ tvColSel.getPaint().measureText(
-									tvColSel.getText().toString()));
-			((LinearLayout) vPwColSelectorBar).addView(tvColSel);
+							+ tvColSelBar.getPaint().measureText(
+									tvColSelBar.getText().toString()));
+			((LinearLayout) vPwColSelectorBar).addView(tvColSelBar);
 		}
 		Log.d("===MainActivity===", "colSelector created");
 		// TODO: no position calculation!!!
 		pwColSelectorBar.showAtLocation(vPwColSelectorBar, Gravity.NO_GRAVITY,
-				colSelectorLeft, colSelectorTop);
+				colSelectorBarLeft, colSelectorBarTop);
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -465,7 +463,7 @@ class GroupAdapter extends BaseAdapter {
 					AppConfig.CFGNAME_COLOR_TEXT_COLSELECTOR_MENU_ITEM_TV,
 					"0x000000");
 			Integer colorPwColSelector = Integer.decode(strColorTv);
-			tv.setTextColor(0xFF000000+colorPwColSelector);
+			tv.setTextColor(0xFF000000 + colorPwColSelector);
 			/*
 			 * TODO: mmmmmmmmmm what if total text height exceeds listview
 			 * height?
