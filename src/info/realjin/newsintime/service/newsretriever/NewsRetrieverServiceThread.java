@@ -86,7 +86,7 @@ public class NewsRetrieverServiceThread implements Runnable {
 			// }
 			// Thread.sleep(10 * 1000); // TODO: should be wait
 			synchronized (nrs) {
-				if (enabled) {
+				if (!enabled) {
 					break;
 				}
 				nrs.wait(10 * 1000);
@@ -136,8 +136,11 @@ public class NewsRetrieverServiceThread implements Runnable {
 		}
 		for (CollectionItem ci : c.getItems()) {
 			// TODO: !!!!!!!!!!!!!!!!!!!!!! no exception handling
+			// TODO: save log here
 			RssFeed rf = getFeedByUrl(ci.getUrl());
-			rfList.add(rf);
+			if (rf != null && rf.getAllItems().size() > 0) {
+				rfList.add(rf);
+			}
 		}
 
 		return rfList;
@@ -196,7 +199,7 @@ public class NewsRetrieverServiceThread implements Runnable {
 
 				feed.addItem(ri);
 
-//				System.out.println("==>" + e.element("title").getTextTrim());
+				// System.out.println("==>" + e.element("title").getTextTrim());
 			}
 
 			return feed;
@@ -228,7 +231,7 @@ public class NewsRetrieverServiceThread implements Runnable {
 
 		// ��ʼ�ĵ�ʱ����
 		public void startDocument() throws SAXException {
-//			System.out.println("startDocument");
+			// System.out.println("startDocument");
 
 			// ʵ����������
 			rssFeed = new RssFeed();

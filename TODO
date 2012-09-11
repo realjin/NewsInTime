@@ -27,3 +27,8 @@ when news retrieving, pressing "play" will cause the app crash!
 
 ***** predefined collist
 ***** no connection case
+***** offline/online, new news arriving notification
+
+***** switch col error
+***** colselector sync with current
+***** clickable tvmain(showing text of the target html)
