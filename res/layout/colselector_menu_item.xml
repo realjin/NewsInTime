@@ -2,13 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#e1e1e1"
+    android:background="@android:color/transparent"
     android:orientation="horizontal" >
 
     <View
-    android:layout_width="1dp"
+    android:layout_width="2dp"
     android:layout_height="fill_parent"
-    android:background="@android:color/darker_gray"/>
+    android:background="#e1e1e1"/>
 
     <!--
     <TextView

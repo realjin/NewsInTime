@@ -190,11 +190,10 @@ public class MainActivity extends Activity {
 
 					vPwCols = layoutInflater.inflate(R.layout.colselector_menu,
 							null);
-					
 
 					AdapterView lvCols;
 					lvCols = new VerticalListView(MainActivity.this);
-					
+
 					AdapterView.OnItemClickListener lvColsOnItemClickListener = new AdapterView.OnItemClickListener() {
 						public void onItemClick(AdapterView<?> adapter,
 								View arg1, int position, long id) {
@@ -220,7 +219,7 @@ public class MainActivity extends Activity {
 
 					LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 							LinearLayout.LayoutParams.FILL_PARENT,
-							LinearLayout.LayoutParams.FILL_PARENT);
+							LinearLayout.LayoutParams.WRAP_CONTENT);
 					lvCols.setLayoutParams(lp);
 					((LinearLayout) vPwCols).addView(lvCols);
 
@@ -455,7 +454,7 @@ class GroupAdapter extends BaseAdapter {
 			convertView.setTag(holder);
 
 			TextView tv = new VerticalTextView(viewGroup.getContext());
-			tv.setTextColor(Color.RED);
+			tv.setTextColor(0xffe1e1e1);
 			/*
 			 * TODO: mmmmmmmmmm what if total text height exceeds listview
 			 * height?
@@ -464,7 +463,9 @@ class GroupAdapter extends BaseAdapter {
 					.getApplication());
 			tv.setTextSize(Integer.parseInt(app.getConfig().get(
 					AppConfig.CFGNAME_UI_MAIN_COLSELECTOR_TEXTSIZE)));
-			((LinearLayout) convertView).addView(tv);
+			((LinearLayout) convertView).addView(tv,
+					LinearLayout.LayoutParams.WRAP_CONTENT,
+					LinearLayout.LayoutParams.FILL_PARENT);
 			holder.groupItem = tv;
 			// holder.groupItem = (TextView) convertView
 			// .findViewById(R.id.tvcolselector_menu_item);
