@@ -2,6 +2,8 @@ package info.realjin.newsintime.domain;
 
 import java.util.Properties;
 
+import android.util.Log;
+
 public class AppConfig {
 	private Properties props;
 
@@ -10,6 +12,7 @@ public class AppConfig {
 
 	// color config
 	public static final String CFGNAME_COLOR_BG_COLSELECTOR_BAR = "color.bg.colselector.bar";
+	public static final String CFGNAME_COLOR_BG_COLSELECTOR_MENU = "color.bg.colselector.menu";
 	public static final String CFGNAME_COLOR_TEXT_COLSELECTOR_MENU_ITEM_TV = "color.text.colselector.menu.item.tv";
 
 	// TODO: make sure every config has a default value when get!
@@ -21,15 +24,17 @@ public class AppConfig {
 
 	private void testLoadColorProperties() {
 		Properties colorProps = new Properties();
-		colorProps.setProperty(CFGNAME_COLOR_BG_COLSELECTOR_BAR, "0xff00aeef");
+		colorProps.setProperty(CFGNAME_COLOR_BG_COLSELECTOR_BAR, "0x00aeef");
+		colorProps.setProperty(CFGNAME_COLOR_BG_COLSELECTOR_MENU, "0x00aeef");
 		colorProps.setProperty(CFGNAME_COLOR_TEXT_COLSELECTOR_MENU_ITEM_TV,
-				"0xffe1e1e1");
+				"0xe1e1e1");
 		loadColorProperties(colorProps);
 	}
 
 	private void loadColorProperties(Properties colorProps) {
-		for (Object ok : props.keySet()) {
+		for (Object ok : colorProps.keySet()) {
 			String k = (String) ok;
+//			Log.e("KV", "k="+k+", v="+colorProps.getProperty(k));
 			props.setProperty(k, colorProps.getProperty(k));
 		}
 	}

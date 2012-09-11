@@ -66,7 +66,7 @@ public class LongTextMovingAnimation extends Animation {
 		scrHeight = app.getData().getScrHeight();
 
 		// init batch size from config
-		batchSize = Integer.parseInt(app.getConfig().get(
+		batchSize = Integer.parseInt(app.getConfig().getProperty(
 				AppConfig.CFGNAME_BATCHSIZE));
 
 		Log.i("===Animation===", "batchSize=" + batchSize);
@@ -103,9 +103,9 @@ public class LongTextMovingAnimation extends Animation {
 		String curLastText = nl.get(0).toString();
 		curNews = nl.get(nl.size() - 1);
 
-//		Log.e("===temp===", "tv=" + tv);
-//		Log.e("===temp===", "tv.getPaint=" + tv.getPaint());
-//		Log.e("===temp===", "curText=" + curText);
+		// Log.e("===temp===", "tv=" + tv);
+		// Log.e("===temp===", "tv.getPaint=" + tv.getPaint());
+		// Log.e("===temp===", "curText=" + curText);
 		curTextWidth = tv.getPaint().measureText(curText);
 
 		// calc initial positions

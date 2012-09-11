@@ -169,6 +169,9 @@ public class MainActivity extends Activity {
 			tvColSel.setOnClickListener(new OnClickListener() {
 
 				public void onClick(View v) {
+					NewsInTimeApp app = (NewsInTimeApp) MainActivity.this.getApplication();
+					AppConfig cfg = app.getConfig();
+					
 					Log.e("===MainActivity===", "tvCol onclick!");
 
 					// 1. hide this tv
@@ -179,6 +182,11 @@ public class MainActivity extends Activity {
 
 					vPwColSelectorMenu = layoutInflater.inflate(
 							R.layout.colselector_menu, null);
+					String strColorPwColSelectorMenu = cfg.getProperty(
+							AppConfig.CFGNAME_COLOR_BG_COLSELECTOR_MENU, "0xFFFFFF");
+					Integer colorPwColSelectorMenu = Integer.decode(strColorPwColSelectorMenu);
+					vPwColSelectorMenu
+							.setBackgroundColor(0xFF000000 + colorPwColSelectorMenu);
 
 					AdapterView lvCols;
 					lvCols = new VerticalListView(MainActivity.this);
@@ -220,7 +228,6 @@ public class MainActivity extends Activity {
 					// collNames.add(coll.getName());
 					// }
 
-					NewsInTimeApp app = (NewsInTimeApp) getApplication();
 					CollectionDao dao = app.getDbmService().getCollectionDao();
 					List<Collection> colls = dao.getAllCollectionsWithItems();
 					GroupAdapter groupAdapter = new GroupAdapter(
@@ -269,10 +276,11 @@ public class MainActivity extends Activity {
 
 			vPwColSelectorBar = layoutInflater.inflate(
 					R.layout.colselector_bar, null);
-			String strColorPwColSelector = cfg.getProperty(
-					AppConfig.CFGNAME_COLOR_BG_COLSELECTOR_BAR, "0xFFFFFFFF");
-			Integer colorPwColSelector = Integer.decode(strColorPwColSelector);
-			vPwColSelectorBar.setBackgroundColor(colorPwColSelector);
+			String strColorPwColSelectorBar = cfg.getProperty(
+					AppConfig.CFGNAME_COLOR_BG_COLSELECTOR_BAR, "0xFFFFFF");
+			Integer colorPwColSelectorBar = Integer.decode(strColorPwColSelectorBar);
+			vPwColSelectorBar
+					.setBackgroundColor(0xFF000000 + colorPwColSelectorBar);
 
 			pwColSelectorBar = new PopupWindow(vPwColSelectorBar,
 					colSelectorHeight, colSelectorWidth);
@@ -454,16 +462,17 @@ class GroupAdapter extends BaseAdapter {
 
 			TextView tv = new VerticalTextView(viewGroup.getContext());
 			String strColorTv = cfg.getProperty(
-					AppConfig.CFGNAME_COLOR_TEXT_COLSELECTOR_MENU_ITEM_TV, "0xFF000000");
+					AppConfig.CFGNAME_COLOR_TEXT_COLSELECTOR_MENU_ITEM_TV,
+					"0x000000");
 			Integer colorPwColSelector = Integer.decode(strColorTv);
-			tv.setTextColor(colorPwColSelector);
+			tv.setTextColor(0xFF000000+colorPwColSelector);
 			/*
 			 * TODO: mmmmmmmmmm what if total text height exceeds listview
 			 * height?
 			 */
 
-			tv.setTextSize(Integer.parseInt(cfg.getProperty(
-					AppConfig.CFGNAME_UI_MAIN_COLSELECTOR_TEXTSIZE)));
+			tv.setTextSize(Integer.parseInt(cfg
+					.getProperty(AppConfig.CFGNAME_UI_MAIN_COLSELECTOR_TEXTSIZE)));
 			((LinearLayout) convertView).addView(tv,
 					LinearLayout.LayoutParams.WRAP_CONTENT,
 					LinearLayout.LayoutParams.FILL_PARENT);
