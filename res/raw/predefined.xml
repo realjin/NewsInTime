@@ -2,6 +2,7 @@
 	<category-list>
 		<category id="cn.general">综合</category>
 		<category id="cn.sports">体育</category>
+		<category id="en.general">General</category>
 	</category-list>
 	<ci-list>
 		<ci url="http://news.qq.com/newsgn/rss_newsgn.xml" category="cn.general">
@@ -11,13 +12,35 @@
 			category="cn.general">
 			<name>网易深度新闻</name>
 		</ci>
-		<ci url="http://rss.sina.com.cn/roll/sports/hot_roll.xml"
-			category="cn.sports">
+		<ci url="http://rss.sina.com.cn/roll/sports/hot_roll.xml" category="cn.sports">
 			<name>新浪体育新闻</name>
 		</ci>
-		<ci url="http://rss.sina.com.cn/sports/global/focus.xml"
-			category="cn.sports">
+		<ci url="http://rss.sina.com.cn/sports/global/focus.xml" category="cn.sports">
 			<name>新浪国际足坛</name>
+		</ci>
+		<ci url="http://www.nytimes.com/services/xml/rss/nyt/GlobalHome.xml"
+			category="en.general">
+			<name>NYT Global</name>
+		</ci>
+		<ci url="http://www.economist.com/rss/asia_rss.xml"
+			category="en.general">
+			<name>Economist Asia</name>
+		</ci>
+		<ci url="http://www.economist.com/rss/china_rss.xml"
+			category="en.general">
+			<name>Economist - China</name>
+		</ci>
+		<ci url="http://www.economist.com/rss/briefings_rss.xml"
+			category="en.general">
+			<name>Economist - Briefings</name>
+		</ci>
+		<ci url="http://www.economist.com/topics/economics/index.xml"
+			category="en.general">
+			<name>Economist - Economics</name>
+		</ci>
+		<ci url="http://www.economist.com/rss/the_world_this_week_rss.xml"
+			category="en.general">
+			<name>Economist - The world this week</name>
 		</ci>
 	</ci-list>
 </predefined>
