@@ -15,7 +15,6 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.InputType;
@@ -46,10 +45,13 @@ public class MainActivity extends Activity {
 	// private TextView tvProgress;
 
 	// collection selector
-	private PopupWindow colSelector;
-	private View colSelectorView;
-	private PopupWindow pwCols;
-	private View vPwCols;
+	private PopupWindow pwColSelectorBar;
+	private View vPwColSelectorBar;
+
+	// collection menu
+	private PopupWindow pwColSelectorMenu;
+	private View vPwColSelectorMenu;
+
 	// TODO: no calc!!!
 	int colSelectorWidth;// = 300;
 	int colSelectorHeight = 50;
@@ -97,11 +99,6 @@ public class MainActivity extends Activity {
 		// init slider
 		vsMain = (VerticalSlider) findViewById(R.id.vsMain);
 
-		// init test button
-		// btPlay = new Button(this);
-		// btPlay.setText("Play");
-		// btPlay.setOnClickListener(new OnClickListener() {
-		// public void onClick(View v) {
 		// /*
 		// * check if there is any news yet(maybe connection error and
 		// * there's no news yet
@@ -111,18 +108,9 @@ public class MainActivity extends Activity {
 		// if (nNews == 0) {
 		// Log.e("===MainActivity===", "playing failed: news null");
 		// }
-		// tvMain.startAnimation(new LongTextMovingAnimation(
-		// MainActivity.this, tvMain));
-		// }
-		// });
-		// rlp = new RelativeLayout.LayoutParams(100, 50);
-		// rlp.leftMargin = 200;
-		// rlp.topMargin = 400;
-		// btPlay.setLayoutParams(rlp);
-		// llMain.addView(btPlay);
 
 		// init
-		colSelector = null;
+		pwColSelectorBar = null;
 
 	}
 
@@ -146,6 +134,7 @@ public class MainActivity extends Activity {
 	private void showColSelector() {
 		// load collection data from database
 		NewsInTimeApp app = (NewsInTimeApp) getApplication();
+		AppConfig cfg = app.getConfig();
 		CollectionDao dao = app.getDbmService().getCollectionDao();
 		List<Collection> colls = dao.getAllCollectionsWithItems();
 
@@ -156,7 +145,7 @@ public class MainActivity extends Activity {
 			// TODO: show "NULL" text selector which is disabled(just a view)
 		}
 
-		if (colSelector == null) {
+		if (pwColSelectorBar == null) {
 			Log.d("===MainActivity===", "colSelector creating");
 
 			// prepare text
@@ -188,8 +177,8 @@ public class MainActivity extends Activity {
 					// 2.
 					LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-					vPwCols = layoutInflater.inflate(R.layout.colselector_menu,
-							null);
+					vPwColSelectorMenu = layoutInflater.inflate(
+							R.layout.colselector_menu, null);
 
 					AdapterView lvCols;
 					lvCols = new VerticalListView(MainActivity.this);
@@ -206,7 +195,7 @@ public class MainActivity extends Activity {
 							// mmm: right? position or id?
 							Collection coll = (Collection) a.getItem(position);
 							// hide pw
-							pwCols.dismiss();
+							pwColSelectorMenu.dismiss();
 							Toast.makeText(MainActivity.this,
 									"Collection \"" + coll.getName() + "\"",
 									Toast.LENGTH_LONG).show();
@@ -221,7 +210,7 @@ public class MainActivity extends Activity {
 							LinearLayout.LayoutParams.FILL_PARENT,
 							LinearLayout.LayoutParams.WRAP_CONTENT);
 					lvCols.setLayoutParams(lp);
-					((LinearLayout) vPwCols).addView(lvCols);
+					((LinearLayout) vPwColSelectorMenu).addView(lvCols);
 
 					// = (ListView) vPwCols.findViewById(R.id.lvCols);
 					// �������
@@ -238,23 +227,27 @@ public class MainActivity extends Activity {
 							MainActivity.this, colls);
 					lvCols.setAdapter(groupAdapter);
 
-					pwCols = new PopupWindow(vPwCols, colSelectorWidth - 5,
-							colSelectorWidth - 5);
-					pwCols.setBackgroundDrawable(new BitmapDrawable());
-					pwCols.setOutsideTouchable(true);
-					pwCols.setFocusable(true);
-					pwCols.setOnDismissListener(new OnDismissListener() {
+					pwColSelectorMenu = new PopupWindow(vPwColSelectorMenu,
+							colSelectorWidth - 5, colSelectorWidth - 5);
+					pwColSelectorMenu
+							.setBackgroundDrawable(new BitmapDrawable());
+					pwColSelectorMenu.setOutsideTouchable(true);
+					pwColSelectorMenu.setFocusable(true);
+					pwColSelectorMenu
+							.setOnDismissListener(new OnDismissListener() {
 
-						public void onDismiss() {
-							tvColSel.setVisibility(View.VISIBLE);
-						}
-					});
+								public void onDismiss() {
+									tvColSel.setVisibility(View.VISIBLE);
+								}
+							});
 
 					// Log.e("===VIEW===", "top="
 					// + colSelector.getContentView().getTop() + ", left="
 					// + colSelector.getContentView().getLeft());
-					pwCols.showAtLocation(vPwCols, Gravity.NO_GRAVITY,
-							colSelectorLeft, colSelectorTop);
+					pwColSelectorMenu
+							.showAtLocation(vPwColSelectorMenu,
+									Gravity.NO_GRAVITY, colSelectorLeft,
+									colSelectorTop);
 				}
 			});
 
@@ -274,14 +267,18 @@ public class MainActivity extends Activity {
 			// prepare colsel view
 			LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-			colSelectorView = layoutInflater
-					.inflate(R.layout.colselector, null);
+			vPwColSelectorBar = layoutInflater.inflate(
+					R.layout.colselector_bar, null);
+			String strColorPwColSelector = cfg.getProperty(
+					AppConfig.CFGNAME_COLOR_BG_COLSELECTOR_BAR, "0xFFFFFFFF");
+			Integer colorPwColSelector = Integer.decode(strColorPwColSelector);
+			vPwColSelectorBar.setBackgroundColor(colorPwColSelector);
 
-			colSelector = new PopupWindow(colSelectorView, colSelectorHeight,
-					colSelectorWidth);
-			colSelector.setBackgroundDrawable(new BitmapDrawable());
-			colSelector.setOutsideTouchable(true);
-			colSelector.setFocusable(true);
+			pwColSelectorBar = new PopupWindow(vPwColSelectorBar,
+					colSelectorHeight, colSelectorWidth);
+			pwColSelectorBar.setBackgroundDrawable(new BitmapDrawable());
+			pwColSelectorBar.setOutsideTouchable(true);
+			pwColSelectorBar.setFocusable(true);
 
 			// add tv to colsel view
 			// colSelector.showAsDropDown(llMain, 200, 200);
@@ -293,11 +290,11 @@ public class MainActivity extends Activity {
 					"tv measuretext.w="
 							+ tvColSel.getPaint().measureText(
 									tvColSel.getText().toString()));
-			((LinearLayout) colSelectorView).addView(tvColSel);
+			((LinearLayout) vPwColSelectorBar).addView(tvColSel);
 		}
 		Log.d("===MainActivity===", "colSelector created");
 		// TODO: no position calculation!!!
-		colSelector.showAtLocation(colSelectorView, Gravity.NO_GRAVITY,
+		pwColSelectorBar.showAtLocation(vPwColSelectorBar, Gravity.NO_GRAVITY,
 				colSelectorLeft, colSelectorTop);
 	}
 
@@ -419,13 +416,13 @@ public class MainActivity extends Activity {
 
 class GroupAdapter extends BaseAdapter {
 
-	private Context context;
+	private Activity activity;
 
 	private List<Collection> list;
 
-	public GroupAdapter(Context context, List<Collection> list) {
+	public GroupAdapter(Activity a, List<Collection> list) {
 
-		this.context = context;
+		this.activity = a;
 		this.list = list;
 
 	}
@@ -444,24 +441,28 @@ class GroupAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup viewGroup) {
+		NewsInTimeApp app = (NewsInTimeApp) ((activity).getApplication());
+		AppConfig cfg = app.getConfig();
 
 		ViewHolder holder;
 		if (convertView == null) {
-			convertView = LayoutInflater.from(context).inflate(
+			convertView = LayoutInflater.from(activity).inflate(
 					R.layout.colselector_menu_item, null);
 			holder = new ViewHolder();
 
 			convertView.setTag(holder);
 
 			TextView tv = new VerticalTextView(viewGroup.getContext());
-			tv.setTextColor(0xffe1e1e1);
+			String strColorTv = cfg.getProperty(
+					AppConfig.CFGNAME_COLOR_TEXT_COLSELECTOR_MENU_ITEM_TV, "0xFF000000");
+			Integer colorPwColSelector = Integer.decode(strColorTv);
+			tv.setTextColor(colorPwColSelector);
 			/*
 			 * TODO: mmmmmmmmmm what if total text height exceeds listview
 			 * height?
 			 */
-			NewsInTimeApp app = (NewsInTimeApp) (((MainActivity) context)
-					.getApplication());
-			tv.setTextSize(Integer.parseInt(app.getConfig().get(
+
+			tv.setTextSize(Integer.parseInt(cfg.getProperty(
 					AppConfig.CFGNAME_UI_MAIN_COLSELECTOR_TEXTSIZE)));
 			((LinearLayout) convertView).addView(tv,
 					LinearLayout.LayoutParams.WRAP_CONTENT,
