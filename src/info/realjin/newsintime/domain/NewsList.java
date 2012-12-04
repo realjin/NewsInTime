@@ -61,16 +61,6 @@ public class NewsList {
 		for (News m : newsList) {
 			Date dm = m.getTime();
 			Date dn = n.getTime();
-			// if (d1.getYear() == d2.getYear() && d1.getMonth() ==
-			// d2.getMonth()
-			// && d1.getDay() == d2.getDay()
-			// && d1.getHours() == d2.getHours()
-			// && d1.getMinutes() == d2.getMinutes()
-			// && d1.getSeconds() == d2.getSeconds()) {
-			// Log.e("===TEMP===", "dm=" + dm + ", dn=" + dn);
-			// Log.e("===TEMP===", "dn text=" + n.getText());
-			// Log.e("===TEMP===", "dmgettime=" + dm.getTime() + ", dngettime="
-			// + dn.getTime());
 			if (dm.getTime() == dn.getTime()) {
 				if (m.getSubid() > maxSubId) {
 					maxSubId = m.getSubid();
@@ -108,7 +98,7 @@ public class NewsList {
 
 		// check if exist
 		if (existNews(n)) {
-			Log.e("===domain.NEWSLIST===", "news exist: " + n.getText());
+			Log.d("===domain.NEWSLIST===", "news exist: " + n.getText());
 			return;
 		}
 

@@ -59,7 +59,7 @@ public class NewsRetrieverServiceThread implements Runnable {
 		while (enabled) {
 			List<News> newsList, unarrangedNewsList;
 			List<RssFeed> feedList = getFeedList(coll);
-			Log.e("===fl=== size=", "" + feedList.size());
+			Log.d("===NRS THREAD==", "feedList size=" + feedList.size());
 			unarrangedNewsList = feedListToNews(feedList);
 			newsList = filterAndRearrangeNews(unarrangedNewsList);
 			nl.addNewsList(newsList);
@@ -93,10 +93,10 @@ public class NewsRetrieverServiceThread implements Runnable {
 			}
 
 			// if source changed
-			Log.e("===NRS===", "loop()");
+			Log.e("===NRS THREAD==", "loop()");
 
 		}
-		Log.e("===NRS===", "loop() end");
+		Log.e("===NRS THREAD==", "loop() end");
 	}
 
 	private List<News> filterAndRearrangeNews(List<News> n) {

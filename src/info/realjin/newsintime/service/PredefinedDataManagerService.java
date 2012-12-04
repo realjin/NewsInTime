@@ -9,14 +9,12 @@ import info.realjin.newsintime.domain.PredefinedCollectionItem;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
-import java.util.List;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import android.app.Application;
 import android.util.Log;
 
 /**
@@ -38,7 +36,7 @@ public class PredefinedDataManagerService {
 	}
 
 	public void loadPredefinedToAppdata() {
-		Log.e("PredefinedDataManagerService", "000");
+		Log.d("PredefinedDataManagerService", "000");
 
 		AppData data = app.getData();
 		// clear
@@ -56,12 +54,12 @@ public class PredefinedDataManagerService {
 			doc = reader.read(is);
 			Element root = doc.getRootElement();
 
-			Log.e("PredefinedDataManagerService", "1111");
+			Log.d("PredefinedDataManagerService", "1111");
 			// parse category list
 			Element elCategoryList = root.element("category-list");
 			Iterator itCategory = elCategoryList.elementIterator("category");
 			while (itCategory.hasNext()) {
-				Log.e("PredefinedDataManagerService", "itCategory");
+				Log.d("PredefinedDataManagerService", "itCategory");
 				Element elCategory = (Element) itCategory.next();
 				PredefinedCategory c = new PredefinedCategory();
 				c.setId(elCategory.attributeValue("id"));
@@ -70,18 +68,18 @@ public class PredefinedDataManagerService {
 				data.getPdCategoryList().add(c);
 			}
 
-			Log.e("PredefinedDataManagerService", "2222");
+			Log.d("PredefinedDataManagerService", "2222");
 			// parse ci list
 			Element elCiList = root.element("ci-list");
 			Iterator itCi = elCiList.elementIterator("ci");
 			while (itCi.hasNext()) {
-				Log.e("PredefinedDataManagerService", "itCi");
+				Log.d("PredefinedDataManagerService", "itCi");
 				Element elCi = (Element) itCi.next();
 				PredefinedCollectionItem ci = new PredefinedCollectionItem();
 				String catId = elCi.attributeValue("category");
 				String catName = data.getPdCategoryMap().get(catId);
 				if (catId == null) {
-					Log.e("loadPredefined", "cilist parsing error: cat \""
+					Log.d("loadPredefined", "cilist parsing error: cat \""
 							+ elCi.attributeValue("category") + "\" not found");
 					continue;
 				}
