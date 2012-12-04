@@ -105,6 +105,8 @@ public class NewsInTimeApp extends Application {
 		Log.d("===ANIM===", "position=" + position + ", min=" + vsMain.getMin()
 				+ ", max=" + vsMain.getMax());
 		vsMain.setPosition(position);
+		
+		//test
 
 	}
 
